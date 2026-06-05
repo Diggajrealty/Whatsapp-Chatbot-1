@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: aria-whatsapp-bot
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: GEMINI_API_KEY_1
+        sync: false
+      - key: GEMINI_API_KEY_2
+        sync: false
+      - key: GEMINI_API_KEY_3
+        sync: false
+      - key: GEMINI_API_KEY_4
+        sync: false
+      - key: GEMINI_API_KEY_5
+        sync: false
+      - key: SESSION_PATH
+        value: /data/whatsapp_session
+    disk:
+      name: session-storage
+      mountPath: /data
+      sizeGB: 1
