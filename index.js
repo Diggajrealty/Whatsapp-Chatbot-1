@@ -86,16 +86,13 @@ function cleanupStaleBrowser() {
     } catch (_) {}
     sleepSync(2000);
 
-    // Remove lock files from session directory
+    // Remove lock files from session directory (using rmSync to handle broken symlinks)
     const sessionDir = path.join(SESSION_PATH, 'session');
     const lockFiles = ['SingletonLock', 'SingletonCookie', 'SingletonSocket', 'lockfile'];
     for (const file of lockFiles) {
         const lockPath = path.join(sessionDir, file);
         try {
-            if (fs.existsSync(lockPath)) {
-                fs.unlinkSync(lockPath);
-                console.log(`[STARTUP] Removed lock file: ${file}`);
-            }
+            fs.rmSync(lockPath, { force: true });
         } catch (e) {
             console.warn(`[STARTUP] Could not remove ${file}: ${e.message}`);
         }
