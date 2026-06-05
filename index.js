@@ -260,8 +260,9 @@ client.on('ready', () => {
 
 // ── Debug All Network Activity ───────────────────────────────────────────────
 client.on('message_create', (msg) => {
-    // This fires for EVERY message (including your own)
-    console.log(`[NETWORK] Message visible: "${msg.body}" (fromMe: ${msg.fromMe}, timestamp: ${msg.timestamp})`);
+    // Ignore historical sync spam (older than 5 mins before boot)
+    if (msg.timestamp < botStartTime - 300) return;
+    console.log(`[NETWORK] NEW Message: "${msg.body}" (fromMe: ${msg.fromMe}, timestamp: ${msg.timestamp})`);
 });
 
 // ── Message Handler ──────────────────────────────────────────────────────────
