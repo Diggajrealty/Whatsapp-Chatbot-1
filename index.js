@@ -22,6 +22,7 @@ let totalMessages = 0;
 let botStatus = 'starting'; // 'starting' | 'qr' | 'authenticated' | 'ready'
 let lastQR = null;
 let isLoggingOut = false; // prevents disconnected auto-restart during logout
+let isInitializing = false; // prevents concurrent initialization
 
 io.on('connection', (socket) => {
     console.log('[DASHBOARD] Browser connected to dashboard');
@@ -50,10 +51,9 @@ io.on('connection', (socket) => {
             console.warn('[LOGOUT] client.logout() error (may already be disconnected):', e.message);
         }
         // Reinitialize after cleanup — will emit fresh 'qr' event
-        setTimeout(() => {
-            cleanupStaleBrowser();
+        setTimeout(async () => {
             isLoggingOut = false;
-            client.initialize();
+            await restartBot();
         }, 3000);
     });
 });
@@ -195,7 +195,7 @@ const client = new Client({
 });
 
 // Auto-restart if Chrome crashes or WhatsApp disconnects
-client.on('disconnected', (reason) => {
+client.on('disconnected', async (reason) => {
     console.log(`[DEBUG] Client disconnected (${reason}).`);
     botStatus = 'starting';
     io.emit('disconnected', reason);
@@ -204,11 +204,27 @@ client.on('disconnected', (reason) => {
         return;
     }
     console.log('[DEBUG] Auto-restarting in 5s...');
-    setTimeout(() => {
-        cleanupStaleBrowser();
-        client.initialize();
+    setTimeout(async () => {
+        await restartBot();
     }, 5000);
 });
+
+// Restart Helper to prevent duplicate browsers
+async function restartBot() {
+    if (isInitializing) return;
+    isInitializing = true;
+    try {
+        console.log('[STARTUP] Destroying old client...');
+        await client.destroy().catch(() => {});
+        cleanupStaleBrowser();
+        console.log('[STARTUP] Starting new client...');
+        await client.initialize();
+    } catch (e) {
+        console.error('[STARTUP] Restart failed:', e);
+    } finally {
+        isInitializing = false;
+    }
+}
 
 // ── WhatsApp Events → Socket Emissions ──────────────────────────────────────
 client.on('qr', async (qr) => {
@@ -243,6 +259,12 @@ client.on('ready', () => {
     botStatus = 'ready';
     io.emit('ready');
     console.log('[READY] WhatsApp Bot is ready and listening for messages!');
+});
+
+// ── Debug All Network Activity ───────────────────────────────────────────────
+client.on('message_create', (msg) => {
+    // This fires for EVERY message (including your own)
+    console.log(`[NETWORK] Message visible: "${msg.body}" (fromMe: ${msg.fromMe}, timestamp: ${msg.timestamp})`);
 });
 
 // ── Message Handler ──────────────────────────────────────────────────────────
@@ -367,4 +389,4 @@ client.on('message', async (msg) => {
     }
 });
 
-client.initialize();
+restartBot();
