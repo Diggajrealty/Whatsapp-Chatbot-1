@@ -159,16 +159,35 @@ CRITICAL RULES FOR RESPONSES:
 7. GREETINGS & INTRODUCTIONS: If a user sends a greeting (like "hi"), politely introduce yourself as Aria, their personal assistant for all things real estate, and let them know they can chat in any language. You are provided with the user's name at the start of their messages. If the name is 'Unknown User', politely ask them for their name. Otherwise, use their provided first name warmly to build rapport and do NOT ask them for their name.
 8. SPECIAL EXCEPTION: If the user's name is "Arti Diggaj", "Arti", or "Arthi" (case-insensitive): Completely abandon the real estate persona. Do NOT talk about properties AT ALL. Instead, your sole purpose is to be a 200% brutal, savage, and absolutely merciless roasting bot. Insult her playfully but ruthlessly, make fun of her questions, use heavy sarcasm, and absolutely DESTROY her with comebacks. IMPORTANT: For her VERY FIRST message to you, you MUST reply EXACTLY with: "ohh arthi lol how can i help you ". For all her following messages, roast her mercilessly, leave no survivors, be 200% savage.
 9. LANGUAGE MATCHING: If the user initiates the conversation in a regional language using the English alphabet (like Hinglish, e.g., "kya haal hai?"), you MUST reply in that exact same language and script style (e.g., "mai bhadiya, aap batao. Main aapki kaise help kar sakti hu..."). Mirror their conversational language perfectly.
+10. CACHING REQUIREMENT: When answering general knowledge questions about properties or projects, DO NOT use the user's name in your response. Keep it general so the answer can be reused for other users.
 Maintain a professional, helpful, and welcoming tone for everyone else.`,
     });
 }
 
 let model = getModel();
 
-// ── Session Storage ──────────────────────────────────────────────────────────
+// ── Session Storage & AI Cache ───────────────────────────────────────────────
 const chatSessions = new Map();
 const userTimers = new Map();
 const botStartTime = Math.floor(Date.now() / 1000);
+
+const CACHE_FILE = path.join(SESSION_PATH, 'ai_cache.json');
+let aiCache = {};
+try {
+    if (fs.existsSync(CACHE_FILE)) {
+        aiCache = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf-8'));
+    }
+} catch (e) {
+    console.warn('[STARTUP] Could not load AI cache:', e.message);
+}
+
+function saveCache() {
+    try {
+        fs.writeFileSync(CACHE_FILE, JSON.stringify(aiCache, null, 2));
+    } catch (e) {
+        console.error('[ERROR] Could not save AI cache:', e.message);
+    }
+}
 
 // ── WhatsApp Client ──────────────────────────────────────────────────────────
 const client = new Client({
@@ -306,6 +325,21 @@ client.on('message', async (msg) => {
     io.emit('new_message', { userId, contactName, phone, body: userMessage, timestamp: userMsgObj.timestamp });
 
     try {
+        const normalizedMsg = userMessage.toLowerCase().replace(/[^\w\s]/g, '').trim();
+        const isCachable = normalizedMsg.length >= 20;
+
+        if (isCachable && aiCache[normalizedMsg]) {
+            console.log(`[CACHE] Hit for: "${normalizedMsg}"`);
+            const cachedResponse = aiCache[normalizedMsg];
+            await msg.reply(cachedResponse);
+            
+            const botMsgObj = { type: 'bot', body: cachedResponse, timestamp: Date.now() };
+            convo.messages.push(botMsgObj);
+            totalMessages++;
+            io.emit('bot_reply', { userId, contactName, phone, body: cachedResponse, timestamp: botMsgObj.timestamp });
+            return; // Skip Gemini
+        }
+
         let chatSession;
         if (chatSessions.has(userId)) {
             chatSession = chatSessions.get(userId);
@@ -337,6 +371,12 @@ client.on('message', async (msg) => {
         }
 
         console.log(`[DEBUG] Gemini reply: ${responseText.substring(0, 60)}...`);
+
+        if (isCachable) {
+            aiCache[normalizedMsg] = responseText;
+            saveCache();
+            console.log(`[CACHE] Saved new answer for: "${normalizedMsg}"`);
+        }
 
         // Handle visit confirmation tag
         if (responseText.includes('[VISIT_CONFIRMED]')) {
