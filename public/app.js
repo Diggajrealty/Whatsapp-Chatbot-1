@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════
-   ARIA DASHBOARD — Socket.io Client
+   Divya DASHBOARD — Socket.io Client
    ═══════════════════════════════════════════════════════════════ */
 
 const socket = io();
@@ -9,6 +9,7 @@ let chats = {};         // { userId: { name, phone, messages: [] } }
 let activeUserId = null;
 let totalMessages = 0;
 let unreadCounts = {};  // { userId: number }
+let pausedChats = new Set();
 
 // Avatar color palette
 const AVATAR_COLORS = [
@@ -64,9 +65,12 @@ function showToast(msg, duration = 3000) {
 
 // ── Socket Events ─────────────────────────────────────────────────
 
-socket.on('init', ({ status, qr, chats: initChats, totalMessages: tm }) => {
+socket.on('init', ({ status, qr, chats: initChats, totalMessages: tm, pausedChats: initPaused }) => {
     chats = initChats || {};
     totalMessages = tm || 0;
+    if (initPaused) {
+        pausedChats = new Set(initPaused);
+    }
 
     if (status === 'ready' || status === 'authenticated') {
         // Bot is running — go straight to dashboard
@@ -110,7 +114,7 @@ socket.on('ready', () => {
     document.getElementById('sstep-loading').classList.add('done');
     document.getElementById('sstep-load-text').textContent = 'WhatsApp Web Loaded';
     document.getElementById('sstep-ready').classList.add('done');
-    document.getElementById('sstep-ready').querySelector('span').textContent = '✦ Aria is online!';
+    document.getElementById('sstep-ready').querySelector('span').textContent = '✦ Divya is online!';
     setTimeout(() => showScreen('screen-dashboard'), 1600);
 });
 
@@ -145,7 +149,7 @@ socket.on('bot_reply', ({ userId, contactName, phone, body, timestamp }) => {
     chats[userId].messages.push({ type: 'bot', body, timestamp });
     totalMessages++;
 
-    updateContactPreview(userId, `Aria: ${body}`, timestamp);
+    updateContactPreview(userId, `Divya: ${body}`, timestamp);
 
     if (activeUserId === userId) {
         appendMessage(userId, { type: 'bot', body, timestamp });
@@ -200,7 +204,7 @@ function addContactToSidebar(userId, data) {
         <div class="contact-ava" style="background: ${color}">${init}</div>
         <div class="contact-body">
             <div class="contact-name">${data.name}</div>
-            <div class="contact-preview" id="preview-${userId}">${lastMsg ? (lastMsg.type === 'bot' ? 'Aria: ' : '') + lastMsg.body : 'No messages yet'}</div>
+            <div class="contact-preview" id="preview-${userId}">${lastMsg ? (lastMsg.type === 'bot' ? 'Divya: ' : '') + lastMsg.body : 'No messages yet'}</div>
         </div>
         <div class="contact-right">
             <div class="contact-time" id="time-${userId}">${lastMsg ? formatTime(lastMsg.timestamp) : ''}</div>
@@ -268,6 +272,10 @@ function openChat(userId) {
     document.getElementById('chat-name').textContent = data.name;
     document.getElementById('chat-phone').textContent = `+${data.phone || userId.replace('@c.us','').replace('@lid','')}`;
 
+    // Set AI toggle
+    const toggleSwitch = document.getElementById('ai-toggle-switch');
+    if (toggleSwitch) toggleSwitch.checked = pausedChats.has(userId);
+
     // Render all messages
     renderAllMessages(userId);
     scrollToBottom();
@@ -302,7 +310,7 @@ function renderAllMessages(userId) {
         if (msg.type !== lastType) {
             const senderEl = document.createElement('div');
             senderEl.className = `msg-sender ${msg.type}`;
-            senderEl.textContent = msg.type === 'user' ? chats[userId].name : 'Aria ✦';
+            senderEl.textContent = msg.type === 'user' ? chats[userId].name : 'Divya ✦';
             area.appendChild(senderEl);
             lastType = msg.type;
         }
@@ -342,7 +350,7 @@ function appendMessage(userId, msg) {
     if (!prevMsg || prevMsg.type !== msg.type) {
         const senderEl = document.createElement('div');
         senderEl.className = `msg-sender ${msg.type}`;
-        senderEl.textContent = msg.type === 'user' ? chats[userId].name : 'Aria ✦';
+        senderEl.textContent = msg.type === 'user' ? chats[userId].name : 'Divya ✦';
         area.appendChild(senderEl);
     }
 
@@ -384,6 +392,48 @@ function escapeHtml(str) {
         .replace(/"/g, '&quot;')
         .replace(/\n/g, '<br>');
 }
+
+// ── Dashboard Messaging & AI Control ─────────────────────────────
+function sendDashboardMessage() {
+    const input = document.getElementById('dashboard-chat-input');
+    const text = input.value.trim();
+    if (!text || !activeUserId) return;
+    
+    // Automatically pause AI on manual message
+    if (!pausedChats.has(activeUserId)) {
+        const toggleSwitch = document.getElementById('ai-toggle-switch');
+        if (toggleSwitch) toggleSwitch.checked = true;
+        socket.emit('toggle_ai', { userId: activeUserId, isPaused: true });
+    }
+
+    socket.emit('dashboard_message', { userId: activeUserId, text });
+    input.value = '';
+}
+
+function handleInputKeyPress(e) {
+    if (e.key === 'Enter') {
+        sendDashboardMessage();
+    }
+}
+
+function toggleAI() {
+    const toggleSwitch = document.getElementById('ai-toggle-switch');
+    if (!toggleSwitch || !activeUserId) return;
+    const isPaused = toggleSwitch.checked;
+    socket.emit('toggle_ai', { userId: activeUserId, isPaused });
+}
+
+socket.on('ai_status_changed', ({ userId, isPaused }) => {
+    if (isPaused) {
+        pausedChats.add(userId);
+    } else {
+        pausedChats.delete(userId);
+    }
+    if (activeUserId === userId) {
+        const toggleSwitch = document.getElementById('ai-toggle-switch');
+        if (toggleSwitch) toggleSwitch.checked = isPaused;
+    }
+});
 
 // ── Logout ────────────────────────────────────────────────────────
 function confirmLogout() {

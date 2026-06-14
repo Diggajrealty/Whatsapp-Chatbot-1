@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aria — WhatsApp AI Dashboard</title>
-    <meta name="description" content="Real-time dashboard for Aria, the WhatsApp Real Estate AI Assistant">
+    <title>Divya — WhatsApp AI Dashboard</title>
+    <meta name="description" content="Real-time dashboard for Divya, the WhatsApp Real Estate AI Assistant">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -21,7 +21,7 @@
             <div class="qr-brand">
                 <div class="brand-gem">✦</div>
                 <div>
-                    <div class="brand-name">ARIA</div>
+                    <div class="brand-name">Divya</div>
                     <div class="brand-sub">Real Estate AI Assistant</div>
                 </div>
             </div>
@@ -63,14 +63,14 @@
         <div class="orb orb-bottom-right"></div>
 
         <div class="starting-content">
-            <div class="aria-orb">
-                <div class="aria-ring r1"></div>
-                <div class="aria-ring r2"></div>
-                <div class="aria-ring r3"></div>
-                <div class="aria-core">✦</div>
+            <div class="Divya-orb">
+                <div class="Divya-ring r1"></div>
+                <div class="Divya-ring r2"></div>
+                <div class="Divya-ring r3"></div>
+                <div class="Divya-core">✦</div>
             </div>
 
-            <h2 class="starting-title">Aria is starting up</h2>
+            <h2 class="starting-title">Divya is starting up</h2>
             <p class="starting-msg" id="starting-msg">Connecting to WhatsApp...</p>
 
             <div class="start-progress-bar">
@@ -89,7 +89,7 @@
                 </div>
                 <div class="start-step" id="sstep-ready">
                     <div class="sstep-dot"></div>
-                    <span>Aria Online</span>
+                    <span>Divya Online</span>
                 </div>
             </div>
         </div>
@@ -102,7 +102,7 @@
             <div class="sidebar-header">
                 <div class="sidebar-brand">
                     <div class="sidebar-gem">✦</div>
-                    <span>ARIA</span>
+                    <span>Divya</span>
                 </div>
                 <div class="live-badge">● LIVE</div>
             </div>
@@ -147,7 +147,7 @@
             <!-- Welcome View -->
             <div id="welcome-view" class="welcome-view">
                 <div class="welcome-gem">✦</div>
-                <h3>Aria is Live</h3>
+                <h3>Divya is Live</h3>
                 <p>Select a conversation from the sidebar to see the full chat history and live messages</p>
                 <div class="welcome-stats">
                     <div class="wstat">
@@ -171,12 +171,22 @@
                         <div class="chat-contact-phone" id="chat-phone">–</div>
                     </div>
                     <div class="chat-header-right">
+                        <label class="ai-toggle-label">
+                            <input type="checkbox" id="ai-toggle-switch" onchange="toggleAI()">
+                            <span class="ai-toggle-slider"></span>
+                            Pause AI
+                        </label>
                         <div class="chat-status-badge">Active</div>
                         <div class="msg-count" id="chat-msg-count">0 messages</div>
                     </div>
                 </div>
 
                 <div class="messages-area" id="messages-area">
+                </div>
+
+                <div class="chat-input-area">
+                    <input type="text" id="dashboard-chat-input" placeholder="Type a manual message (Divya will pause)..." onkeypress="handleInputKeyPress(event)">
+                    <button onclick="sendDashboardMessage()">Send</button>
                 </div>
             </div>
         </main>
@@ -190,7 +200,7 @@
         <div class="modal-card">
             <div class="modal-icon">⚠️</div>
             <h3>Logout from WhatsApp?</h3>
-            <p>This will disconnect Aria from WhatsApp and show a new QR code. All conversation history will be cleared.</p>
+            <p>This will disconnect Divya from WhatsApp and show a new QR code. All conversation history will be cleared.</p>
             <div class="modal-actions">
                 <button class="modal-btn cancel" onclick="closeLogoutModal()">Cancel</button>
                 <button class="modal-btn confirm" id="confirm-logout-btn" onclick="doLogout()">Yes, Logout</button>

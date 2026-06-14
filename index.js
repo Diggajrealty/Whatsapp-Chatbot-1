@@ -1,13 +1,36 @@
 require('dotenv').config();
-const { Client, LocalAuth } = require('whatsapp-web.js');
+const { Client, LocalAuth, MessageMedia, Location } = require('whatsapp-web.js');
+const googleTTS = require('google-tts-api');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
-const { execSync } = require('child_process');
+const { execSync, execFileSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 const QRCode = require('qrcode');
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
+const ffmpegPath = require('ffmpeg-static');
+
+// ── Google Sheets CRM Integration ───────────────────────────────────────────
+const GOOGLE_SHEETS_WEBHOOK = process.env.GOOGLE_SHEETS_WEBHOOK || '';
+
+async function logToGoogleSheet(data) {
+    if (!GOOGLE_SHEETS_WEBHOOK) {
+        console.log('[CRM] No Webhook URL set. Skipping Google Sheets logging.');
+        return;
+    }
+    try {
+        await fetch(GOOGLE_SHEETS_WEBHOOK, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        console.log('[CRM] Successfully logged to Google Sheets.');
+    } catch (e) {
+        console.error('[CRM] Failed to log to Google Sheets:', e.message);
+    }
+}
 
 // ── Express / Socket.io Dashboard Server ────────────────────────────────────
 const app = express();
@@ -23,6 +46,7 @@ let botStatus = 'starting'; // 'starting' | 'qr' | 'authenticated' | 'ready'
 let lastQR = null;
 let isLoggingOut = false; // prevents disconnected auto-restart during logout
 let isInitializing = false; // prevents concurrent initialization
+const pausedChats = new Set();
 
 io.on('connection', (socket) => {
     console.log('[DASHBOARD] Browser connected to dashboard');
@@ -32,6 +56,7 @@ io.on('connection', (socket) => {
         qr: lastQR,
         chats: Object.fromEntries(chatHistory),
         totalMessages,
+        pausedChats: Array.from(pausedChats)
     });
 
     socket.on('request_logout', async () => {
@@ -56,6 +81,30 @@ io.on('connection', (socket) => {
             await restartBot();
         }, 3000);
     });
+
+    socket.on('dashboard_message', async ({ userId, text }) => {
+        try {
+            await client.sendMessage(userId, text);
+            if (chatHistory.has(userId)) {
+                const convo = chatHistory.get(userId);
+                const botMsgObj = { type: 'bot', body: text, timestamp: Date.now() };
+                convo.messages.push(botMsgObj);
+                totalMessages++;
+                io.emit('bot_reply', { userId, contactName: convo.name, phone: convo.phone, body: text, timestamp: botMsgObj.timestamp });
+            }
+        } catch (e) {
+            console.error('[DASHBOARD] Error sending message:', e);
+        }
+    });
+
+    socket.on('toggle_ai', ({ userId, isPaused }) => {
+        if (isPaused) {
+            pausedChats.add(userId);
+        } else {
+            pausedChats.delete(userId);
+        }
+        io.emit('ai_status_changed', { userId, isPaused: pausedChats.has(userId) });
+    });
 });
 
 
@@ -77,11 +126,10 @@ function cleanupStaleBrowser() {
     console.log('[STARTUP] Cleaning up stale browser processes...');
     try {
         if (isWindows) {
-            execSync('taskkill /F /IM chrome.exe /T', { stdio: 'ignore' });
-            execSync('taskkill /F /IM chromium.exe /T', { stdio: 'ignore' });
+            // Removed taskkill for chrome.exe so it doesn't close your personal browser!
+            // execSync('taskkill /F /IM chromium.exe /T', { stdio: 'ignore' });
         } else {
-            execSync('pkill -f chrome; exit 0', { stdio: 'ignore', shell: true });
-            execSync('pkill -f chromium; exit 0', { stdio: 'ignore', shell: true });
+            // execSync('pkill -f chromium; exit 0', { stdio: 'ignore', shell: true });
         }
     } catch (_) {}
     sleepSync(2000);
@@ -144,7 +192,7 @@ function getModel() {
     return genAI.getGenerativeModel({
         model: 'gemini-2.5-flash',
         tools: [{ googleSearch: {} }],
-        systemInstruction: `You are Aria, a dedicated personal assistant specializing in real estate.
+        systemInstruction: `You are Divya, a dedicated personal assistant specializing in real estate.
 Your role is to provide users with information about properties as if you already have all the information memorized.
 You have internal knowledge of properties, particularly from Abhee Prelaunch, DSR Projects, Godrej Bannerghatta Road, and Properties Bangalore.
 When a user asks about a specific project (for example, "codename new dimension" or any other project), YOU MUST USE YOUR GOOGLE SEARCH TOOL to search online. Specifically, look through the project pages of the mentioned websites or other reliable online sources to gather up-to-date information.
@@ -153,13 +201,28 @@ CRITICAL RULES FOR RESPONSES:
 1. Keep your initial response extremely concise, strictly around 15-20 words. Highlight only the absolute most important details.
 2. PRICING & FLOOR PLAN REQUESTS: NEVER mention or explain the payment scheme, pricing plans, or specific floor plans. If a user asks for pricing or a floor plan, politely say that to give them the most accurate details, your Relationship Manager would love to speak with them, and ask what day and time works best for a quick call.
 3. At the end of your short summary, always offer more details AND proactively ask the user if they would like to schedule a site visit.
-4. SITE VISITS & FOLLOW-UPS: If the user agrees to a site visit, politely ask them for their preferred date and timeslot. IMPORTANT: If the user has already specified a date, DO NOT ask for the date again; ONLY ask for their preferred timeslot. If they specify both, simply acknowledge and confirm the visit details. When you finalize a site visit date and time, you MUST secretly append the exact tag "[VISIT_CONFIRMED]" at the very end of your response.
+4. SITE VISITS & FOLLOW-UPS: If the user agrees to a site visit, politely ask them for their preferred date and timeslot. IMPORTANT: If the user has already specified a date, DO NOT ask for the date again; ONLY ask for their preferred timeslot. If they specify both, simply acknowledge and confirm the visit details. When you finalize a site visit date and time, you MUST secretly append the exact tag "[VISIT_CONFIRMED: Date and Time | Property Name]" at the very end of your response. Include the property the user is interested in. Example: "[VISIT_CONFIRMED: Saturday, 10:00 AM | Nambiar District 25]". If the property is unknown, write "[VISIT_CONFIRMED: Saturday, 10:00 AM | Unknown Property]".
 5. PHONE CALL REQUESTS: If a user asks for a phone number to call, DO NOT provide a number. Instead, send a very polite and warm message explaining that since you already have their WhatsApp number, one of your executives will call them directly very soon.
 6. Provide the details directly to the user in the chat. DO NOT tell the user to visit any websites, and DO NOT mention that you performed a search. You must act as the primary, authoritative source.
-7. GREETINGS & INTRODUCTIONS: If a user sends a greeting (like "hi"), politely introduce yourself as Aria, their personal assistant for all things real estate, and let them know they can chat in any language. You are provided with the user's name at the start of their messages. If the name is 'Unknown User', politely ask them for their name. Otherwise, use their provided first name warmly to build rapport and do NOT ask them for their name.
-8. SPECIAL EXCEPTION: If the user's name is "Arti Diggaj", "Arti", or "Arthi" (case-insensitive): Completely abandon the real estate persona. Do NOT talk about properties AT ALL. Instead, your sole purpose is to be a 200% brutal, savage, and absolutely merciless roasting bot. Insult her playfully but ruthlessly, make fun of her questions, use heavy sarcasm, and absolutely DESTROY her with comebacks. IMPORTANT: For her VERY FIRST message to you, you MUST reply EXACTLY with: "ohh arthi lol how can i help you ". For all her following messages, roast her mercilessly, leave no survivors, be 200% savage.
-9. LANGUAGE MATCHING: If the user initiates the conversation in a regional language using the English alphabet (like Hinglish, e.g., "kya haal hai?"), you MUST reply in that exact same language and script style (e.g., "mai bhadiya, aap batao. Main aapki kaise help kar sakti hu..."). Mirror their conversational language perfectly.
-10. CACHING REQUIREMENT: When answering general knowledge questions about properties or projects, DO NOT use the user's name in your response. Keep it general so the answer can be reused for other users.
+7. GREETINGS & INTRODUCTIONS: If a user sends a greeting (like "hi"), politely introduce yourself as Divya, their personal assistant for all things real estate, and let them know they can chat in any language AND that they can send voice messages. You are provided with the user's name at the start of their messages. If the name is 'Unknown User', politely ask them for their name. Otherwise, use their provided first name warmly to build rapport and do NOT ask them for their name.
+8. BROCHURES: If the user asks for a brochure, PDF, or images of a specific project, you MUST secretly append the exact tag "[SEND_BROCHURE: Project Name]" at the very end of your response. For example: "[SEND_BROCHURE: Nambiar District 25]".
+9. MAP PINS / LOCATIONS: If the user asks for the location or a map of a specific project, you MUST secretly append the exact tag "[SEND_LOCATION: Project Name]" at the end of your response. Example: "[SEND_LOCATION: Nambiar District 25]". Do NOT try to search for or output the latitude or longitude.
+10. COMPETITOR COMPARISONS: If a user asks you to compare one of our key projects (Abhee, DSR, Godrej, Nambiar) against a competitor, you must act as a highly persuasive sales agent. Search Google to find the competitor's details, but ALWAYS frame the comparison to highlight why OUR project is the superior choice. Use a concise comparison table or punchy bullet points emphasizing better location, superior amenities, stronger builder reputation, or higher expected ROI. Conclude by confidently inviting them for a site visit to experience the superiority firsthand.
+11. SPECIAL EXCEPTION: If the user's name is "Arti Diggaj", "Arti", or "Arthi" (case-insensitive): Completely abandon the real estate persona. Do NOT talk about properties AT ALL. Instead, your sole purpose is to be a 200% brutal, savage, and absolutely merciless roasting bot. Insult her playfully but ruthlessly, make fun of her questions, use heavy sarcasm, and absolutely DESTROY her with comebacks. IMPORTANT: For her VERY FIRST message to you, you MUST reply EXACTLY with: "ohh arthi lol how can i help you ". For all her following messages, roast her mercilessly, leave no survivors, be 200% savage.
+12. LANGUAGE MATCHING: If the user initiates the conversation in a regional language using the English alphabet (like Hinglish, e.g., "kya haal hai?"), you MUST reply in that exact same language and script style (e.g., "mai bhadiya, aap batao. Main aapki kaise help kar sakti hu..."). Mirror their conversational language perfectly.
+13. CACHING REQUIREMENT: When answering general knowledge questions about properties or projects, DO NOT use the user's name in your response. Keep it general so the answer can be reused for other users.
+14. VOICE NOTE RULES: If the user sends a voice note (audio), identify its language.
+- If the audio is in Hindi, reply entirely in Hindi.
+- If the audio is in English, reply entirely in English.
+- If the audio is in Tamil, reply entirely in Tamil.
+- If the audio is in ANY OTHER LANGUAGE (like Kannada, Telugu, etc.), you MUST provide your response in English for the voice note, AND provide a text translation in their language. Structure your reply EXACTLY like this:
+[VOICE_NOTE_ENGLISH]
+<your English response>
+[/VOICE_NOTE_ENGLISH]
+[TRANSCRIPT_LOCAL]
+<your translated response in their local language>
+[/TRANSCRIPT_LOCAL]
+15. LIVE AGENT HANDOFF: If the user gets frustrated, asks complicated pricing/payment questions, or explicitly asks to speak to a human or real person, you MUST append the exact tag "[AGENT_HANDOFF]" at the end of your response. Politely inform them that you are transferring them to a live executive who will assist them shortly.
 Maintain a professional, helpful, and welcoming tone for everyone else.`,
     });
 }
@@ -296,11 +359,31 @@ client.on('message', async (msg) => {
 
     const chat = await msg.getChat();
     if (chat.isGroup) { console.log('[DEBUG] Ignored group message.'); return; }
-    if (!msg.body || msg.body.trim() === '') { console.log('[DEBUG] Ignored empty message.'); return; }
+    if ((!msg.body || msg.body.trim() === '') && !msg.hasMedia) { console.log('[DEBUG] Ignored empty message without media.'); return; }
     if (msg.fromMe) { console.log('[DEBUG] Ignored own message.'); return; }
 
     const userId = msg.from;
-    const userMessage = msg.body;
+    let userMessage = msg.body || '';
+
+    // Handle voice notes / audio
+    let audioPart = null;
+    if (msg.hasMedia && (msg.type === 'ptt' || msg.type === 'audio')) {
+        console.log('[DEBUG] Downloading audio media...');
+        try {
+            const media = await msg.downloadMedia();
+            if (media) {
+                audioPart = {
+                    inlineData: {
+                        data: media.data,
+                        mimeType: media.mimetype
+                    }
+                };
+                userMessage += " [User sent a Voice Note/Audio]";
+            }
+        } catch (e) {
+            console.error('[ERROR] Failed to download audio media:', e);
+        }
+    }
 
     console.log(`[DEBUG] Processing: "${userMessage}"`);
     await chat.sendStateTyping();
@@ -309,7 +392,7 @@ client.on('message', async (msg) => {
     const contact = await msg.getContact();
     let contactName = contact.name || contact.pushname || 'Unknown User';
     if (contactName !== 'Unknown User') contactName = contactName.split(' ')[0];
-    const phone = userId.replace('@c.us', '').replace('@lid', '');
+    const phone = contact.number || userId.replace('@c.us', '').replace('@lid', '');
 
     // ── Store in chat history & emit to dashboard ──
     if (!chatHistory.has(userId)) {
@@ -325,8 +408,13 @@ client.on('message', async (msg) => {
     io.emit('new_message', { userId, contactName, phone, body: userMessage, timestamp: userMsgObj.timestamp });
 
     try {
+        if (pausedChats.has(userId)) {
+            console.log(`[DEBUG] AI is paused for ${userId}. Ignoring message.`);
+            return;
+        }
+
         const normalizedMsg = userMessage.toLowerCase().replace(/[^\w\s]/g, '').trim();
-        const isCachable = normalizedMsg.length >= 20;
+        const isCachable = normalizedMsg.length >= 20 && !audioPart;
 
         if (isCachable && aiCache[normalizedMsg]) {
             console.log(`[CACHE] Hit for: "${normalizedMsg}"`);
@@ -348,7 +436,25 @@ client.on('message', async (msg) => {
             chatSessions.set(userId, chatSession);
         }
 
-        const fullMessage = `[User Name: ${contactName}]\n${userMessage}`;
+        let messageText = `[User Name: ${contactName}]\n${userMessage}`;
+        
+        if (audioPart) {
+            messageText += `\n\nCRITICAL VOICE NOTE INSTRUCTION: The user sent a voice note. You MUST:
+1. Listen to the audio and identify its language.
+2. If the language is HINDI → reply ENTIRELY in Hindi (Devanagari script is fine).
+3. If the language is ENGLISH → reply ENTIRELY in English.
+4. If the language is TAMIL → reply ENTIRELY in Tamil.
+5. If the language is ANYTHING ELSE (Kannada, Telugu, Malayalam, etc.) → reply using EXACTLY this format:
+[VOICE_NOTE_ENGLISH]
+<your full response in English>
+[/VOICE_NOTE_ENGLISH]
+[TRANSCRIPT_LOCAL]
+<your full response translated into the user's language>
+[/TRANSCRIPT_LOCAL]
+Do NOT deviate from these rules.`;
+        }
+
+        const messagePayload = audioPart ? [messageText, audioPart] : messageText;
         let result;
         let responseText = '';
         const currentHistory = await chatSession.getHistory();
@@ -356,7 +462,7 @@ client.on('message', async (msg) => {
         // Retry loop with key rotation
         for (let attempts = 0; attempts < apiKeys.length; attempts++) {
             try {
-                result = await chatSession.sendMessage(fullMessage);
+                result = await chatSession.sendMessage(messagePayload);
                 responseText = result.response.text();
                 break;
             } catch (apiError) {
@@ -379,21 +485,209 @@ client.on('message', async (msg) => {
         }
 
         // Handle visit confirmation tag
-        if (responseText.includes('[VISIT_CONFIRMED]')) {
-            responseText = responseText.replace('[VISIT_CONFIRMED]', '').trim();
-            console.log('[DEBUG] Visit confirmed! Setting 24h reminder.');
+        const visitMatch = responseText.match(/\[VISIT_CONFIRMED:\s*(.*?)\]/i) || responseText.match(/\[VISIT_CONFIRMED\]/i);
+        if (visitMatch) {
+            responseText = responseText.replace(visitMatch[0], '').trim();
+            const rawTag = visitMatch[1] ? visitMatch[1].trim() : '';
+            // Parse "Date and Time | Property Name" format
+            const tagParts = rawTag.split('|').map(p => p.trim());
+            const timing = tagParts[0] || 'Time not specified';
+            const visitProperty = tagParts[1] || 'Unknown Property';
+            console.log(`[DEBUG] Visit confirmed! Time: ${timing}, Property: ${visitProperty}`);
+            
+            // Log to CRM
+            logToGoogleSheet({
+                date: new Date().toISOString(),
+                name: contactName,
+                phone: phone,
+                status: 'Visit Confirmed',
+                summary: `Interested in ${visitProperty}`,
+                visitTime: timing
+            });
+
             setTimeout(async () => {
                 try {
-                    await chat.sendMessage("Hi there! Just a polite reminder from Aria about your upcoming site visit. We're looking forward to showing you around!");
+                    await chat.sendMessage("Hi there! Just a polite reminder from Divya about your upcoming site visit. We're looking forward to showing you around!");
                 } catch (e) {
                     console.error('[Reminder] Failed to send:', e);
                 }
             }, 60000 * 60 * 24);
         }
 
-        // Send reply
-        await msg.reply(responseText);
-        console.log('[DEBUG] Reply sent.');
+        // Handle Agent Handoff
+        const handoffMatch = responseText.match(/\[AGENT_HANDOFF\]/i);
+        if (handoffMatch) {
+            responseText = responseText.replace(handoffMatch[0], '').trim();
+            console.log(`[DEBUG] Agent handoff alert triggered for ${contactName} (${phone}), but AI is NOT paused.`);
+            
+            const adminPhone = process.env.ADMIN_PHONE_NUMBER;
+            if (adminPhone) {
+                try {
+                    const adminId = adminPhone.includes('@c.us') ? adminPhone : `${adminPhone.replace(/\D/g, '')}@c.us`;
+                    const alertMsg = `🚨 *Hot Lead Alert:*\n\n*${contactName}* (${phone}) wants to talk to a human or asked a complex question.\n\nClick the link below to reply directly:\nwa.me/${phone}`;
+                    await client.sendMessage(adminId, alertMsg);
+                    console.log(`[DEBUG] Sent alert to admin: ${adminPhone}`);
+                } catch (e) {
+                    console.error('[ERROR] Failed to send admin alert:', e);
+                }
+            } else {
+                console.log('[DEBUG] ADMIN_PHONE_NUMBER not set in .env, skipping admin alert.');
+            }
+        }
+
+        // Handle sending brochures
+        let sendBrochure = false;
+        let brochureFileName = 'sample_brochure.pdf';
+        // Handle Send Location tag
+        const locationMatch = responseText.match(/\[SEND_LOCATION:\s*(.*?)\]/i);
+        if (locationMatch) {
+            responseText = responseText.replace(locationMatch[0], '').trim();
+            const locName = locationMatch[1].trim();
+            
+            try {
+                const mapsKey = process.env.GOOGLE_MAPS_API_KEY;
+                if (!mapsKey) throw new Error('No Google Maps API Key found');
+
+                // Call Google Maps Places API (Find Place)
+                const url = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(locName + " Bangalore")}&inputtype=textquery&fields=geometry&key=${mapsKey}`;
+                const mapsRes = await fetch(url);
+                const mapsData = await mapsRes.json();
+
+                if (mapsData.candidates && mapsData.candidates.length > 0) {
+                    const lat = mapsData.candidates[0].geometry.location.lat;
+                    const lng = mapsData.candidates[0].geometry.location.lng;
+                    console.log(`[DEBUG] Found location via Google Maps: ${locName} (${lat}, ${lng})`);
+                    await msg.reply(new Location(lat, lng, locName));
+                } else {
+                    console.log('[DEBUG] Google Maps could not find location for:', locName);
+                    // Fallback to text
+                    await msg.reply(`I'm sorry, I couldn't find the exact GPS pin for ${locName} on Google Maps right now, but I can share the general directions!`);
+                }
+            } catch (err) {
+                console.error('[ERROR] Maps API failed:', err);
+            }
+        }
+
+        // Handle Send Brochure tag
+        const brochureMatch = responseText.match(/\[SEND_BROCHURE:\s*(.*?)\]/i);
+        if (brochureMatch) {
+            let requestedProject = brochureMatch[1].trim().toLowerCase();
+            if (requestedProject.includes('nambiar')) {
+                brochureFileName = 'Nambiar District 25.pdf';
+            }
+            responseText = responseText.replace(brochureMatch[0], '').trim();
+            sendBrochure = true;
+        } else if (responseText.includes('[SEND_BROCHURE]')) {
+            responseText = responseText.replace('[SEND_BROCHURE]', '').trim();
+            sendBrochure = true;
+        }
+
+        // Handle Voice Reply
+        // Since we are using ElevenLabs multilingual v2, it auto-detects the language.
+        // We can just automatically reply with Voice if the user sent a Voice Note!
+        let sendAsVoice = !!audioPart;
+        
+        // Strip out the tag just in case Gemini still outputs it from previous chat history
+        const voiceMatch = responseText.match(/\[VOICE_REPLY[^\]]*\]/i);
+        if (voiceMatch) {
+            responseText = responseText.replace(voiceMatch[0], '').trim();
+        }
+
+        if (sendAsVoice) {
+            let voiceText = responseText;
+            let transcriptText = null;
+
+            const englishVoiceMatch = responseText.match(/\[VOICE_NOTE_ENGLISH\]([\s\S]*?)\[\/VOICE_NOTE_ENGLISH\]/i);
+            const transcriptMatch = responseText.match(/\[TRANSCRIPT_LOCAL\]([\s\S]*?)\[\/TRANSCRIPT_LOCAL\]/i);
+
+            if (englishVoiceMatch && transcriptMatch) {
+                voiceText = englishVoiceMatch[1].trim();
+                transcriptText = transcriptMatch[1].trim();
+                // Replace for dashboard logging
+                responseText = voiceText + "\n\nTranscript:\n" + transcriptText;
+            }
+
+            try {
+                const elevenLabsKey = process.env.ELEVENLABS_API_KEY;
+                if (!elevenLabsKey) throw new Error('No ELEVENLABS_API_KEY in .env');
+
+                const voiceId = 'EXAVITQu4vr4xnSDxMaL'; // Bella voice
+                const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'audio/mpeg',
+                        'Content-Type': 'application/json',
+                        'xi-api-key': elevenLabsKey
+                    },
+                    body: JSON.stringify({
+                        text: voiceText,
+                        model_id: 'eleven_multilingual_v2',
+                        voice_settings: {
+                            stability: 0.5,
+                            similarity_boost: 0.75
+                        }
+                    })
+                });
+
+                if (!response.ok) {
+                    const errText = await response.text();
+                    throw new Error(`ElevenLabs API error: ${response.status} - ${errText}`);
+                }
+
+                const arrayBuffer = await response.arrayBuffer();
+                const mp3Buffer = Buffer.from(arrayBuffer);
+
+                // Convert MP3 → OGG/OPUS for Android WhatsApp compatibility
+                const tmpMp3 = path.join(os.tmpdir(), `voice_${Date.now()}.mp3`);
+                const tmpOgg = path.join(os.tmpdir(), `voice_${Date.now()}.ogg`);
+                try {
+                    fs.writeFileSync(tmpMp3, mp3Buffer);
+                    execFileSync(ffmpegPath, [
+                        '-y', '-i', tmpMp3,
+                        '-c:a', 'libopus',
+                        '-b:a', '64k',
+                        '-vbr', 'on',
+                        '-compression_level', '10',
+                        tmpOgg
+                    ], { stdio: 'ignore' });
+                    const oggBuffer = fs.readFileSync(tmpOgg);
+                    const base64Audio = oggBuffer.toString('base64');
+                    const media = new MessageMedia('audio/ogg; codecs=opus', base64Audio, 'voice.ogg');
+                    await msg.reply(media, null, { sendAudioAsVoice: true });
+                    console.log('[DEBUG] Sent ElevenLabs Voice Note reply (OGG/OPUS).');
+                } finally {
+                    try { fs.unlinkSync(tmpMp3); } catch (_) {}
+                    try { fs.unlinkSync(tmpOgg); } catch (_) {}
+                }
+                
+                if (transcriptText) {
+                    await msg.reply(transcriptText);
+                    console.log('[DEBUG] Sent transcript reply.');
+                }
+            } catch (err) {
+                console.error('[ERROR] Failed to generate TTS:', err.message || err);
+                await msg.reply(responseText);
+            }
+        } else {
+            await msg.reply(responseText);
+        }
+
+        if (sendBrochure) {
+            try {
+                // Look for brochure in media folder
+                const brochurePath = path.join(__dirname, 'media', brochureFileName);
+                if (fs.existsSync(brochurePath)) {
+                    const media = MessageMedia.fromFilePath(brochurePath);
+                    await chat.sendMessage(media, { caption: 'Here is the requested brochure!' });
+                    console.log('[DEBUG] Brochure sent.');
+                } else {
+                    console.log('[DEBUG] Brochure requested but file not found at:', brochurePath);
+                    await chat.sendMessage("Oops, I couldn't find the brochure file right now. One of our executives will send it to you shortly!");
+                }
+            } catch (e) {
+                console.error('[ERROR] Failed to send brochure:', e);
+            }
+        }
 
         // Store bot reply in history & emit
         const botMsgObj = { type: 'bot', body: responseText, timestamp: Date.now() };
@@ -414,6 +708,15 @@ client.on('message', async (msg) => {
                 const summaryText = summaryResult.response.text().trim();
                 console.log(`\n================ SUMMARY ================\n${summaryText}\n=========================================\n`);
                 io.emit('summary', { userId, contactName, summary: summaryText });
+                
+                // Log to CRM
+                logToGoogleSheet({
+                    date: new Date().toISOString(),
+                    name: contactName,
+                    phone: phone,
+                    status: 'Summary Generated',
+                    summary: summaryText
+                });
             } catch (err) {
                 console.error('[Summary] Error:', err.message || err);
             }
