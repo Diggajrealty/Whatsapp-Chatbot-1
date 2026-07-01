@@ -1,474 +1,434 @@
 /* ═══════════════════════════════════════════════════════════════
-   Divya DASHBOARD — Socket.io Client
+   REAL ESTATE BOT MANAGER — Multi-Bot Dashboard
    ═══════════════════════════════════════════════════════════════ */
 
 const socket = io();
 
-// ── State ────────────────────────────────────────────────────────
-let chats = {};         // { userId: { name, phone, messages: [] } }
-let activeUserId = null;
-let totalMessages = 0;
-let unreadCounts = {};  // { userId: number }
-let pausedChats = new Set();
+// State
+let activeBots = new Map(); // botId -> { name, status, messages, qrCode }
+let currentTab = null;
+let qrSimulationTimer = null; // Track the simulation timer
 
-// Avatar color palette
-const AVATAR_COLORS = [
-    '#16a34a', '#7c3aed', '#0891b2', '#db2777',
-    '#d97706', '#dc2626', '#059669', '#6d28d9',
-];
-function avatarColor(str) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
-}
-function initials(name) {
-    const parts = (name || '?').split(' ');
-    return parts.length > 1 ? (parts[0][0] + parts[1][0]).toUpperCase() : (parts[0][0] || '?').toUpperCase();
-}
-function formatTime(ts) {
-    const d = new Date(ts);
-    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-}
-function formatDate(ts) {
-    const d = new Date(ts);
-    const now = new Date();
-    if (d.toDateString() === now.toDateString()) return 'Today';
-    const yesterday = new Date(now); yesterday.setDate(now.getDate() - 1);
-    if (d.toDateString() === yesterday.toDateString()) return 'Yesterday';
-    return d.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'short' });
+// Toast
+function showToast(message, duration = 3000) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), duration);
 }
 
-// ── Screen Manager ────────────────────────────────────────────────
-function showScreen(id) {
-    document.querySelectorAll('.screen').forEach(s => {
-        s.classList.remove('active');
-        s.classList.add('hidden');
+// Update Stats
+function updateStats() {
+    const activeCount = Array.from(activeBots.values()).filter(b => b.status === 'online').length;
+    document.getElementById('active-bots-count').textContent = activeCount;
+
+    let totalMessages = 0;
+    activeBots.forEach(bot => {
+        totalMessages += bot.messages ? bot.messages.length : 0;
     });
-    const target = document.getElementById(id);
-    target.classList.remove('hidden');
-    setTimeout(() => target.classList.add('active'), 10);
+    document.getElementById('total-messages-count').textContent = totalMessages;
 }
 
-// ── Toast ─────────────────────────────────────────────────────────
-let toastTimer;
-function showToast(msg, duration = 3000) {
-    const el = document.getElementById('toast');
-    el.textContent = msg;
-    el.classList.remove('hidden');
-    el.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => {
-        el.classList.remove('show');
-        el.classList.add('hidden');
-    }, duration);
-}
+// Toggle Bot
+function toggleBot(botId, isOn) {
+    const statusBadge = document.getElementById(`status-${botId}`);
 
-// ── Socket Events ─────────────────────────────────────────────────
+    if (isOn) {
+        // Turn on bot
+        statusBadge.textContent = 'Connecting...';
+        statusBadge.className = 'status-badge connecting';
 
-socket.on('init', ({ status, qr, chats: initChats, totalMessages: tm, pausedChats: initPaused }) => {
-    chats = initChats || {};
-    totalMessages = tm || 0;
-    if (initPaused) {
-        pausedChats = new Set(initPaused);
-    }
+        showToast(`Starting ${getBotName(botId)} bot...`);
 
-    if (status === 'ready' || status === 'authenticated') {
-        // Bot is running — go straight to dashboard
-        showScreen('screen-dashboard');
-        Object.keys(chats).forEach(uid => {
-            addContactToSidebar(uid, chats[uid]);
-        });
-        updateStats();
-        if (status === 'qr' && qr) {
-            // Still waiting for QR scan
-            showScreen('screen-qr');
-            showQR(qr);
+        // Send start request to backend
+        socket.emit('start_bot', { botId });
+
+        // Show QR modal
+        showQRModal(botId);
+
+        // Add to active bots
+        if (!activeBots.has(botId)) {
+            activeBots.set(botId, {
+                id: botId,
+                name: getBotName(botId),
+                status: 'connecting',
+                messages: [],
+                qrCode: null
+            });
         }
-    } else if (status === 'qr' && qr) {
-        showScreen('screen-qr');
-        showQR(qr);
-    }
-    // else: default is QR screen, waiting
-});
 
-socket.on('qr', (dataUrl) => {
-    showQR(dataUrl);
-    showScreen('screen-qr');
-});
+        // Create tab
+        createBotTab(botId);
 
-socket.on('authenticated', () => {
-    showScreen('screen-loading');
-    document.getElementById('sstep-authenticated').classList.add('done');
-    document.getElementById('sstep-loading').classList.add('loading');
-});
-
-socket.on('loading', ({ percent, message }) => {
-    document.getElementById('start-progress').style.width = percent + '%';
-    document.getElementById('starting-msg').textContent = message;
-    document.getElementById('sstep-load-text').textContent = `${message} (${percent}%)`;
-});
-
-socket.on('ready', () => {
-    document.getElementById('start-progress').style.width = '100%';
-    document.getElementById('sstep-loading').classList.remove('loading');
-    document.getElementById('sstep-loading').classList.add('done');
-    document.getElementById('sstep-load-text').textContent = 'WhatsApp Web Loaded';
-    document.getElementById('sstep-ready').classList.add('done');
-    document.getElementById('sstep-ready').querySelector('span').textContent = '✦ Divya is online!';
-    setTimeout(() => showScreen('screen-dashboard'), 1600);
-});
-
-socket.on('new_message', ({ userId, contactName, phone, body, timestamp }) => {
-    // Ensure contact exists
-    if (!chats[userId]) {
-        chats[userId] = { name: contactName, phone, messages: [] };
-        addContactToSidebar(userId, chats[userId]);
-    }
-    chats[userId].name = contactName;
-    chats[userId].phone = phone;
-    chats[userId].messages.push({ type: 'user', body, timestamp });
-    totalMessages++;
-
-    // Update sidebar preview
-    updateContactPreview(userId, body, timestamp);
-
-    // Unread or live render
-    if (activeUserId === userId) {
-        appendMessage(userId, { type: 'user', body, timestamp });
-        scrollToBottom();
     } else {
-        unreadCounts[userId] = (unreadCounts[userId] || 0) + 1;
-        updateUnreadBadge(userId);
+        // Turn off bot
+        statusBadge.textContent = 'Offline';
+        statusBadge.className = 'status-badge offline';
+
+        showToast(`Stopping ${getBotName(botId)} bot...`);
+
+        // Send stop request to backend
+        socket.emit('stop_bot', { botId });
+
+        // Remove from active bots
+        activeBots.delete(botId);
+
+        // Remove tab
+        removeBotTab(botId);
+
+        // Close modal if open
+        closeQRModal();
     }
+
     updateStats();
-    showToast(`💬 New message from ${contactName}`);
-});
-
-socket.on('bot_reply', ({ userId, contactName, phone, body, timestamp }) => {
-    if (!chats[userId]) return;
-    chats[userId].messages.push({ type: 'bot', body, timestamp });
-    totalMessages++;
-
-    updateContactPreview(userId, `Divya: ${body}`, timestamp);
-
-    if (activeUserId === userId) {
-        appendMessage(userId, { type: 'bot', body, timestamp });
-        scrollToBottom();
-    }
-    updateStats();
-});
-
-socket.on('summary', ({ userId, contactName, summary }) => {
-    if (activeUserId === userId) {
-        const area = document.getElementById('messages-area');
-        const card = document.createElement('div');
-        card.className = 'summary-card';
-        card.textContent = summary;
-        area.appendChild(card);
-        scrollToBottom();
-    }
-});
-
-socket.on('disconnected', (reason) => {
-    showToast(`⚠️ Bot disconnected: ${reason}. Restarting...`, 5000);
-});
-
-socket.on('auth_failure', () => {
-    showToast('❌ Authentication failed. Refresh to retry.', 5000);
-});
-
-// ── QR Code Display ───────────────────────────────────────────────
-function showQR(dataUrl) {
-    document.getElementById('qr-loading-state').classList.add('hidden');
-    const img = document.getElementById('qr-image');
-    img.src = dataUrl;
-    img.classList.remove('hidden');
-    document.getElementById('qr-tag').textContent = 'Scan with WhatsApp to connect';
+    updateEmptyState();
 }
 
-// ── Contact Sidebar ───────────────────────────────────────────────
-function addContactToSidebar(userId, data) {
-    document.getElementById('empty-contacts').classList.add('hidden');
+// Get Bot Name with assistant name
+function getBotName(botId) {
+    const names = {
+        sobha: 'Divya',
+        brigade: 'Ashi',
+        nambiar: 'Samaira',
+        godrej: 'Riya',
+        abhee: 'Meera',
+        dsr: 'Neha',
+        all: 'Kavya'
+    };
+    return names[botId] || botId;
+}
 
-    // Check if already exists
-    if (document.getElementById(`contact-${userId}`)) return;
+// Get Bot Icon
+function getBotIcon(botId) {
+    const icons = {
+        sobha: '🏢',
+        brigade: '🏗️',
+        nambiar: '🌆',
+        godrej: '🏘️',
+        abhee: '🏡',
+        dsr: '🏙️',
+        all: '⭐'
+    };
+    return icons[botId] || '🤖';
+}
 
-    const color = avatarColor(userId);
-    const init = initials(data.name);
-    const lastMsg = data.messages && data.messages.length > 0 ? data.messages[data.messages.length - 1] : null;
+// Create Bot Tab
+function createBotTab(botId) {
+    const tabsContainer = document.getElementById('bot-tabs');
 
-    const el = document.createElement('div');
-    el.className = 'contact-item';
-    el.id = `contact-${userId}`;
-    el.innerHTML = `
-        <div class="contact-ava" style="background: ${color}">${init}</div>
-        <div class="contact-body">
-            <div class="contact-name">${data.name}</div>
-            <div class="contact-preview" id="preview-${userId}">${lastMsg ? (lastMsg.type === 'bot' ? 'Divya: ' : '') + lastMsg.body : 'No messages yet'}</div>
+    // Check if tab already exists
+    if (document.getElementById(`tab-${botId}`)) return;
+
+    const tab = document.createElement('button');
+    tab.id = `tab-${botId}`;
+    tab.className = 'bot-tab';
+    tab.onclick = () => switchTab(botId);
+
+    tab.innerHTML = `
+        <span class="bot-tab-icon">${getBotIcon(botId)}</span>
+        <span>${getBotName(botId)}</span>
+        <button class="bot-tab-close" onclick="event.stopPropagation(); closeBot('${botId}')">×</button>
+    `;
+
+    tabsContainer.appendChild(tab);
+
+    // Create content area
+    createBotContent(botId);
+
+    // Switch to this tab
+    switchTab(botId);
+}
+
+// Remove Bot Tab
+function removeBotTab(botId) {
+    const tab = document.getElementById(`tab-${botId}`);
+    if (tab) tab.remove();
+
+    const content = document.getElementById(`content-${botId}`);
+    if (content) content.remove();
+
+    // Switch to another tab if this was active
+    if (currentTab === botId) {
+        const remainingTabs = document.querySelectorAll('.bot-tab');
+        if (remainingTabs.length > 0) {
+            const firstTabId = remainingTabs[0].id.replace('tab-', '');
+            switchTab(firstTabId);
+        } else {
+            currentTab = null;
+        }
+    }
+}
+
+// Create Bot Content
+function createBotContent(botId) {
+    const container = document.getElementById('bot-contents');
+
+    // Check if content already exists
+    if (document.getElementById(`content-${botId}`)) return;
+
+    const content = document.createElement('div');
+    content.id = `content-${botId}`;
+    content.className = 'bot-content';
+
+    content.innerHTML = `
+        <div class="bot-content-header">
+            <h2>${getBotIcon(botId)} ${getBotName(botId)}</h2>
+            <span>Real Estate Bot Dashboard</span>
         </div>
-        <div class="contact-right">
-            <div class="contact-time" id="time-${userId}">${lastMsg ? formatTime(lastMsg.timestamp) : ''}</div>
-            <div class="unread-badge hidden" id="badge-${userId}">0</div>
+        <div class="bot-content-body">
+            <div class="chat-area" id="messages-${botId}">
+                <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+                    <p>Waiting for messages...</p>
+                </div>
+            </div>
         </div>
     `;
-    el.addEventListener('click', () => openChat(userId));
-    document.getElementById('contact-list').appendChild(el);
+
+    container.appendChild(content);
 }
 
-function updateContactPreview(userId, previewText, timestamp) {
-    const previewEl = document.getElementById(`preview-${userId}`);
-    const timeEl = document.getElementById(`time-${userId}`);
-    if (previewEl) previewEl.textContent = previewText.length > 40 ? previewText.substring(0, 40) + '...' : previewText;
-    if (timeEl) timeEl.textContent = formatTime(timestamp);
-
-    // Move contact to top of list
-    const contactEl = document.getElementById(`contact-${userId}`);
-    const list = document.getElementById('contact-list');
-    if (contactEl && list.firstChild !== contactEl) {
-        list.insertBefore(contactEl, list.firstChild);
-    }
-}
-
-function updateUnreadBadge(userId) {
-    const badge = document.getElementById(`badge-${userId}`);
-    if (!badge) return;
-    const count = unreadCounts[userId] || 0;
-    if (count > 0) {
-        badge.textContent = count > 99 ? '99+' : count;
-        badge.classList.remove('hidden');
-        document.getElementById(`contact-${userId}`).classList.add('has-new');
-    } else {
-        badge.classList.add('hidden');
-        document.getElementById(`contact-${userId}`).classList.remove('has-new');
-    }
-}
-
-// ── Chat View ─────────────────────────────────────────────────────
-function openChat(userId) {
-    // Update active state in sidebar
-    document.querySelectorAll('.contact-item').forEach(el => el.classList.remove('active'));
-    const contactEl = document.getElementById(`contact-${userId}`);
-    if (contactEl) contactEl.classList.add('active');
-
-    // Clear unread
-    unreadCounts[userId] = 0;
-    updateUnreadBadge(userId);
-
-    activeUserId = userId;
-    const data = chats[userId];
-    if (!data) return;
-
-    // Show chat view, hide welcome
-    document.getElementById('welcome-view').classList.add('hidden');
-    const chatView = document.getElementById('chat-view');
-    chatView.classList.remove('hidden');
-
-    // Set header
-    const color = avatarColor(userId);
-    const init = initials(data.name);
-    const ava = document.getElementById('chat-avatar');
-    ava.style.background = color;
-    ava.textContent = init;
-    document.getElementById('chat-name').textContent = data.name;
-    document.getElementById('chat-phone').textContent = `+${data.phone || userId.replace('@c.us','').replace('@lid','')}`;
-
-    // Set AI toggle
-    const toggleSwitch = document.getElementById('ai-toggle-switch');
-    if (toggleSwitch) toggleSwitch.checked = pausedChats.has(userId);
-
-    // Render all messages
-    renderAllMessages(userId);
-    scrollToBottom();
-}
-
-function renderAllMessages(userId) {
-    const area = document.getElementById('messages-area');
-    area.innerHTML = '';
-    const msgs = chats[userId]?.messages || [];
-
-    document.getElementById('chat-msg-count').textContent = `${msgs.length} message${msgs.length !== 1 ? 's' : ''}`;
-
-    if (msgs.length === 0) {
-        area.innerHTML = '<div style="text-align:center;color:var(--text-muted);font-size:13px;margin-top:40px">No messages yet</div>';
-        return;
-    }
-
-    let lastDate = null;
-    let lastType = null;
-
-    msgs.forEach((msg, i) => {
-        const msgDate = formatDate(msg.timestamp);
-        if (msgDate !== lastDate) {
-            const sep = document.createElement('div');
-            sep.className = 'date-sep';
-            sep.innerHTML = `<span>${msgDate}</span>`;
-            area.appendChild(sep);
-            lastDate = msgDate;
-        }
-
-        // Show sender label on type change
-        if (msg.type !== lastType) {
-            const senderEl = document.createElement('div');
-            senderEl.className = `msg-sender ${msg.type}`;
-            senderEl.textContent = msg.type === 'user' ? chats[userId].name : 'Divya ✦';
-            area.appendChild(senderEl);
-            lastType = msg.type;
-        }
-
-        const row = document.createElement('div');
-        row.className = `msg-row ${msg.type}`;
-        row.innerHTML = `
-            <div class="msg-bubble">${escapeHtml(msg.body)}</div>
-        `;
-        area.appendChild(row);
-
-        // Show time on last message or type change
-        const nextMsg = msgs[i + 1];
-        if (!nextMsg || nextMsg.type !== msg.type || formatDate(nextMsg.timestamp) !== msgDate) {
-            const timeEl = document.createElement('div');
-            timeEl.className = 'msg-time';
-            timeEl.textContent = formatTime(msg.timestamp);
-            area.appendChild(timeEl);
-        }
+// Switch Tab
+function switchTab(botId) {
+    // Update tabs
+    document.querySelectorAll('.bot-tab').forEach(tab => {
+        tab.classList.remove('active');
     });
+    const activeTab = document.getElementById(`tab-${botId}`);
+    if (activeTab) activeTab.classList.add('active');
+
+    // Update content
+    document.querySelectorAll('.bot-content').forEach(content => {
+        content.classList.remove('active');
+    });
+    const activeContent = document.getElementById(`content-${botId}`);
+    if (activeContent) activeContent.classList.add('active');
+
+    currentTab = botId;
+    updateEmptyState();
 }
 
-function appendMessage(userId, msg) {
-    const area = document.getElementById('messages-area');
-    const msgs = chats[userId]?.messages || [];
-    const prevMsg = msgs[msgs.length - 2]; // message before this one
-
-    // Date separator if needed
-    if (!prevMsg || formatDate(prevMsg.timestamp) !== formatDate(msg.timestamp)) {
-        const sep = document.createElement('div');
-        sep.className = 'date-sep';
-        sep.innerHTML = `<span>${formatDate(msg.timestamp)}</span>`;
-        area.appendChild(sep);
-    }
-
-    // Sender label on type change
-    if (!prevMsg || prevMsg.type !== msg.type) {
-        const senderEl = document.createElement('div');
-        senderEl.className = `msg-sender ${msg.type}`;
-        senderEl.textContent = msg.type === 'user' ? chats[userId].name : 'Divya ✦';
-        area.appendChild(senderEl);
-    }
-
-    const row = document.createElement('div');
-    row.className = `msg-row ${msg.type}`;
-    row.innerHTML = `<div class="msg-bubble">${escapeHtml(msg.body)}</div>`;
-    area.appendChild(row);
-
-    const timeEl = document.createElement('div');
-    timeEl.className = 'msg-time';
-    timeEl.textContent = formatTime(msg.timestamp);
-    area.appendChild(timeEl);
-
-    // Update message count
-    const allMsgs = chats[userId]?.messages || [];
-    document.getElementById('chat-msg-count').textContent = `${allMsgs.length} message${allMsgs.length !== 1 ? 's' : ''}`;
-}
-
-function scrollToBottom() {
-    const area = document.getElementById('messages-area');
-    area.scrollTop = area.scrollHeight;
-}
-
-// ── Stats ─────────────────────────────────────────────────────────
-function updateStats() {
-    const contactCount = Object.keys(chats).length;
-    document.getElementById('stat-contacts').textContent = contactCount;
-    document.getElementById('stat-messages').textContent = totalMessages;
-    document.getElementById('wstat-contacts').textContent = contactCount;
-    document.getElementById('wstat-msgs').textContent = totalMessages;
-}
-
-// ── Helpers ───────────────────────────────────────────────────────
-function escapeHtml(str) {
-    return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/\n/g, '<br>');
-}
-
-// ── Dashboard Messaging & AI Control ─────────────────────────────
-function sendDashboardMessage() {
-    const input = document.getElementById('dashboard-chat-input');
-    const text = input.value.trim();
-    if (!text || !activeUserId) return;
-    
-    // Automatically pause AI on manual message
-    if (!pausedChats.has(activeUserId)) {
-        const toggleSwitch = document.getElementById('ai-toggle-switch');
-        if (toggleSwitch) toggleSwitch.checked = true;
-        socket.emit('toggle_ai', { userId: activeUserId, isPaused: true });
-    }
-
-    socket.emit('dashboard_message', { userId: activeUserId, text });
-    input.value = '';
-}
-
-function handleInputKeyPress(e) {
-    if (e.key === 'Enter') {
-        sendDashboardMessage();
+// Close Bot
+function closeBot(botId) {
+    const checkbox = document.querySelector(`.bot-item[data-bot="${botId}"] input[type="checkbox"]`);
+    if (checkbox) {
+        checkbox.checked = false;
+        toggleBot(botId, false);
     }
 }
 
-function toggleAI() {
-    const toggleSwitch = document.getElementById('ai-toggle-switch');
-    if (!toggleSwitch || !activeUserId) return;
-    const isPaused = toggleSwitch.checked;
-    socket.emit('toggle_ai', { userId: activeUserId, isPaused });
-}
+// Update Empty State
+function updateEmptyState() {
+    const emptyState = document.getElementById('empty-state');
+    const botContents = document.getElementById('bot-contents');
 
-socket.on('ai_status_changed', ({ userId, isPaused }) => {
-    if (isPaused) {
-        pausedChats.add(userId);
+    if (activeBots.size === 0) {
+        emptyState.style.display = 'flex';
+        botContents.style.display = 'none';
     } else {
-        pausedChats.delete(userId);
+        emptyState.style.display = 'none';
+        botContents.style.display = 'block';
     }
-    if (activeUserId === userId) {
-        const toggleSwitch = document.getElementById('ai-toggle-switch');
-        if (toggleSwitch) toggleSwitch.checked = isPaused;
+}
+
+// QR Modal
+let currentQRBot = null;
+
+function showQRModal(botId) {
+    currentQRBot = botId;
+    const modal = document.getElementById('qr-modal');
+    const title = document.getElementById('qr-modal-title');
+    title.textContent = `Connect ${getBotName(botId)} Bot`;
+
+    // Reset QR display
+    document.getElementById('qr-placeholder').style.display = 'flex';
+    document.getElementById('qr-image').style.display = 'none';
+
+    modal.classList.add('active');
+
+    // The QR will come from backend via Socket.io 'qr' event
+    // No simulation needed
+}
+
+function closeQRModal() {
+    const modal = document.getElementById('qr-modal');
+    modal.classList.remove('active');
+
+    // Clear any pending simulation timer
+    if (qrSimulationTimer) {
+        clearTimeout(qrSimulationTimer);
+        qrSimulationTimer = null;
     }
-});
 
-// ── Logout ────────────────────────────────────────────────────────
-function confirmLogout() {
-    document.getElementById('logout-modal').classList.remove('hidden');
-}
-function closeLogoutModal() {
-    document.getElementById('logout-modal').classList.add('hidden');
-    const btn = document.getElementById('confirm-logout-btn');
-    btn.classList.remove('loading');
-    btn.textContent = 'Yes, Logout';
+    // If bot was closed before authentication, revert to offline
+    if (currentQRBot && activeBots.has(currentQRBot)) {
+        const bot = activeBots.get(currentQRBot);
+        if (bot.status === 'connecting') {
+            const statusBadge = document.getElementById(`status-${currentQRBot}`);
+            statusBadge.textContent = 'Offline';
+            statusBadge.className = 'status-badge offline';
+
+            // Uncheck the toggle
+            const toggleInput = document.querySelector(`[onchange*="'${currentQRBot}'"]`);
+            if (toggleInput) toggleInput.checked = false;
+
+            // Remove from active bots
+            activeBots.delete(currentQRBot);
+            removeBotTab(currentQRBot);
+            updateStats();
+            updateEmptyState();
+        }
+    }
+
+    currentQRBot = null;
 }
 
-function doLogout() {
-    const btn = document.getElementById('confirm-logout-btn');
-    btn.classList.add('loading');
-    btn.textContent = 'Logging out...';
-    socket.emit('request_logout');
+function simulateQRCode(botId) {
+    // This is a simulation - in real implementation,
+    // you'll receive QR from Socket.io
+
+    const qrPlaceholder = document.getElementById('qr-placeholder');
+    const qrImage = document.getElementById('qr-image');
+
+    // For now, just show placeholder text
+    qrPlaceholder.innerHTML = '<p style="color: #64748b; font-size: 14px;">QR code will appear here when WhatsApp client is ready</p>';
+
+    // REMOVED: Auto-online simulation
+    // The bot should only go online when 'bot_ready' event is received from backend
+    // Do NOT automatically set bot online without actual authentication
 }
 
-socket.on('logging_out', () => {
-    closeLogoutModal();
-    // Reset all state
-    chats = {};
-    activeUserId = null;
-    totalMessages = 0;
-    unreadCounts = {};
-    // Clear sidebar
-    document.getElementById('contact-list').innerHTML =
-        '<div class="empty-contacts" id="empty-contacts"><div class="empty-icon">💬</div><p>No conversations yet</p><span>Messages will appear here</span></div>';
+function setBotOnline(botId) {
+    const statusBadge = document.getElementById(`status-${botId}`);
+    statusBadge.textContent = 'Online';
+    statusBadge.className = 'status-badge online';
+
+    if (activeBots.has(botId)) {
+        const bot = activeBots.get(botId);
+        bot.status = 'online';
+        activeBots.set(botId, bot);
+    }
+
+    showToast(`${getBotName(botId)} is now online!`);
     updateStats();
-    // Show QR screen to scan new login
-    document.getElementById('qr-image').classList.add('hidden');
-    document.getElementById('qr-loading-state').classList.remove('hidden');
-    document.getElementById('qr-tag').textContent = 'Logging out...';
-    showScreen('screen-qr');
-    showToast('🔓 Logged out. Scan the QR code to log in again.', 5000);
+}
+
+// Add Message to Bot
+function addMessage(botId, message) {
+    if (!activeBots.has(botId)) return;
+
+    const bot = activeBots.get(botId);
+    bot.messages.push(message);
+    activeBots.set(botId, bot);
+
+    // Update UI
+    const messagesContainer = document.getElementById(`messages-${botId}`);
+    if (!messagesContainer) return;
+
+    // Clear placeholder
+    if (messagesContainer.children[0]?.textContent?.includes('Waiting')) {
+        messagesContainer.innerHTML = '';
+    }
+
+    const messageEl = document.createElement('div');
+    messageEl.className = 'message-item';
+    messageEl.innerHTML = `
+        <div class="message-avatar">${message.sender[0].toUpperCase()}</div>
+        <div class="message-content">
+            <div class="message-header">
+                <span class="message-name">${message.sender}</span>
+                <span class="message-time">${new Date(message.timestamp).toLocaleTimeString()}</span>
+            </div>
+            <div class="message-text">${message.text}</div>
+        </div>
+    `;
+
+    messagesContainer.appendChild(messageEl);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+    updateStats();
+}
+
+// Socket.io Events
+socket.on('connect', () => {
+    console.log('Connected to server');
 });
 
+// Multi-bot backend events (with botId)
+socket.on('qr', ({ botId, qr }) => {
+    console.log(`QR received for ${botId}`);
+    if (currentQRBot === botId) {
+        const qrPlaceholder = document.getElementById('qr-placeholder');
+        const qrImage = document.getElementById('qr-image');
+
+        qrPlaceholder.style.display = 'none';
+        qrImage.src = qr;
+        qrImage.style.display = 'block';
+    }
+});
+
+socket.on('loading', ({ botId, percent, message }) => {
+    console.log(`${botId} loading: ${percent}%`);
+    if (currentQRBot === botId) {
+        const qrPlaceholder = document.getElementById('qr-placeholder');
+        qrPlaceholder.innerHTML = `
+            <div class="spinner"></div>
+            <p style="color: #64748b; font-size: 14px;">Loading: ${percent}%</p>
+            <p style="color: #94a3b8; font-size: 12px;">${message}</p>
+        `;
+    }
+});
+
+socket.on('authenticated', ({ botId }) => {
+    console.log(`${botId} authenticated!`);
+    showToast(`${getBotName(botId)} authenticated!`);
+});
+
+socket.on('ready', ({ botId }) => {
+    console.log(`${botId} ready!`);
+    setBotOnline(botId);
+    if (currentQRBot === botId) {
+        closeQRModal();
+    }
+});
+
+socket.on('bot_status', ({ botId, status }) => {
+    const statusBadge = document.getElementById(`status-${botId}`);
+    if (!statusBadge) return;
+
+    if (status === 'offline') {
+        statusBadge.textContent = 'Offline';
+        statusBadge.className = 'status-badge offline';
+
+        // Uncheck toggle
+        const toggleInput = document.querySelector(`[onchange*="'${botId}'"]`);
+        if (toggleInput) toggleInput.checked = false;
+
+        activeBots.delete(botId);
+        removeBotTab(botId);
+        updateStats();
+        updateEmptyState();
+    }
+});
+
+socket.on('user_message', ({ botId, userId, contactName, body, timestamp }) => {
+    addMessage(botId, { sender: contactName, text: body, timestamp });
+});
+
+socket.on('bot_reply', ({ botId, userId, contactName, body, timestamp }) => {
+    addMessage(botId, { sender: 'Bot', text: body, timestamp });
+});
+
+socket.on('bot_error', ({ botId, error }) => {
+    console.error(`${botId} error:`, error);
+    showToast(`Error: ${error}`);
+});
+
+// Initialize
+updateEmptyState();
+updateStats();
+
+// Demo: Add test message after 3 seconds (remove in production)
+setTimeout(() => {
+    // This is just for demo - remove in production
+    console.log('Dashboard loaded and ready');
+}, 3000);

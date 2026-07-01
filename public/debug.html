@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug - Divya Dashboard</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #0a0e27;
+            color: #fff;
+        }
+        .log {
+            background: #1e2652;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+        .info { color: #6366f1; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Dashboard Debug Info</h1>
+    <div id="logs"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const logs = document.getElementById('logs');
+
+        function log(msg, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `log ${type}`;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            logs.appendChild(div);
+        }
+
+        log('Starting debug...', 'info');
+
+        try {
+            log('Socket.io script loaded ✓', 'success');
+            const socket = io();
+            log('Socket.io instance created ✓', 'success');
+
+            socket.on('connect', () => {
+                log('Connected to server ✓', 'success');
+            });
+
+            socket.on('init', (data) => {
+                log('Received init event ✓', 'success');
+                log(`Status: ${data.status}`, 'info');
+                log(`Has QR: ${!!data.qr}`, 'info');
+                log(`Total messages: ${data.totalMessages}`, 'info');
+                log(`Chats: ${Object.keys(data.chats || {}).length}`, 'info');
+            });
+
+            socket.on('qr', (qr) => {
+                log('Received QR code ✓', 'success');
+                log(`QR data length: ${qr.length}`, 'info');
+            });
+
+            socket.on('ready', () => {
+                log('Bot is ready ✓', 'success');
+            });
+
+            socket.on('disconnect', () => {
+                log('Disconnected from server', 'error');
+            });
+
+            socket.on('connect_error', (err) => {
+                log(`Connection error: ${err.message}`, 'error');
+            });
+
+        } catch (err) {
+            log(`Error: ${err.message}`, 'error');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,442 @@
+{
+  "builder": "DSR Group",
+  "description": "One of South India's leading real estate developers with 35+ years of experience since 1988. Specializing in residential villas, luxury homes, and gated communities across Bengaluru, Hyderabad, and Chennai.",
+  "website": "www.dsrgroup.in",
+  "contact": {
+    "phone": "For detailed pricing, floor plans, and site visits, call 08045888783",
+    "email": "For inquiries via email, contact tanishq@diggajrealty.com"
+  },
+  "head_office": "Hyderabad, India",
+  "bangalore_office": "DSR Techno Cube, Varthur Main Road, Bengaluru - 560066",
+  "established": "1988",
+  "experience": "35+ years",
+  "leadership": {
+    "managing_director": "D. Sudhakar Reddy (35+ years experience)",
+    "executive_director": "D. Prabhakar Reddy (30+ years experience)",
+    "ceo": "K.S. Satyanarayan Reddy (30 years experience, 18 years with DSR)"
+  },
+  "group_companies": [
+    "DSR Infrastructure",
+    "DSR Infra Projects",
+    "DSR Constructions",
+    "DSR Prime Spaces",
+    "DSR Infra Developers",
+    "DSR Educational Society"
+  ],
+  "projects": [
+    {
+      "id": "dsr-evoq",
+      "name": "DSR Evoq",
+      "type": "Premium Residential Apartments",
+      "location": "Whitefield, Bangalore",
+      "configurations": ["2 BHK", "3 BHK", "4 BHK"],
+      "sizes": {
+        "2BHK": "773-896 sq.ft",
+        "3BHK": "896 sq.ft onwards",
+        "4BHK": "Contact for details"
+      },
+      "units": "725 units in 3 towers",
+      "price": "₹1.44-1.47 Cr onwards",
+      "possession": "Under Construction",
+      "status": "under_construction",
+      "project_area": "7.80 acres",
+      "rera": "Contact DSR for RERA details",
+      "amenities": [
+        "Clubhouse",
+        "Swimming Pool",
+        "Gymnasium",
+        "Children's Play Area",
+        "Landscaped Gardens",
+        "Sports Facilities",
+        "24/7 Security",
+        "Power Backup",
+        "Visitor Parking",
+        "Jogging Track"
+      ],
+      "highlights": "Premium residential project in Whitefield IT corridor. 3 towers with 725 units spread across 7.80 acres. Multiple configuration options from 2 to 4 BHK. Strategic location in East Bangalore's prime tech hub.",
+      "nearby": "Whitefield IT corridor, ITPL, International Tech Park Bangalore, Graphite India, Brigade Gateway, Phoenix Marketcity, Columbia Asia Hospital, KIMS Hospital, schools within 2-3 km"
+    },
+    {
+      "id": "dsr-the-address",
+      "name": "DSR The Address",
+      "type": "Premium Residential Apartments",
+      "location": "Dommasandra, Bangalore",
+      "configurations": ["2 BHK", "2.5 BHK", "3 BHK", "4 BHK"],
+      "sizes": {
+        "2BHK": "724 sq.ft onwards",
+        "2.5BHK": "Contact for details",
+        "3BHK": "Contact for details",
+        "4BHK": "Contact for details"
+      },
+      "units": "1,300 premium apartments in 6 towers",
+      "price": "₹1.3 Cr onwards",
+      "possession": "Under Construction (Pre-launch)",
+      "status": "pre_launch",
+      "project_area": "13.67 acres",
+      "rera": "Contact DSR for RERA details",
+      "amenities": [
+        "Premium Clubhouse",
+        "Swimming Pool with Deck",
+        "State-of-the-art Gymnasium",
+        "Indoor Games Room",
+        "Children's Play Area",
+        "Multipurpose Hall",
+        "Landscaped Gardens",
+        "Jogging Track",
+        "Sports Courts",
+        "24/7 Security with CCTV",
+        "Power Backup",
+        "Rainwater Harvesting",
+        "Sewage Treatment Plant"
+      ],
+      "highlights": "Large-scale premium development with 1,300 apartments across 13.67 acres. 6 towers offering multiple configurations from 2 to 4 BHK. Strategic location in Dommasandra near major IT hubs. Close to Electronic City and Sarjapur Road.",
+      "nearby": "Dommasandra near Electronic City, Sarjapur Road, Wipro Corporate Office, Biocon, Infosys, schools and hospitals within 5 km radius"
+    },
+    {
+      "id": "dsr-elixir",
+      "name": "DSR Elixir",
+      "type": "Luxury Villas",
+      "location": "Whitefield, Bangalore",
+      "configurations": ["3 BHK Villa", "4 BHK Villa", "4+ BHK Villa"],
+      "sizes": {
+        "3BHK": "1,879 sq.ft onwards",
+        "4BHK": "Contact for details",
+        "4+BHK": "Contact for details"
+      },
+      "price": "₹3.06 Cr onwards",
+      "possession": "Under Construction",
+      "status": "under_construction",
+      "project_area": "Contact DSR for details",
+      "rera": "Contact DSR for RERA details",
+      "amenities": [
+        "Gated Community",
+        "Private Gardens",
+        "Clubhouse",
+        "Swimming Pool",
+        "Fitness Center",
+        "Children's Play Area",
+        "Landscaped Common Areas",
+        "24/7 Security",
+        "Power Backup",
+        "Covered Parking",
+        "Premium Fittings and Fixtures"
+      ],
+      "highlights": "Luxury villa project in prestigious Whitefield location. Spacious villas starting from 1,879 sq.ft with 3, 4, and 4+ BHK configurations. Premium gated community with private gardens. Ideal for families seeking independent homes in prime location.",
+      "nearby": "Whitefield IT Hub, International Tech Park, major tech companies, premium schools, hospitals, Phoenix Marketcity, VR Bengaluru, excellent connectivity to Outer Ring Road"
+    },
+    {
+      "id": "dsr-waterscape",
+      "name": "DSR Waterscape",
+      "type": "Residential Apartments",
+      "location": "K Channasandra, Bangalore",
+      "configurations": ["2 BHK", "3 BHK"],
+      "sizes": {
+        "2BHK": "760 sq.ft onwards",
+        "3BHK": "Contact for details"
+      },
+      "price": "₹1.01 Cr onwards",
+      "possession": "Ready to Move",
+      "status": "ready_to_move",
+      "project_area": "Contact DSR for details",
+      "rera": "Contact DSR for RERA details",
+      "amenities": [
+        "Clubhouse",
+        "Swimming Pool",
+        "Gymnasium",
+        "Children's Play Area",
+        "Landscaped Gardens",
+        "Indoor Games",
+        "Security",
+        "Power Backup",
+        "Parking",
+        "Water Features"
+      ],
+      "highlights": "Ready to move project in K Channasandra. Offers 2 and 3 BHK apartments starting from 760 sq.ft. Competitively priced at ₹1.01 Cr onwards. Good connectivity to IT corridors and Whitefield area.",
+      "nearby": "K Channasandra near Whitefield, IT parks, schools, hospitals, shopping centers within close proximity"
+    },
+    {
+      "id": "dsr-green-waters",
+      "name": "DSR Green Waters",
+      "type": "Residential Apartments",
+      "location": "Varthur, Bangalore",
+      "configurations": ["2 BHK", "2.5 BHK", "3 BHK"],
+      "sizes": {
+        "2BHK": "718 sq.ft onwards",
+        "2.5BHK": "Contact for details",
+        "3BHK": "Contact for details"
+      },
+      "price": "₹85.85 Lakhs onwards",
+      "possession": "Ready to Move",
+      "status": "ready_to_move",
+      "project_area": "Contact DSR for details",
+      "rera": "Contact DSR for RERA details",
+      "amenities": [
+        "Clubhouse",
+        "Swimming Pool",
+        "Gymnasium",
+        "Children's Play Area",
+        "Landscaped Gardens",
+        "Sports Facilities",
+        "24/7 Security",
+        "Power Backup",
+        "Parking"
+      ],
+      "highlights": "Affordable ready-to-move project in Varthur starting at ₹85.85 Lakhs. Compact 2 BHK starting from 718 sq.ft. Excellent value proposition for first-time homebuyers. Strategic location near Whitefield IT corridor.",
+      "nearby": "Varthur near Whitefield, Outer Ring Road, tech parks including Cessna Business Park, schools, hospitals, metro connectivity planned"
+    },
+    {
+      "id": "dsr-parkway",
+      "name": "DSR Parkway",
+      "type": "Residential Apartments",
+      "location": "Sarjapur Road, Bangalore",
+      "configurations": ["1 BHK", "2 BHK", "2.5 BHK", "3 BHK"],
+      "sizes": {
+        "1BHK": "420 sq.ft onwards",
+        "2BHK": "Contact for details",
+        "2.5BHK": "Contact for details",
+        "3BHK": "Contact for details"
+      },
+      "price": "₹1.35 Cr onwards",
+      "possession": "Ready to Move",
+      "status": "ready_to_move",
+      "project_area": "Contact DSR for details",
+      "rera": "Contact DSR for RERA details",
+      "amenities": [
+        "Clubhouse",
+        "Swimming Pool",
+        "Gymnasium",
+        "Children's Play Area",
+        "Landscaped Gardens",
+        "Sports Facilities",
+        "Security",
+        "Power Backup",
+        "Visitor Parking"
+      ],
+      "highlights": "Ready-to-move project on prime Sarjapur Road. Multiple configurations from compact 1 BHK (420 sq.ft) to spacious 3 BHK. Strategic location on Sarjapur Road with excellent connectivity. Close to major IT companies and tech parks.",
+      "nearby": "Sarjapur Road, Electronic City, major IT parks including Wipro, Infosys, schools, hospitals, shopping malls, excellent connectivity to Outer Ring Road"
+    },
+    {
+      "id": "dsr-browncreeper",
+      "name": "DSR Browncreeper",
+      "type": "Residential Apartments",
+      "location": "Gunjur Village, Bangalore",
+      "configurations": ["3 BHK"],
+      "sizes": {
+        "3BHK": "897 sq.ft onwards"
+      },
+      "price": "₹1.35 Cr onwards",
+      "possession": "Under Construction",
+      "status": "under_construction",
+      "project_area": "Contact DSR for details",
+      "rera": "Contact DSR for RERA details",
+      "amenities": [
+        "Clubhouse",
+        "Swimming Pool",
+        "Gymnasium",
+        "Children's Play Area",
+        "Landscaped Gardens",
+        "Sports Facilities",
+        "Security",
+        "Power Backup",
+        "Parking"
+      ],
+      "highlights": "Exclusively 3 BHK configuration starting from 897 sq.ft. Under construction project in Gunjur Village. Growing residential area with good connectivity. Priced at ₹1.35 Cr onwards.",
+      "nearby": "Gunjur Village near Varthur and Whitefield, IT parks, schools, hospitals, upcoming infrastructure development"
+    },
+    {
+      "id": "dsr-the-courtyard",
+      "name": "DSR The Courtyard",
+      "type": "Residential Apartments",
+      "location": "Gunjur/Varthur, Bangalore",
+      "configurations": ["2 BHK", "3 BHK"],
+      "sizes": {
+        "2BHK": "701 sq.ft onwards",
+        "3BHK": "Contact for details"
+      },
+      "price": "₹1.23 Cr onwards",
+      "possession": "Under Construction",
+      "status": "under_construction",
+      "project_area": "Contact DSR for details",
+      "rera": "Contact DSR for RERA details",
+      "amenities": [
+        "Courtyard Design",
+        "Clubhouse",
+        "Swimming Pool",
+        "Gymnasium",
+        "Children's Play Area",
+        "Landscaped Gardens",
+        "Security",
+        "Power Backup",
+        "Parking"
+      ],
+      "highlights": "Courtyard-style residential project in Gunjur/Varthur area. Compact 2 BHK starting from 701 sq.ft. Under construction with competitive pricing at ₹1.23 Cr onwards. Good connectivity to IT hubs.",
+      "nearby": "Gunjur/Varthur area, Whitefield IT corridor, Outer Ring Road, tech parks, schools, hospitals, shopping centers"
+    },
+    {
+      "id": "dsr-highland-greenz",
+      "name": "DSR Highland Greenz",
+      "type": "Residential Apartments",
+      "location": "Sarjapur, Bangalore",
+      "configurations": ["1 BHK", "1.5 BHK", "2 BHK", "2.5 BHK", "3 BHK"],
+      "sizes": {
+        "1BHK": "398 sq.ft onwards",
+        "1.5BHK": "Contact for details",
+        "2BHK": "Contact for details",
+        "2.5BHK": "Contact for details",
+        "3BHK": "Contact for details"
+      },
+      "price": "₹1.12 Cr onwards",
+      "possession": "Ready to Move",
+      "status": "ready_to_move",
+      "project_area": "Contact DSR for details",
+      "rera": "Contact DSR for RERA details",
+      "amenities": [
+        "Clubhouse",
+        "Swimming Pool",
+        "Gymnasium",
+        "Children's Play Area",
+        "Landscaped Green Spaces",
+        "Sports Facilities",
+        "Security",
+        "Power Backup",
+        "Parking"
+      ],
+      "highlights": "Ready-to-move project in Sarjapur with wide range of configurations from 1 to 3 BHK. Compact 1 BHK starting from just 398 sq.ft. Multiple options including 1.5 BHK and 2.5 BHK configurations. Priced from ₹1.12 Cr onwards.",
+      "nearby": "Sarjapur, Electronic City, major IT companies, schools, hospitals, shopping centers, good connectivity to ORR"
+    },
+    {
+      "id": "dsr-rainbow-heights",
+      "name": "DSR Rainbow Heights",
+      "type": "Residential Apartments",
+      "location": "HSR Layout, Bangalore",
+      "configurations": ["3 BHK"],
+      "sizes": {
+        "3BHK": "1,069 sq.ft onwards"
+      },
+      "price": "₹1.88 Cr onwards",
+      "possession": "Ready to Move",
+      "status": "ready_to_move",
+      "project_area": "Contact DSR for details",
+      "rera": "Contact DSR for RERA details",
+      "amenities": [
+        "Clubhouse",
+        "Swimming Pool",
+        "Gymnasium",
+        "Children's Play Area",
+        "Landscaped Gardens",
+        "Sports Facilities",
+        "Security",
+        "Power Backup",
+        "Parking"
+      ],
+      "highlights": "Ready-to-move project in prestigious HSR Layout. Exclusively 3 BHK apartments with spacious 1,069 sq.ft onwards. Prime location in established South Bangalore neighborhood. Excellent connectivity and social infrastructure.",
+      "nearby": "HSR Layout - premium South Bangalore location, close to BTM Layout, Koramangala, schools, hospitals, shopping centers, restaurants, excellent metro connectivity"
+    },
+    {
+      "id": "dsr-rr-avenues",
+      "name": "DSR RR Avenues",
+      "type": "Residential Apartments",
+      "location": "Yelahanka New Town, Bangalore",
+      "configurations": ["2 BHK", "3 BHK"],
+      "sizes": {
+        "2BHK": "843 sq.ft onwards",
+        "3BHK": "Contact for details"
+      },
+      "price": "₹95.32 Lakhs onwards",
+      "possession": "Ready to Move",
+      "status": "ready_to_move",
+      "project_area": "Contact DSR for details",
+      "rera": "Contact DSR for RERA details",
+      "amenities": [
+        "Clubhouse",
+        "Swimming Pool",
+        "Gymnasium",
+        "Children's Play Area",
+        "Landscaped Gardens",
+        "Sports Facilities",
+        "Security",
+        "Power Backup",
+        "Parking"
+      ],
+      "highlights": "Affordable ready-to-move project in Yelahanka New Town starting at ₹95.32 Lakhs. 2 BHK apartments from 843 sq.ft. Excellent value in North Bangalore. Good connectivity to airport and city center.",
+      "nearby": "Yelahanka New Town, North Bangalore, close to Kempegowda International Airport, industrial areas, schools, hospitals, upcoming metro connectivity"
+    },
+    {
+      "id": "dsr-krishna-royale",
+      "name": "DSR Krishna Royale",
+      "type": "Residential Apartments",
+      "location": "Marathahalli, Bangalore",
+      "configurations": ["2 BHK", "3 BHK"],
+      "sizes": {
+        "2BHK": "Contact for details",
+        "3BHK": "Contact for details"
+      },
+      "price": "Contact DSR for pricing - 08045888783",
+      "possession": "Completed/Occupied",
+      "status": "completed",
+      "project_area": "Contact DSR for details",
+      "rera": "Contact DSR for RERA details",
+      "amenities": [
+        "Clubhouse",
+        "Swimming Pool",
+        "Gymnasium",
+        "Children's Play Area",
+        "Landscaped Gardens",
+        "Security",
+        "Power Backup",
+        "Parking"
+      ],
+      "highlights": "Established residential project in prime Marathahalli location. 2 and 3 BHK configurations. Strategic location with excellent connectivity to IT corridors. Completed and occupied project with proven track record.",
+      "nearby": "Marathahalli - central East Bangalore location, close to Whitefield, Outer Ring Road, major IT parks, schools, hospitals, malls including Phoenix Marketcity"
+    },
+    {
+      "id": "dsr-sunrise-towers",
+      "name": "DSR Sunrise Towers",
+      "type": "Residential Apartments",
+      "location": "Whitefield, Bangalore",
+      "configurations": ["2 BHK", "3 BHK"],
+      "sizes": {
+        "2BHK": "Contact for details",
+        "3BHK": "Contact for details"
+      },
+      "price": "Contact DSR for pricing - 08045888783",
+      "possession": "Completed/Occupied",
+      "status": "completed",
+      "project_area": "Contact DSR for details",
+      "rera": "Contact DSR for RERA details",
+      "amenities": [
+        "Clubhouse",
+        "Swimming Pool",
+        "Gymnasium",
+        "Children's Play Area",
+        "Landscaped Gardens",
+        "Security",
+        "Power Backup",
+        "Parking"
+      ],
+      "highlights": "Landmark residential project in Whitefield IT corridor. 2 and 3 BHK apartments. Completed and occupied with established community. Prime location in East Bangalore's tech hub.",
+      "nearby": "Whitefield IT corridor, International Tech Park, major tech companies, schools, hospitals, Phoenix Marketcity, VR Bengaluru, excellent connectivity"
+    },
+    {
+      "id": "dsr-regency",
+      "name": "DSR Regency",
+      "type": "Residential Apartments",
+      "location": "Bangalore (Contact for specific location)",
+      "configurations": ["2 BHK", "3 BHK"],
+      "sizes": {
+        "2BHK": "Contact for details",
+        "3BHK": "Contact for details"
+      },
+      "price": "Contact DSR for pricing - 08045888783",
+      "possession": "Contact DSR for status",
+      "status": "active",
+      "project_area": "Contact DSR for details",
+      "rera": "Contact DSR for RERA details",
+      "amenities": [
+        "Contact DSR Group for complete amenity list - 08045888783"
+      ],
+      "highlights": "DSR Regency residential project in Bangalore. Contact DSR Group for specific location details, configurations, and pricing information.",
+      "nearby": "Contact DSR for location and nearby landmarks"
+    }
+  ]
+}

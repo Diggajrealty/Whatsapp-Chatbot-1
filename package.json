@@ -4,7 +4,8 @@
   "description": "WhatsApp automation bot using whatsapp-web.js and Gemini",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index-multibot.js",
+    "single": "node index.js"
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",

@@ -1,0 +1,353 @@
+{
+  "builder": "Brigade Group",
+  "description": "One of South India's leading property developers with 35+ years of excellence. Diverse portfolio including residential, commercial, hospitality, and retail.",
+  "website": "www.brigadegroup.com",
+  "contact": {
+    "phone": "For detailed pricing, floor plans, and site visits, call 08045888783",
+    "email": "For inquiries via email, contact tanishq@diggajrealty.com"
+  },
+  "head_office": "29th & 30th Floor, WTC Brigade Gateway Campus, Bengaluru",
+  "projects": [
+    {
+      "id": "belvedere",
+      "name": "Brigade Belvedere",
+      "type": "Apartments (Township-style)",
+      "location": "Budigere Main Road (Ballgere Main Road), Bangalore",
+      "configurations": ["1 BHK", "2 BHK", "3 BHK", "3.5 BHK"],
+      "sizes": {
+        "note": "Contact Brigade for specific sizes"
+      },
+      "price": "₹96 Lakhs onwards",
+      "possession": "New Launch - Contact for timeline",
+      "status": "new_launch",
+      "project_area": "10.75 acres with five residential towers",
+      "amenities": [
+        "Contact Brigade Group for complete amenity list - 08045888783"
+      ],
+      "highlights": "Large township-style development spanning 10.75 acres. Five residential towers with multiple configuration options from 1 to 3.5 BHK. New launch project in developing Budigere corridor.",
+      "nearby": "Budigere Main Road area, developing residential corridor"
+    },
+    {
+      "id": "avalon",
+      "name": "Brigade Avalon",
+      "type": "Luxury Apartments",
+      "location": "Golf Club Road, Whitefield, Bengaluru",
+      "configurations": ["2.5 BHK", "3.5 BHK", "4 BHK"],
+      "sizes": {
+        "note": "Contact Brigade for specific sizes"
+      },
+      "price": "₹4.62 Crores onwards",
+      "possession": "Ongoing Project (Under Construction)",
+      "status": "under_construction",
+      "amenities": [
+        "Premium luxury amenities",
+        "Contact Brigade Group for complete list - 08045888783"
+      ],
+      "highlights": "Premium luxury segment project located in prime Whitefield Golf Club Road area. Larger configuration options (2.5, 3.5, 4 BHK) with high-end specifications and finishes.",
+      "nearby": "Whitefield tech corridor, IT companies and tech parks in Whitefield area"
+    },
+    {
+      "id": "lakecrest",
+      "name": "Brigade Lakecrest",
+      "type": "Apartments",
+      "location": "Old Madras Road, Bengaluru",
+      "configurations": ["1 BHK", "2 BHK", "3 BHK"],
+      "sizes": {
+        "note": "Contact Brigade for specific sizes"
+      },
+      "price": "Contact Brigade - 08045888783",
+      "possession": "Featured/Active Project",
+      "status": "active",
+      "amenities": [
+        "Contact Brigade Group for complete amenity list - 08045888783"
+      ],
+      "highlights": "Strategic location on Old Madras Road with good connectivity corridor. Multiple configuration options from 1 to 3 BHK.",
+      "nearby": "Old Madras Road corridor"
+    },
+    {
+      "id": "insignia",
+      "name": "Brigade Insignia",
+      "type": "Large Format Apartments",
+      "location": "Yelahanka, Bengaluru",
+      "configurations": ["3 BHK", "4 BHK", "5 BHK"],
+      "sizes": {
+        "note": "Contact Brigade for specific sizes"
+      },
+      "price": "Contact Brigade - 08045888783",
+      "possession": "Featured/Active Project",
+      "status": "active",
+      "amenities": [
+        "Contact Brigade Group for complete amenity list - 08045888783"
+      ],
+      "highlights": "Large configuration options (3, 4, and 5 BHK). Spacious homes for families. Located in North Bangalore's Yelahanka area. Premium large-format apartments.",
+      "nearby": "Yelahanka, North Bangalore"
+    },
+    {
+      "id": "orchards_laurel_maple",
+      "name": "Laurel & Maple at Brigade Orchards",
+      "type": "Apartments (Integrated Township - Multigenerational Living)",
+      "location": "Devanahalli, Bangalore (Kasaba Hobli)",
+      "configurations": ["1 BHK", "2 BHK", "3 BHK"],
+      "sizes": {
+        "note": "Contact Brigade for specific sizes"
+      },
+      "price": "₹97 Lakhs onwards",
+      "possession": "New Launch",
+      "status": "new_launch",
+      "amenities": [
+        "Multigenerational living facilities",
+        "Operated by Primus (specialized senior living operator)",
+        "Township amenities",
+        "Contact Brigade for complete list"
+      ],
+      "highlights": "Multigenerational living concept operated by Primus. Part of award-winning Brigade Orchards township (Township Project of the Year - multiple awards). Integrated township lifestyle.",
+      "nearby": "Devanahalli area, near Kempegowda International Airport"
+    },
+    {
+      "id": "orchards_ebony",
+      "name": "Ebony at Brigade Orchards",
+      "type": "Apartments (Integrated Township)",
+      "location": "Devanahalli, Bangalore (Kasaba Hobli)",
+      "configurations": ["3 BHK", "3.5 BHK"],
+      "sizes": {
+        "note": "Contact Brigade for specific sizes"
+      },
+      "price": "₹1.70 Crores onwards",
+      "possession": "Ongoing (Under Construction)",
+      "status": "under_construction",
+      "amenities": [
+        "Township amenities available",
+        "Contact Brigade for complete list"
+      ],
+      "highlights": "Part of Brigade Orchards integrated township (Township Project of the Year - multiple awards). Larger configurations (3 and 3.5 BHK only). Premium segment within Brigade Orchards.",
+      "nearby": "Devanahalli area, near Kempegowda International Airport"
+    },
+    {
+      "id": "orchards_fairmont",
+      "name": "Fairmont at Brigade Orchards",
+      "type": "Apartments (Integrated Township)",
+      "location": "Kasaba Hobli, Devanahalli, Bangalore",
+      "configurations": ["3.5 BHK", "4+ BHK"],
+      "sizes": {
+        "3.5BHK": "1,200+ sq.ft carpet area",
+        "4BHK": "1,200+ sq.ft carpet area onwards"
+      },
+      "price": "₹1.75 Crores onwards",
+      "possession": "Under Construction",
+      "status": "under_construction",
+      "amenities": [
+        "World-class amenities",
+        "Luxurious home features",
+        "Township-level facilities",
+        "Contact Brigade for complete list"
+      ],
+      "highlights": "Luxurious homes with premium specifications. Part of award-winning Brigade Orchards township. Larger configurations (3.5 and 4+ BHK). Premium segment with world-class amenities.",
+      "nearby": "Devanahalli area, near Kempegowda International Airport"
+    },
+    {
+      "id": "meadows_plumeria",
+      "name": "Brigade Meadows Plumeria",
+      "type": "Apartments (Township)",
+      "location": "Kanakapura Road, Bangalore",
+      "configurations": ["2 BHK", "3 BHK"],
+      "sizes": {
+        "2BHK": "1,022+ sq.ft carpet area onwards",
+        "3BHK": "1,022+ sq.ft carpet area onwards"
+      },
+      "price": "₹1.4 Crores onwards",
+      "possession": "Ready to Move",
+      "status": "ready_to_move",
+      "project_area": "Part of 60-acre Brigade Meadows township with 800 units",
+      "amenities": [
+        "World-class amenities",
+        "Lush landscapes",
+        "24/7 security",
+        "Township-level facilities",
+        "Contact Brigade for complete list"
+      ],
+      "highlights": "READY TO MOVE-IN property. Part of 60-acre Brigade Meadows township with 800 units total. Lush green surroundings with established community. Kanakapura Road location.",
+      "nearby": "Kanakapura Road"
+    },
+    {
+      "id": "meadows_seniorliving",
+      "name": "Senior Living by Parkside at Brigade Meadows",
+      "type": "Senior Living Commune (Township)",
+      "location": "Kanakapura Road, Bangalore",
+      "configurations": ["Coming Soon"],
+      "sizes": {
+        "note": "Information not yet available"
+      },
+      "price": "Coming Soon",
+      "possession": "Coming Soon",
+      "status": "coming_soon",
+      "amenities": [
+        "Operated by Primus (specialized senior living operator)",
+        "Senior-focused amenities expected",
+        "Healthcare and age-appropriate facilities"
+      ],
+      "highlights": "Dedicated senior living commune operated by Primus (specialized operator). Part of Brigade Meadows township. Healthcare and age-appropriate facilities expected. Community living for seniors.",
+      "nearby": "Kanakapura Road"
+    },
+    {
+      "id": "eldorado_aurum",
+      "name": "Brigade Eldorado Aurum",
+      "type": "Apartments",
+      "location": "Huvinayakanahalli (Aerospace Park), Bangalore",
+      "configurations": ["2 BHK", "3 BHK"],
+      "sizes": {
+        "2BHK": "592+ sq.ft carpet area onwards",
+        "3BHK": "592+ sq.ft carpet area onwards"
+      },
+      "price": "₹1 Crore onwards",
+      "possession": "Under Construction",
+      "status": "under_construction",
+      "amenities": [
+        "World-class amenities",
+        "Modern designs",
+        "Serene surroundings",
+        "Contact Brigade for complete list"
+      ],
+      "highlights": "Near Aerospace Park. Part of Brigade El Dorado brand. Modern architectural designs with serene and peaceful environment. Good connectivity.",
+      "nearby": "Aerospace Park"
+    },
+    {
+      "id": "eldorado_dioro",
+      "name": "Dioro at Brigade El Dorado",
+      "type": "Apartments",
+      "location": "Huvinayakanahalli, Bangalore",
+      "configurations": ["2 BHK", "3 BHK"],
+      "sizes": {
+        "2BHK": "590+ sq.ft carpet area onwards",
+        "3BHK": "590+ sq.ft carpet area onwards"
+      },
+      "price": "₹90 Lakhs onwards",
+      "possession": "Under Construction",
+      "status": "under_construction",
+      "amenities": [
+        "Modern designs",
+        "Lush green spaces",
+        "Top-notch amenities",
+        "Contact Brigade for complete list"
+      ],
+      "highlights": "Part of Brigade El Dorado brand. Affordable pricing starting under ₹1 Crore. Modern architectural designs with green spaces and landscaping. Good connectivity.",
+      "nearby": "Huvinayakanahalli area"
+    },
+    {
+      "id": "eldorado_cobalt",
+      "name": "Cobalt at Brigade El Dorado",
+      "type": "Apartments",
+      "location": "Bagalur, Bangalore",
+      "configurations": ["1 BHK", "2 BHK", "3 BHK"],
+      "sizes": {
+        "1BHK": "338+ sq.ft carpet area onwards",
+        "2BHK": "338+ sq.ft carpet area onwards",
+        "3BHK": "338+ sq.ft carpet area onwards"
+      },
+      "price": "₹86.62 Lakhs onwards",
+      "possession": "Under Construction (Pre-launch)",
+      "status": "pre_launch",
+      "amenities": [
+        "Contact Brigade Group for complete amenity list - 08045888783"
+      ],
+      "highlights": "Most affordable El Dorado variant. Pre-launch project in Bagalur growth corridor. Compact and efficient layouts with multiple configuration options (1-3 BHK).",
+      "nearby": "Bagalur area, developing corridor"
+    },
+    {
+      "id": "woods",
+      "name": "Brigade Woods",
+      "type": "3 BHK Luxury Apartments",
+      "location": "Kadugodi Industrial Area, Whitefield ITPL, Bangalore",
+      "configurations": ["3 BHK"],
+      "sizes": {
+        "3BHK": "1,175+ sq.ft carpet area onwards"
+      },
+      "price": "₹1.49 Crores onwards",
+      "possession": "Ready to Move",
+      "status": "ready_to_move",
+      "project_area": "6.3 acres with 333 luxury apartments",
+      "amenities": [
+        "Premium amenities",
+        "Lush landscapes",
+        "Excellent connectivity",
+        "Contact Brigade for complete list"
+      ],
+      "highlights": "READY TO MOVE-IN property. 6.3 acres development with 333 luxury apartments. Located near Whitefield IT corridor and ITPL. Excellent connectivity to tech parks. Established community with premium 3 BHK apartments only.",
+      "nearby": "Whitefield ITPL area, Kadugodi, near IT companies and tech parks, ITPL (International Tech Park Limited)"
+    },
+    {
+      "id": "caladium",
+      "name": "Brigade Caladium",
+      "type": "Luxury 4 BHK Apartments",
+      "location": "Hebbal, Bangalore",
+      "configurations": ["4 BHK"],
+      "sizes": {
+        "4BHK": "2,177+ sq.ft carpet area onwards"
+      },
+      "price": "₹4.2 Crores onwards",
+      "possession": "Ready to Move",
+      "status": "ready_to_move",
+      "amenities": [
+        "Swimming pool",
+        "Gymnasium",
+        "Tennis court",
+        "24/7 security",
+        "Additional amenities available"
+      ],
+      "highlights": "READY TO MOVE-IN luxury segment - 4 BHK apartments only. Premium Hebbal location with spacious layouts (2,177+ sq.ft). High-end specifications with sports facilities including tennis court.",
+      "nearby": "Hebbal, North Bangalore, well-connected area with metro access"
+    },
+    {
+      "id": "calista_phase2",
+      "name": "Brigade Calista Phase 2",
+      "type": "Apartments",
+      "location": "Budigere Cross, Bangalore",
+      "configurations": ["2 BHK", "3 BHK", "3.5 BHK"],
+      "sizes": {
+        "2BHK": "727+ sq.ft carpet area onwards",
+        "3BHK": "727+ sq.ft carpet area onwards",
+        "3.5BHK": "727+ sq.ft carpet area onwards"
+      },
+      "price": "₹1.77 Crores onwards",
+      "possession": "Under Construction",
+      "status": "under_construction",
+      "amenities": [
+        "Contact Brigade Group for complete amenity list - 08045888783"
+      ],
+      "highlights": "Part of multi-phase Brigade Calista township. Phase 2 of established project with multiple configuration options (2, 3, 3.5 BHK). Budigere Cross location with good connectivity.",
+      "nearby": "Budigere Cross area"
+    }
+  ],
+  "additional_projects": [
+    {
+      "name": "Brigade Southfield",
+      "location": "Mahadevapura, Bangalore",
+      "type": "1 RK-1 BHK Flats",
+      "size": "32,550 sq.ft carpet area onwards",
+      "price": "₹2.24 Crores",
+      "area": "3.5 acres with 234 units",
+      "status": "Ready to Move"
+    },
+    {
+      "name": "Brigade Oasis Phase 3",
+      "location": "Devanahalli, Bangalore",
+      "price": "₹89.89 Lakhs",
+      "status": "Ready to Move",
+      "highlights": "Stylish homes with advanced facilities"
+    },
+    {
+      "name": "Brigade Cherry Blossom",
+      "location": "Malur, Bangalore",
+      "type": "Plots",
+      "price": "₹73 Lakhs",
+      "status": "Under Construction",
+      "highlights": "Spacious plots for custom home construction"
+    }
+  ],
+  "notes": {
+    "inactive_projects": "Brigade Utopia, Brigade Cornerstone Utopia, Brigade Valencia, and Brigade Citadel were not found in active listings and may be completed/sold out.",
+    "data_limitations": "Complete amenity lists (10-15 items), specific landmark distances, and exact possession dates require verification with Brigade Group sales team.",
+    "pricing_note": "All pricing marked 'Price on Demand' and subject to change. Contact Brigade for current pricing and promotional offers.",
+    "recommendation": "For complete project details including amenities, possession timelines, current offers, and nearby landmark distances, contact Brigade Group at 08045888783 or tanishq@diggajrealty.com",
+    "data_accuracy": "Information compiled from multiple real estate portals and Brigade Group sources. For most accurate and updated information, contact Brigade directly."
+  }
+}

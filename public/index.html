@@ -3,210 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Divya — WhatsApp AI Dashboard</title>
-    <meta name="description" content="Real-time dashboard for Divya, the WhatsApp Real Estate AI Assistant">
+    <title>Real Estate Bot Manager</title>
+    <meta name="description" content="Professional Multi-Bot Management Dashboard">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
 
-    <!-- ═══ SCREEN 1: QR CODE ═══ -->
-    <div id="screen-qr" class="screen active">
-        <div class="orb orb-top-left"></div>
-        <div class="orb orb-bottom-right"></div>
+    <!-- MAIN DASHBOARD -->
+    <div id="main-dashboard" class="main-dashboard">
 
-        <div class="qr-card">
-            <div class="qr-brand">
-                <div class="brand-gem">✦</div>
-                <div>
-                    <div class="brand-name">Divya</div>
-                    <div class="brand-sub">Real Estate AI Assistant</div>
+        <!-- Top Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <div class="logo">
+                    <div class="logo-icon">🏢</div>
+                    <div class="logo-text">
+                        <h1>Real Estate Bots</h1>
+                        <span>Multi-Bot Control Center</span>
+                    </div>
                 </div>
             </div>
-
-            <div class="qr-frame-wrapper">
-                <div class="qr-corner tl"></div>
-                <div class="qr-corner tr"></div>
-                <div class="qr-corner bl"></div>
-                <div class="qr-corner br"></div>
-                <div id="qr-loading-state" class="qr-placeholder">
-                    <div class="qr-spinner"></div>
-                    <p>Generating QR code...</p>
-                </div>
-                <img id="qr-image" class="qr-image hidden" src="" alt="WhatsApp QR Code">
-            </div>
-
-            <div class="qr-tag" id="qr-tag">Waiting for bot to start...</div>
-
-            <div class="qr-steps">
-                <div class="qr-step">
-                    <div class="step-num">1</div>
-                    <span>Open WhatsApp on your phone</span>
-                </div>
-                <div class="qr-step">
-                    <div class="step-num">2</div>
-                    <span>Settings → Linked Devices → Link a Device</span>
-                </div>
-                <div class="qr-step">
-                    <div class="step-num">3</div>
-                    <span>Point your camera at the QR code</span>
+            <div class="header-right">
+                <div class="header-stats">
+                    <div class="stat-pill">
+                        <span class="stat-label">Active Bots</span>
+                        <span class="stat-value" id="active-bots-count">0</span>
+                    </div>
+                    <div class="stat-pill">
+                        <span class="stat-label">Total Messages</span>
+                        <span class="stat-value" id="total-messages-count">0</span>
+                    </div>
                 </div>
             </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <div class="dashboard-content">
+
+            <!-- Left Sidebar - Bot Manager -->
+            <aside class="bot-manager">
+                <div class="manager-header">
+                    <h3>Bot Manager</h3>
+                    <span class="subtitle">Turn bots on/off independently</span>
+                </div>
+
+                <div class="bot-list">
+                    <!-- Sobha -->
+                    <div class="bot-item" data-bot="sobha">
+                        <div class="bot-item-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">🏢</div>
+                        <div class="bot-item-info">
+                            <h4>Divya - Sobha</h4>
+                            <span class="bot-item-desc">Luxury Residential Properties</span>
+                        </div>
+                        <div class="bot-item-status">
+                            <span class="status-badge offline" id="status-sobha">Offline</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" onchange="toggleBot('sobha', this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Brigade -->
+                    <div class="bot-item" data-bot="brigade">
+                        <div class="bot-item-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">🏗️</div>
+                        <div class="bot-item-info">
+                            <h4>Ashi - Brigade</h4>
+                            <span class="bot-item-desc">Premium Property Solutions</span>
+                        </div>
+                        <div class="bot-item-status">
+                            <span class="status-badge offline" id="status-brigade">Offline</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" onchange="toggleBot('brigade', this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Nambiar -->
+                    <div class="bot-item" data-bot="nambiar">
+                        <div class="bot-item-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">🌆</div>
+                        <div class="bot-item-info">
+                            <h4>Samaira - Nambiar</h4>
+                            <span class="bot-item-desc">Modern Living Spaces</span>
+                        </div>
+                        <div class="bot-item-status">
+                            <span class="status-badge offline" id="status-nambiar">Offline</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" onchange="toggleBot('nambiar', this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Godrej -->
+                    <div class="bot-item" data-bot="godrej">
+                        <div class="bot-item-icon" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);">🏘️</div>
+                        <div class="bot-item-info">
+                            <h4>Riya - Godrej</h4>
+                            <span class="bot-item-desc">Sustainable Smart Homes</span>
+                        </div>
+                        <div class="bot-item-status">
+                            <span class="status-badge offline" id="status-godrej">Offline</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" onchange="toggleBot('godrej', this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Abhee -->
+                    <div class="bot-item" data-bot="abhee">
+                        <div class="bot-item-icon" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);">🏡</div>
+                        <div class="bot-item-info">
+                            <h4>Meera - Abhee</h4>
+                            <span class="bot-item-desc">Affordable Housing Expert</span>
+                        </div>
+                        <div class="bot-item-status">
+                            <span class="status-badge offline" id="status-abhee">Offline</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" onchange="toggleBot('abhee', this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- DSR -->
+                    <div class="bot-item" data-bot="dsr">
+                        <div class="bot-item-icon" style="background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);">🏙️</div>
+                        <div class="bot-item-info">
+                            <h4>Neha - DSR</h4>
+                            <span class="bot-item-desc">Urban Development Projects</span>
+                        </div>
+                        <div class="bot-item-status">
+                            <span class="status-badge offline" id="status-dsr">Offline</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" onchange="toggleBot('dsr', this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- All Builders -->
+                    <div class="bot-item featured" data-bot="all">
+                        <div class="bot-item-icon" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);">⭐</div>
+                        <div class="bot-item-info">
+                            <h4>Kavya - All Builders</h4>
+                            <span class="bot-item-desc">General Property Assistant</span>
+                        </div>
+                        <div class="bot-item-status">
+                            <span class="status-badge offline" id="status-all">Offline</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" onchange="toggleBot('all', this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Right Content - Bot Tabs -->
+            <main class="main-content">
+
+                <!-- Bot Tabs -->
+                <div class="bot-tabs" id="bot-tabs">
+                    <!-- Tabs will be added dynamically -->
+                </div>
+
+                <!-- Empty State -->
+                <div class="empty-state" id="empty-state">
+                    <div class="empty-icon">🤖</div>
+                    <h3>No Active Bots</h3>
+                    <p>Turn on a bot from the left panel to start receiving messages</p>
+                    <div class="empty-features">
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>Run multiple bots simultaneously</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>Switch between bots with tabs</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>Independent message tracking</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bot Content Areas (will be created dynamically) -->
+                <div id="bot-contents">
+                    <!-- Individual bot dashboards will appear here -->
+                </div>
+
+            </main>
+
         </div>
     </div>
 
-    <!-- ═══ SCREEN 2: BOT STARTING ANIMATION ═══ -->
-    <div id="screen-loading" class="screen hidden">
-        <div class="orb orb-top-left"></div>
-        <div class="orb orb-bottom-right"></div>
-
-        <div class="starting-content">
-            <div class="Divya-orb">
-                <div class="Divya-ring r1"></div>
-                <div class="Divya-ring r2"></div>
-                <div class="Divya-ring r3"></div>
-                <div class="Divya-core">✦</div>
+    <!-- QR Code Modal -->
+    <div id="qr-modal" class="modal-overlay" onclick="if(event.target === this) closeQRModal()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="qr-modal-title">Connect Bot</h3>
+                <button class="modal-close" onclick="closeQRModal()">×</button>
             </div>
-
-            <h2 class="starting-title">Divya is starting up</h2>
-            <p class="starting-msg" id="starting-msg">Connecting to WhatsApp...</p>
-
-            <div class="start-progress-bar">
-                <div class="start-progress-fill" id="start-progress" style="width: 0%"></div>
-                <div class="start-progress-glow" id="start-glow" style="left: 0%"></div>
-            </div>
-
-            <div class="start-steps">
-                <div class="start-step done" id="sstep-authenticated">
-                    <div class="sstep-dot"></div>
-                    <span>WhatsApp Authenticated</span>
+            <div class="modal-body">
+                <div class="qr-container">
+                    <div id="qr-placeholder" class="qr-loading">
+                        <div class="spinner"></div>
+                        <p>Generating QR code...</p>
+                    </div>
+                    <img id="qr-image" class="qr-image" style="display: none;">
                 </div>
-                <div class="start-step loading" id="sstep-loading">
-                    <div class="sstep-dot"></div>
-                    <span id="sstep-load-text">Loading WhatsApp Web...</span>
-                </div>
-                <div class="start-step" id="sstep-ready">
-                    <div class="sstep-dot"></div>
-                    <span>Divya Online</span>
+                <div class="qr-instructions">
+                    <div class="instruction-step">
+                        <span class="step-num">1</span>
+                        <span>Open WhatsApp on your phone</span>
+                    </div>
+                    <div class="instruction-step">
+                        <span class="step-num">2</span>
+                        <span>Go to Settings → Linked Devices</span>
+                    </div>
+                    <div class="instruction-step">
+                        <span class="step-num">3</span>
+                        <span>Scan this QR code</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- ═══ SCREEN 3: DASHBOARD ═══ -->
-    <div id="screen-dashboard" class="screen hidden">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="sidebar-brand">
-                    <div class="sidebar-gem">✦</div>
-                    <span>Divya</span>
-                </div>
-                <div class="live-badge">● LIVE</div>
-            </div>
-
-            <div class="sidebar-stats">
-                <div class="sstat">
-                    <div class="sstat-val" id="stat-contacts">0</div>
-                    <div class="sstat-label">Contacts</div>
-                </div>
-                <div class="sstat-sep"></div>
-                <div class="sstat">
-                    <div class="sstat-val" id="stat-messages">0</div>
-                    <div class="sstat-label">Messages</div>
-                </div>
-                <div class="sstat-sep"></div>
-                <div class="sstat">
-                    <div class="sstat-val" id="stat-keys">–</div>
-                    <div class="sstat-label">API Key</div>
-                </div>
-            </div>
-
-            <div class="sidebar-label">CONVERSATIONS</div>
-
-            <div class="contact-list" id="contact-list">
-                <div class="empty-contacts" id="empty-contacts">
-                    <div class="empty-icon">💬</div>
-                    <p>No conversations yet</p>
-                    <span>Messages will appear here</span>
-                </div>
-            </div>
-
-            <div class="sidebar-footer">
-                <button class="logout-btn" id="logout-btn" onclick="confirmLogout()">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                    Logout WhatsApp
-                </button>
-            </div>
-        </aside>
-
-        <!-- Main Panel -->
-        <main class="main-panel">
-            <!-- Welcome View -->
-            <div id="welcome-view" class="welcome-view">
-                <div class="welcome-gem">✦</div>
-                <h3>Divya is Live</h3>
-                <p>Select a conversation from the sidebar to see the full chat history and live messages</p>
-                <div class="welcome-stats">
-                    <div class="wstat">
-                        <span id="wstat-contacts">0</span>
-                        <label>Active Contacts</label>
-                    </div>
-                    <div class="wstat">
-                        <span id="wstat-msgs">0</span>
-                        <label>Total Messages</label>
-                    </div>
-                </div>
-                <div class="pulse-ring"></div>
-            </div>
-
-            <!-- Chat View -->
-            <div id="chat-view" class="chat-view hidden">
-                <div class="chat-header">
-                    <div class="chat-avatar" id="chat-avatar">?</div>
-                    <div class="chat-meta">
-                        <div class="chat-contact-name" id="chat-name">–</div>
-                        <div class="chat-contact-phone" id="chat-phone">–</div>
-                    </div>
-                    <div class="chat-header-right">
-                        <label class="ai-toggle-label">
-                            <input type="checkbox" id="ai-toggle-switch" onchange="toggleAI()">
-                            <span class="ai-toggle-slider"></span>
-                            Pause AI
-                        </label>
-                        <div class="chat-status-badge">Active</div>
-                        <div class="msg-count" id="chat-msg-count">0 messages</div>
-                    </div>
-                </div>
-
-                <div class="messages-area" id="messages-area">
-                </div>
-
-                <div class="chat-input-area">
-                    <input type="text" id="dashboard-chat-input" placeholder="Type a manual message (Divya will pause)..." onkeypress="handleInputKeyPress(event)">
-                    <button onclick="sendDashboardMessage()">Send</button>
-                </div>
-            </div>
-        </main>
     </div>
 
     <!-- Toast Notification -->
-    <div id="toast" class="toast hidden"></div>
-
-    <!-- Logout Confirmation Modal -->
-    <div id="logout-modal" class="modal-overlay hidden">
-        <div class="modal-card">
-            <div class="modal-icon">⚠️</div>
-            <h3>Logout from WhatsApp?</h3>
-            <p>This will disconnect Divya from WhatsApp and show a new QR code. All conversation history will be cleared.</p>
-            <div class="modal-actions">
-                <button class="modal-btn cancel" onclick="closeLogoutModal()">Cancel</button>
-                <button class="modal-btn confirm" id="confirm-logout-btn" onclick="doLogout()">Yes, Logout</button>
-            </div>
-        </div>
-    </div>
+    <div id="toast" class="toast"></div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="app.js"></script>

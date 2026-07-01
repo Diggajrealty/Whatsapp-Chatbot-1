@@ -1,0 +1,232 @@
+{
+  "builder": "SOBHA Limited",
+  "description": "India's most trusted luxury real estate brand with uncompromising quality and attention to detail",
+  "projects": [
+    {
+      "id": "ayana",
+      "name": "SOBHA Ayana",
+      "type": "3 & 4 BHK Premium Apartments",
+      "location": "Panathur Road, Bangalore",
+      "configurations": ["3 BHK", "4 BHK"],
+      "sizes": {
+        "3BHK": "1850 sq.ft",
+        "4BHK": "2500 sq.ft"
+      },
+      "price": "₹1.2 Cr onwards",
+      "possession": "Ready to Move",
+      "amenities": [
+        "SOBHA signature clubhouse",
+        "Swimming pool",
+        "Squash and badminton courts",
+        "Gymnasium",
+        "Yoga and meditation center",
+        "Indoor games room",
+        "Children's play area",
+        "Landscaped gardens"
+      ],
+      "highlights": "Premium SOBHA quality construction with elegant design and timeless architecture",
+      "nearby": "Sarjapur Road (3 km), Outer Ring Road (5 km), Wipro Campus (7 km)"
+    },
+    {
+      "id": "infinia",
+      "name": "SOBHA Infinia",
+      "type": "Ultra-Luxury High-Rise Apartments",
+      "location": "Rajajinagar, West Bangalore",
+      "configurations": ["3 BHK", "4 BHK Penthouses"],
+      "sizes": {
+        "3BHK": "2200 sq.ft",
+        "4BHK": "3200 sq.ft"
+      },
+      "price": "₹2.5 Cr onwards",
+      "possession": "Under Construction - Jun 2027",
+      "amenities": [
+        "5-tier clubhouse",
+        "Rooftop infinity pool",
+        "Sky lounge",
+        "Private theater",
+        "Spa and salon",
+        "Wine cellar",
+        "Concierge service",
+        "Helipad"
+      ],
+      "highlights": "Ultra-luxury high-rise living with panoramic city views and exclusive lifestyle amenities",
+      "nearby": "Orion Mall (2 km), Yeshwanthpur Metro (3 km), Palace Grounds (5 km)"
+    },
+    {
+      "id": "insignia",
+      "name": "SOBHA Insignia",
+      "type": "Exclusive Waterfront Villas",
+      "location": "Whitefield, East Bangalore",
+      "configurations": ["4 BHK", "5 BHK"],
+      "sizes": {
+        "4BHK": "3500 sq.ft",
+        "5BHK": "4500 sq.ft"
+      },
+      "price": "₹3.5 Cr onwards",
+      "possession": "Ready to Move",
+      "amenities": [
+        "Waterfront living",
+        "Private gardens",
+        "Exclusive clubhouse",
+        "Swimming pool",
+        "Gymnasium",
+        "Tennis court",
+        "Kids play area",
+        "Smart home automation"
+      ],
+      "highlights": "Ultra-premium waterfront villas with stunning lake views and resort-style living",
+      "nearby": "ITPL (5 km), Varthur Lake (adjacent), Whitefield (3 km)"
+    },
+    {
+      "id": "oneworld",
+      "name": "SOBHA One World",
+      "type": "Integrated Township",
+      "location": "Sarjapur, Bangalore",
+      "configurations": ["2-4 BHK Apartments", "3-4 BHK Villas"],
+      "sizes": {
+        "apartments": "1100-2400 sq.ft",
+        "villas": "2200-3200 sq.ft"
+      },
+      "price": "₹80 Lakhs onwards",
+      "possession": "Phased - Multiple phases ready",
+      "amenities": [
+        "100+ amenities",
+        "International school",
+        "Retail boulevard",
+        "Healthcare center",
+        "Multiple clubhouses",
+        "Sports academy",
+        "Convention center",
+        "Landscaped parks"
+      ],
+      "highlights": "Self-sustained township with world-class infrastructure spread across multiple phases",
+      "nearby": "Sarjapur Road (2 km), Electronic City (12 km), HSR Layout (8 km)"
+    },
+    {
+      "id": "galera",
+      "name": "SOBHA Galera",
+      "type": "2, 3 & 4 BHK Apartments",
+      "location": "Tavarekere, South Bangalore",
+      "configurations": ["2 BHK", "3 BHK", "4 BHK"],
+      "sizes": {
+        "2BHK": "1200 sq.ft",
+        "3BHK": "1700 sq.ft",
+        "4BHK": "2300 sq.ft"
+      },
+      "price": "₹75 Lakhs onwards",
+      "possession": "Dec 2026",
+      "amenities": [
+        "Modern clubhouse",
+        "Swimming pool",
+        "Gym and aerobics",
+        "Indoor games",
+        "Library",
+        "Children's play area",
+        "Jogging track",
+        "Amphitheater"
+      ],
+      "highlights": "Affordable SOBHA quality in premium South Bangalore with excellent connectivity",
+      "nearby": "Bannerghatta Road (5 km), BTM Layout (7 km), Electronic City (15 km)"
+    },
+    {
+      "id": "altair",
+      "name": "SOBHA Altair",
+      "type": "Premium 3 & 4 BHK Apartments",
+      "location": "Kanakapura Road, Bangalore",
+      "configurations": ["3 BHK", "4 BHK"],
+      "sizes": {
+        "3BHK": "1900 sq.ft",
+        "4BHK": "2600 sq.ft"
+      },
+      "price": "₹1.1 Cr onwards",
+      "possession": "Ready to Move",
+      "amenities": [
+        "Premium clubhouse",
+        "Swimming pool",
+        "Tennis court",
+        "Squash court",
+        "Gymnasium",
+        "Yoga deck",
+        "Indoor games",
+        "Party hall"
+      ],
+      "highlights": "Premium apartments in serene location near Art of Living Ashram with peaceful environment",
+      "nearby": "Art of Living (5 km), Nice Road (3 km), Rajarajeshwari Nagar (8 km)"
+    },
+    {
+      "id": "neopolis",
+      "name": "SOBHA Neopolis",
+      "type": "2 & 3 BHK Urban Apartments",
+      "location": "Panathur, East Bangalore",
+      "configurations": ["2 BHK", "3 BHK"],
+      "sizes": {
+        "2BHK": "1150 sq.ft",
+        "3BHK": "1650 sq.ft"
+      },
+      "price": "₹70 Lakhs onwards",
+      "possession": "Ready to Move",
+      "amenities": [
+        "Clubhouse",
+        "Swimming pool",
+        "Gym",
+        "Indoor games",
+        "Children's play area",
+        "Jogging track",
+        "Security",
+        "Power backup"
+      ],
+      "highlights": "Contemporary urban living with strategic location near Outer Ring Road and IT hubs",
+      "nearby": "Outer Ring Road (2 km), Sarjapur Road (4 km), Marathahalli (8 km)"
+    },
+    {
+      "id": "townpark",
+      "name": "SOBHA Town Park",
+      "type": "Premium Villa Plots",
+      "location": "Bannerghatta Road, Bangalore",
+      "configurations": ["30x40", "40x60", "50x80"],
+      "sizes": {
+        "plots": "1200-2400 sq.ft"
+      },
+      "price": "₹60 Lakhs onwards",
+      "possession": "Ready to Construct",
+      "amenities": [
+        "Gated community",
+        "Clubhouse",
+        "Swimming pool",
+        "Children's park",
+        "Paved roads",
+        "Street lights",
+        "Underground drainage",
+        "24/7 security"
+      ],
+      "highlights": "DTCP approved villa plots from trusted SOBHA with complete infrastructure",
+      "nearby": "IIM Bangalore (8 km), Electronic City (18 km), Nice Ring Road (5 km)"
+    },
+    {
+      "id": "dreamacres",
+      "name": "SOBHA Dream Acres",
+      "type": "Luxury Villas",
+      "location": "Varthur, East Bangalore",
+      "configurations": ["3 BHK", "4 BHK"],
+      "sizes": {
+        "3BHK": "2200 sq.ft",
+        "4BHK": "3000 sq.ft"
+      },
+      "price": "₹2.2 Cr onwards",
+      "possession": "Upcoming - Launch Q3 2026",
+      "status": "upcoming",
+      "amenities": [
+        "Premium villa community",
+        "Private gardens",
+        "Clubhouse with pool",
+        "Gymnasium",
+        "Tennis court",
+        "Children's play area",
+        "Jogging track",
+        "Smart home features"
+      ],
+      "highlights": "Upcoming luxury villa project near Whitefield with modern amenities and green living",
+      "nearby": "Whitefield (8 km), Varthur Lake (2 km), ITPL (10 km)"
+    }
+  ]
+}

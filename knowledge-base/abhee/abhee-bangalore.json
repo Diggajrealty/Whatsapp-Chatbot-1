@@ -1,0 +1,1102 @@
+{
+  "developer": {
+    "name": "Abhee Ventures",
+    "founded": "2010",
+    "experience_years": "16+",
+    "headquarters": "No. 538, Sector 4, HSR Layout, Bengaluru, Karnataka 560102",
+    "website": "abheeventures.com",
+    "track_record": {
+      "completed_projects": "13+",
+      "ongoing_projects": "7",
+      "happy_families": "5000+",
+      "focus": "Affordable homes in prime locations near IT parks"
+    },
+    "bank_approvals": ["SBI", "HDFC"],
+    "key_advantages": [
+      "Uncompromised Quality - Homes built to last generations",
+      "On-Time Delivery - Committed to timelines",
+      "Transparent Dealings - No hidden costs",
+      "Customer-First Approach - Prioritizes client needs",
+      "Prime Locations - Strategic IT corridor accessibility",
+      "Future-Ready Designs - Adaptable living spaces",
+      "RERA Compliance - All ongoing projects RERA registered"
+    ]
+  },
+  "ongoing_projects": [
+    {
+      "id": 1,
+      "project_name": "Abhee Celestial City",
+      "status": "FLAGSHIP PROJECT - ONGOING",
+      "location": {
+        "address": "Sarjapur-Whitefield Main Road, Chikkavaderapura, Gunjur",
+        "landmarks": "Behind Greenwood High School, Near Dommasandra Circle",
+        "zone": "East Bangalore"
+      },
+      "property_type": "Ultra-modern High-Rise Apartments",
+      "configurations": [
+        {
+          "type": "2 BHK",
+          "size_sqft": "Contact for details"
+        },
+        {
+          "type": "2.5 BHK",
+          "bhk_config": "3+2T",
+          "size_sqft": "Contact for details"
+        },
+        {
+          "type": "3 BHK",
+          "bhk_config": "3+3T",
+          "size_sqft": "Contact for details"
+        }
+      ],
+      "project_details": {
+        "total_units": 397,
+        "towers": 3,
+        "floors": "B2+Ground+26 (27 floors)",
+        "land_area_acres": 5,
+        "open_space_percent": 73,
+        "carpet_efficiency_percent": 65
+      },
+      "pricing": {
+        "status": "Contact for current pricing",
+        "note": "Specific rates available on inquiry"
+      },
+      "possession": {
+        "status": "Under Construction",
+        "timeline": "Available on inquiry",
+        "rera_number": "PRM/KA/RERA/1251/308/PR/071123/006380",
+        "approvals": ["BDA", "RERA"]
+      },
+      "amenities": [
+        "Heated swimming pool",
+        "Kids pool",
+        "Adults pool",
+        "Pool deck",
+        "Outdoor gym",
+        "Indoor gym",
+        "Jogging track",
+        "Multipurpose court",
+        "Badminton court",
+        "Squash court",
+        "Cricket practice pitch",
+        "Multipurpose Maidan",
+        "Clubhouse",
+        "Amphitheatre",
+        "Party hall",
+        "Café",
+        "Indoor games room",
+        "Spa/Salon",
+        "Yoga lawn",
+        "Central courtyard",
+        "Floral garden",
+        "Landscaped gardens",
+        "Children's play area",
+        "Grocery store",
+        "Medical store",
+        "Daycare",
+        "24/7 security with CCTV",
+        "Power backup",
+        "Rainwater harvesting"
+      ],
+      "unique_highlights": [
+        "Sky-high 27-floor towers with panoramic East Bangalore views",
+        "73% open space with resort-style amenities",
+        "Vastu-compliant homes",
+        "High 65% carpet efficiency maximizes usable space",
+        "Strategic IT corridor location",
+        "Heated swimming pool - rare feature in Bangalore",
+        "Three tower design for exclusivity"
+      ],
+      "nearby_landmarks": {
+        "it_parks": [
+          {"name": "RGA Tech Park", "distance_km": 8.8},
+          {"name": "Wipro Technologies", "distance_km": 9.2},
+          {"name": "Embassy Tech Village", "distance_km": 10.5},
+          {"name": "Microsoft Prestige Ferns", "distance_km": 11},
+          {"name": "Ecospace", "distance_km": 13}
+        ],
+        "healthcare": [
+          {"name": "Kshema Hospital", "distance_km": 4.4},
+          {"name": "Snehadaan Hospital", "distance_km": 5.2},
+          {"name": "Columbia Asia Whitefield", "distance_km": 7.5},
+          {"name": "Sakra World Hospital", "distance_km": 10}
+        ],
+        "shopping": [
+          {"name": "City Hyper Mart", "distance_km": 2},
+          {"name": "D Mart", "distance_km": 6},
+          {"name": "Decathlon", "distance_km": 6.6},
+          {"name": "Brand Factory", "distance_km": 8}
+        ],
+        "education": [
+          {"name": "Greenwood High School", "distance": "Adjacent"}
+        ]
+      },
+      "current_offers": "Contact sales team for latest offers"
+    },
+    {
+      "id": 2,
+      "project_name": "Abhee Silicon Shine (Phase 2)",
+      "status": "ONGOING",
+      "location": {
+        "address": "Sarjapur Road, Bengaluru",
+        "landmarks": "Opposite Wipro SEZ",
+        "distance_to_wipro": "0.7 km"
+      },
+      "property_type": "Luxury Residential Apartments",
+      "configurations": [
+        {
+          "type": "1 BHK",
+          "size_sqft": "Contact for details"
+        },
+        {
+          "type": "2 BHK",
+          "bhk_config": "2+2T",
+          "size_sqft": "Contact for details"
+        },
+        {
+          "type": "2.5 BHK",
+          "bhk_config": "3+2T",
+          "size_sqft": "Contact for details"
+        },
+        {
+          "type": "3 BHK",
+          "bhk_config": "3+3T",
+          "size_sqft": "Contact for details"
+        },
+        {
+          "type": "4 BHK",
+          "size_sqft": "Contact for details"
+        }
+      ],
+      "project_details": {
+        "total_units": 462,
+        "land_area_acres": 6.75
+      },
+      "pricing": {
+        "1_bhk_from": "₹67 Lakhs",
+        "2.5_bhk_3plus2t_from": "₹1.30 Crore",
+        "3_bhk_3plus3t_from": "₹1.53 Crore",
+        "note": "2 BHK and 4 BHK pricing on request"
+      },
+      "possession": {
+        "status": "Under Construction",
+        "approvals": ["BDA", "RERA"]
+      },
+      "amenities": [
+        "Adult swimming pool",
+        "Toddler pool",
+        "Multipurpose court",
+        "Cricket pitch",
+        "Jogging track",
+        "Cycling track",
+        "Skating rink",
+        "Climbing wall with sand pit",
+        "Indoor gym",
+        "Outdoor gym",
+        "Elder's zone with reflexology pathway",
+        "Children's play trampoline",
+        "Kids daycare centre",
+        "Informal amphitheatre",
+        "Giant chess courtyard",
+        "Indoor games room",
+        "Outdoor workstation",
+        "Library",
+        "Seating gallery",
+        "Cascade waterfall",
+        "Floral garden",
+        "Sculpture garden",
+        "Vegetable garden",
+        "Herbal garden",
+        "Water fountain park",
+        "Clubhouse",
+        "Party hall",
+        "24/7 security",
+        "CCTV surveillance",
+        "Power backup",
+        "Rainwater harvesting",
+        "Sewage treatment plant"
+      ],
+      "unique_highlights": [
+        "Directly opposite Wipro SEZ - walking distance for employees",
+        "Smooth connectivity to ORR, Whitefield, Electronic City",
+        "Self-sustained residential ecosystem with 40+ amenities",
+        "Natural light and ventilation-focused design",
+        "Multiple configuration options from 1-4 BHK suits all family sizes",
+        "Elder's zone with reflexology pathway - senior citizen friendly",
+        "Kids daycare centre on premises"
+      ],
+      "nearby_landmarks": {
+        "it_parks": [
+          {"name": "Wipro SEZ", "distance_km": 0.7},
+          {"name": "RGA Tech Park", "distance_km": 1.7},
+          {"name": "Wells Fargo", "distance_km": 7},
+          {"name": "Embassy Tech Village", "distance_km": 7.2}
+        ],
+        "healthcare": [
+          {"name": "Snehadaan Hospital", "distance_km": 0.65},
+          {"name": "Motherhood Hospital", "distance_km": 6.5},
+          {"name": "Columbia Asia Hospital", "distance_km": 6.9},
+          {"name": "Cloudnine Hospital", "distance_km": 7.2}
+        ],
+        "education": [
+          {"name": "India International School", "distance_km": 0.5},
+          {"name": "DPS (Delhi Public School)", "distance_km": 4},
+          {"name": "Silver Oaks International School", "distance_km": 4.9},
+          {"name": "Oakridge International School", "distance_km": 6.2}
+        ],
+        "shopping": [
+          {"name": "KIDZTOPIAA", "distance_km": 2.3},
+          {"name": "Market Square Mall", "distance_km": 6.1}
+        ]
+      },
+      "current_offers": "Contact for latest schemes"
+    },
+    {
+      "id": 3,
+      "project_name": "Abhee Serenity Springs",
+      "status": "ONGOING",
+      "location": {
+        "address": "Bommasandra, Bengaluru",
+        "landmarks": "5 minutes to Bommasandra Metro Station, 5 minutes to E-City Toll Plaza"
+      },
+      "property_type": "Residential Apartments",
+      "configurations": [
+        {
+          "type": "2 BHK",
+          "size_sqft": 1050,
+          "availability": "SOLD OUT"
+        },
+        {
+          "type": "3 BHK + 2T",
+          "size_sqft": "1310-1425",
+          "availability": "Available"
+        },
+        {
+          "type": "3 BHK + 3T",
+          "size_sqft": "1595-1675",
+          "availability": "Available"
+        }
+      ],
+      "project_details": {
+        "total_units": 288,
+        "towers": 2,
+        "floors": "B+G+7",
+        "land_area_acres": 4.5,
+        "open_space_percent": 70,
+        "vastu_compliant": true
+      },
+      "pricing": {
+        "3_bhk_2t": {
+          "range": "₹90 Lakhs - ₹1.07 Crore",
+          "note": "All-inclusive (taxes, club membership, PLC included; FRC & registration extra)"
+        },
+        "3_bhk_3t": {
+          "range": "₹1.20 Crore - ₹1.26 Crore",
+          "note": "All-inclusive (taxes, club membership, PLC included; FRC & registration extra)"
+        }
+      },
+      "possession": {
+        "status": "Under Construction",
+        "expected_possession": "December 2027",
+        "rera_number": "PRM/KA/RERA/1251/308/PR/180325/007592",
+        "approvals": ["BMRDA", "RERA"],
+        "home_loans": ["SBI", "HDFC"]
+      },
+      "amenities": [
+        "Skating rink",
+        "Multipurpose court",
+        "Infinity swimming pool",
+        "Outdoor gym",
+        "Indoor gym",
+        "Spa",
+        "12,000 sq.ft. clubhouse",
+        "Multipurpose hall",
+        "Terrace party lawn",
+        "Outdoor café",
+        "Indoor café",
+        "BBQ counter",
+        "Creche",
+        "Kids play area",
+        "Guest rooms",
+        "Zen garden",
+        "Vegetable garden",
+        "Aroma garden",
+        "Bridge with pergola",
+        "Sculpture court with waterbody",
+        "Office space/Co-working",
+        "Jogging track",
+        "Yoga/meditation area",
+        "24/7 security with CCTV",
+        "Power backup",
+        "Rainwater harvesting",
+        "Sewage treatment plant",
+        "Covered parking",
+        "Visitor parking"
+      ],
+      "unique_highlights": [
+        "70% open space - Low-density living with only 288 homes",
+        "100% Vastu-compliant apartments - All units follow Vastu principles",
+        "3-side open design for natural ventilation and cross-breeze",
+        "12,000 sq.ft. clubhouse - Generous ratio for 288 homes",
+        "Family-centric multi-generational design with creche and guest rooms",
+        "Metro connectivity - 5 minutes to Bommasandra Metro Station",
+        "Infinity swimming pool - Premium feature",
+        "All-inclusive transparent pricing model"
+      ],
+      "nearby_landmarks": {
+        "metro": [
+          {"name": "Bommasandra Metro Station", "distance": "5 minutes"}
+        ],
+        "highways": [
+          {"name": "E-City Toll Plaza", "distance": "5 minutes"},
+          {"name": "NICE Road", "distance": "Nearby"},
+          {"name": "PRR (Peripheral Ring Road)", "distance": "Nearby"},
+          {"name": "STRR (Satellite Town Ring Road)", "distance": "Nearby"}
+        ],
+        "it_parks": [
+          {"name": "Electronic City", "distance": "Nearby"}
+        ],
+        "note": "International schools, hospitals, tech parks in vicinity"
+      },
+      "current_offers": "Limited 3 BHK units available (2 BHK sold out)"
+    },
+    {
+      "id": 4,
+      "project_name": "Abhee Riviera Royale",
+      "status": "NEAR COMPLETION - ONGOING",
+      "location": {
+        "address": "Kudlu Gate, HSR Extension, South-East Bangalore",
+        "landmarks": "2-3 km from HSR Layout, 2 km from upcoming Kudlu Gate Metro Station"
+      },
+      "property_type": "Boutique Luxury Apartments",
+      "configurations": [
+        {
+          "type": "2 BHK",
+          "variants": [
+            {"facing": "North", "size_sqft": 1205},
+            {"facing": "East", "size_sqft": 1300}
+          ]
+        },
+        {
+          "type": "3 BHK",
+          "size_sqft": "Multiple sizes available on request"
+        }
+      ],
+      "project_details": {
+        "total_units": 96,
+        "land_area_acres": 1.75,
+        "development_type": "Boutique development"
+      },
+      "pricing": {
+        "status": "Available on request from sales team",
+        "rental_potential": {
+          "2_bhk": "₹25,000-40,000/month",
+          "3_bhk": "₹40,000-60,000/month"
+        }
+      },
+      "possession": {
+        "status": "NEARING COMPLETION",
+        "construction_status": "Construction fully complete, residents occupying",
+        "availability": "Limited fresh units now available",
+        "approvals": ["BBMP", "RERA"]
+      },
+      "amenities": [
+        "Grand entrance plaza",
+        "Bus bay",
+        "Visitor carpark",
+        "EV charging stations",
+        "Outdoor gym",
+        "Swing park",
+        "Walking track",
+        "Floral garden",
+        "Dribble court",
+        "Multi-purpose play court",
+        "Kids play on lawn",
+        "Kids sandpit",
+        "Climbing wall",
+        "Adult swimming pool",
+        "Kids pool",
+        "Stage/dance platform",
+        "Amphitheatre",
+        "Reflexology pathway",
+        "Meditation deck",
+        "Indoor games room",
+        "Yoga fitness centre",
+        "Multipurpose hall",
+        "Indoor gym",
+        "Co-working space",
+        "Reception & lounge",
+        "Toddlers play arena",
+        "24×7 Security with CCTV",
+        "Power backup",
+        "Rainwater harvesting",
+        "Sewage treatment plant",
+        "Covered parking"
+      ],
+      "unique_highlights": [
+        "Boutique living with only 96 units - Exclusive tight-knit community",
+        "Eco-conscious sustainable construction",
+        "Near-completion advantage: Zero construction risk, immediate tax benefits",
+        "Residents already occupying - Established community",
+        "Strategic location at HSR-Haralur-Sarjapur intersection",
+        "Limited availability - Last few units",
+        "2 km from upcoming Kudlu Gate Metro Station",
+        "Strong rental potential in HSR Extension area"
+      ],
+      "nearby_landmarks": {
+        "shopping": [
+          {"name": "Big Bazaar", "distance_km": 1},
+          {"name": "More Mega Store", "distance_km": 3},
+          {"name": "Total Mall", "distance_km": 6},
+          {"name": "Bangalore Central", "distance_km": 8}
+        ],
+        "healthcare": [
+          {"name": "Manipal Hospital", "distance_km": 4},
+          {"name": "Motherhood Hospital", "distance_km": 5},
+          {"name": "Sakra World Hospital", "distance_km": 7}
+        ],
+        "it_parks": [
+          {"name": "Wipro Corporate Office", "distance_km": 6},
+          {"name": "RMZ Eco Space", "distance_km": 7},
+          {"name": "Cessna Tech Park", "distance_km": 8.5},
+          {"name": "Bosch", "distance_km": 12.4}
+        ],
+        "education": [
+          {"name": "Sri Chaitanya School", "distance_km": 1},
+          {"name": "Narayana Olympiad School", "distance_km": 1.3},
+          {"name": "VIBGYOR High School", "distance_km": 1.4},
+          {"name": "PESIT South Campus", "distance_km": 4}
+        ]
+      },
+      "current_offers": "Last few units available - Near completion advantage"
+    },
+    {
+      "id": 5,
+      "project_name": "Abhee Natura",
+      "status": "ONGOING - READY TO REGISTER",
+      "location": {
+        "address": "Soukya Road, Whitefield Extension",
+        "zone": "Emerging East Bengaluru"
+      },
+      "property_type": "Premium Plotted Development",
+      "configurations": [
+        {
+          "type": "Plot",
+          "size_sqft": 1200,
+          "vastu_compliant": true
+        },
+        {
+          "type": "Plot",
+          "size_sqft": 1500,
+          "vastu_compliant": true
+        }
+      ],
+      "project_details": {
+        "total_plots": 50,
+        "land_area_acres": 4,
+        "layout_type": "Vastu-compliant, well-zoned gated community"
+      },
+      "pricing": {
+        "1200_sqft": "₹54 Lakhs onwards",
+        "1500_sqft": "₹67.5 Lakhs onwards"
+      },
+      "possession": {
+        "status": "Ready-to-register plots",
+        "approvals": ["STRR"]
+      },
+      "amenities": [
+        "Jogging track",
+        "Meditation deck",
+        "Outdoor gym",
+        "Zen garden",
+        "Floral garden",
+        "Bamboo garden",
+        "Terminalia court",
+        "Plumeria court",
+        "Kids play area",
+        "Palm groves",
+        "Gazebo pavilion",
+        "Pergola with seating",
+        "Secure gated layout",
+        "24/7 security",
+        "Well-lit pathways",
+        "Landscaped green spaces",
+        "Water features"
+      ],
+      "unique_highlights": [
+        "Nature-infused sanctuary design - Balance between nature and growth",
+        "Strategic investment in high-growth Whitefield corridor",
+        "Connected to major metro lines and IT parks",
+        "Wellness-focused amenities throughout",
+        "Ready for immediate registration - No waiting period",
+        "Vastu-compliant plots for auspicious home construction",
+        "50 exclusive plots only - Limited inventory",
+        "Ideal for building dream villa or investment"
+      ],
+      "nearby_landmarks": {
+        "metro": [
+          {"name": "Hope Farm Metro Station", "distance": "25 minutes"}
+        ],
+        "it_hubs": [
+          {"name": "Whitefield IT Hub", "distance": "30 minutes"}
+        ],
+        "healthcare": [
+          {"name": "Colombia Asia Hospital", "distance": "30 minutes"}
+        ],
+        "education": [
+          {"name": "DPS Whitefield", "distance": "Within 15 minutes"}
+        ],
+        "highways": [
+          {"name": "Satellite Town Ring Road (STRR)", "distance": "35 minutes"},
+          {"name": "Peripheral Ring Road (PRR)", "distance": "30 minutes"},
+          {"name": "Suburban Rail", "distance": "25 minutes"}
+        ]
+      },
+      "current_offers": "Immediate registration benefit - Ready plots"
+    },
+    {
+      "id": 6,
+      "project_name": "Abhee Tranquila",
+      "status": "ONGOING - UNDER DEVELOPMENT",
+      "location": {
+        "address": "Sarjapur-Attibele Road, Bengaluru",
+        "landmarks": "Right beside SWIFT City (1500+ acre government project)"
+      },
+      "property_type": "Premium Plotted Community",
+      "configurations": [
+        {
+          "type": "Villa Plot",
+          "size_sqft": 1200,
+          "vastu_compliant": true
+        },
+        {
+          "type": "Villa Plot",
+          "size_sqft": 1500,
+          "vastu_compliant": true
+        }
+      ],
+      "project_details": {
+        "total_plots": 279,
+        "land_area_acres": 20,
+        "layout_type": "Vastu-compliant plots in gated enclave"
+      },
+      "pricing": {
+        "1200_sqft": "₹78 Lakhs onwards",
+        "1500_sqft": "₹98 Lakhs onwards"
+      },
+      "possession": {
+        "status": "Under development (not ready to register)",
+        "rera_number": "PRM/KA/RERA/1251/310/PR/020725/007891",
+        "approvals": ["STRR", "RERA"]
+      },
+      "amenities": [
+        "12,000 sq.ft. exclusive clubhouse",
+        "Multipurpose court",
+        "Cricket pitch",
+        "Indoor gym",
+        "Outdoor gym",
+        "Table tennis room",
+        "Indoor games room",
+        "Infinity pool with deck",
+        "Mini forest",
+        "Herbal garden",
+        "Aroma garden",
+        "Floral garden",
+        "Music garden",
+        "Meditation deck",
+        "Forest walks",
+        "Yoga lawns",
+        "Jogging track",
+        "Walking track",
+        "Amphitheater",
+        "Pavilion with food counter",
+        "Elder/kitty room",
+        "Creche",
+        "Kids play area",
+        "Pet park",
+        "Wide tree-lined avenues",
+        "Landscaped green spaces",
+        "24/7 security",
+        "CCTV surveillance",
+        "Power backup",
+        "Rainwater harvesting"
+      ],
+      "unique_highlights": [
+        "Adjacent to SWIFT City - 1500+ acre landmark government project",
+        "Future Metro Phase 3A connectivity - Few minutes away",
+        "Multi-highway access: NH44, NH48, ORR, PRR",
+        "IT hub proximity: Electronic City, RGA Tech Park",
+        "Nature integration: green avenues, mini forest, themed gardens",
+        "Investment potential: Where growth is inevitable",
+        "12,000 sq.ft. clubhouse - Rare for plotted development",
+        "Infinity pool - Premium amenity for plot owners",
+        "Suitable for residential construction or land banking"
+      ],
+      "nearby_landmarks": {
+        "major_projects": [
+          {"name": "SWIFT City Government Project", "distance": "Adjacent", "size": "1500+ acres"}
+        ],
+        "connectivity": [
+          {"name": "Sarjapur Town", "distance_km": 5},
+          {"name": "Arenur Bus Stop", "distance_km": 5},
+          {"name": "Upcoming Metro Phase 3A", "distance": "Few minutes"}
+        ],
+        "education": [
+          {"name": "Primus Public School", "distance": "Within 5 km"}
+        ],
+        "healthcare": [
+          {"name": "Kshema Hospital", "distance": "Within 5 km"}
+        ],
+        "highways": [
+          {"name": "NH44 (National Highway 44)", "distance": "Nearby"},
+          {"name": "NH48 (National Highway 48)", "distance": "Nearby"},
+          {"name": "ORR (Outer Ring Road)", "distance": "Nearby"},
+          {"name": "PRR (Peripheral Ring Road)", "distance": "Nearby"}
+        ],
+        "it_parks": [
+          {"name": "Electronic City", "distance": "Nearby"},
+          {"name": "RGA Tech Park", "distance": "Nearby"}
+        ]
+      },
+      "current_offers": "Pre-launch/under development advantages"
+    },
+    {
+      "id": 7,
+      "project_name": "Abhee Aaria",
+      "status": "ONGOING",
+      "location": {
+        "address": "Near Gunjur Lake, Gunjur, Sarjapur-Whitefield Main Road"
+      },
+      "property_type": "Apartments",
+      "configurations": [
+        {
+          "note": "Specific BHK types and sizes available on inquiry"
+        }
+      ],
+      "project_details": {
+        "note": "Complete details available on inquiry"
+      },
+      "pricing": {
+        "status": "Contact for current rates"
+      },
+      "possession": {
+        "status": "Ongoing project",
+        "approvals": ["BBMP", "RERA"]
+      },
+      "amenities": [
+        "Full amenities list available on inquiry",
+        "Standard clubhouse facilities",
+        "Swimming pool",
+        "Gym",
+        "Children's play area",
+        "Landscaped gardens",
+        "24/7 security"
+      ],
+      "unique_highlights": [
+        "Designed To Breathe - Focus on natural ventilation",
+        "Prime Gunjur Lake location - Lakeside living",
+        "Sarjapur-Whitefield corridor connectivity - IT hub access"
+      ],
+      "nearby_landmarks": {
+        "landmarks": [
+          {"name": "Gunjur Lake", "distance": "Adjacent"}
+        ],
+        "connectivity": [
+          {"name": "Sarjapur-Whitefield Main Road", "distance": "On main road"}
+        ],
+        "note": "IT corridor proximity - Specific distances available on inquiry"
+      },
+      "current_offers": "Contact sales team for details"
+    }
+  ],
+  "completed_projects": [
+    {
+      "id": 8,
+      "project_name": "Abhee Pride",
+      "status": "COMPLETED - READY TO MOVE",
+      "location": {
+        "address": "Iggalur, Chandapura, Bengaluru"
+      },
+      "property_type": "Residential Apartments",
+      "configurations": [
+        {
+          "type": "2 BHK",
+          "size_sqft": "1105-1150"
+        },
+        {
+          "type": "3 BHK",
+          "size_sqft": "1360-1410"
+        }
+      ],
+      "project_details": {
+        "land_area_acres": 1.25,
+        "open_space_percent": 70
+      },
+      "pricing": {
+        "2_bhk": "₹74 Lakhs (All Inclusive)",
+        "3_bhk": "₹1.07 Crore (All Inclusive)",
+        "note": "All-inclusive pricing model"
+      },
+      "possession": {
+        "status": "COMPLETED & READY TO MOVE",
+        "approvals": ["BMRDA", "RERA"]
+      },
+      "amenities": [
+        "Swimming pool",
+        "Toddler pool",
+        "Gym",
+        "Party hall",
+        "Indoor games room",
+        "Giant chess",
+        "Yoga arena",
+        "Meditation plaza",
+        "Reflexology pathway",
+        "Sand pit",
+        "Children play area",
+        "Wall climbing",
+        "Senior citizens' area",
+        "Jogging track",
+        "Multipurpose court",
+        "Fitness park",
+        "Peripheral garden",
+        "Sitting area",
+        "Entry plaza",
+        "Bus bay",
+        "Convenience store",
+        "CCTV surveillance",
+        "24/7 security",
+        "Rainwater harvesting",
+        "Power backup"
+      ],
+      "unique_highlights": [
+        "70% open space with expansive landscapes",
+        "Thoughtfully designed homes with optimal space and natural light",
+        "Low-density development offering serene escape",
+        "All-inclusive pricing model - No hidden costs",
+        "Ready for immediate possession - Move-in ready",
+        "Immediate tax benefits and home loan advantages"
+      ],
+      "nearby_landmarks": {
+        "education": [
+          {"name": "National Public School", "distance_meters": 500},
+          {"name": "Triumph World School", "distance_km": 1.2}
+        ],
+        "healthcare": [
+          {"name": "Athreya Hospital", "distance_km": 2.1}
+        ],
+        "shopping": [
+          {"name": "Laxmi Galaxy Hypermarket", "distance_meters": 700},
+          {"name": "The Society Supermarket", "distance_km": 2.2},
+          {"name": "Domino's Pizza", "distance_km": 1}
+        ],
+        "connectivity": [
+          {"name": "Heelalige transit hub", "distance": "Nearby"}
+        ]
+      },
+      "current_offers": "Ready-to-move advantages - Immediate possession"
+    },
+    {
+      "id": 9,
+      "project_name": "Abhee King's Court",
+      "status": "COMPLETED",
+      "location": {
+        "address": "Sarjapur Road, Bengaluru"
+      },
+      "property_type": "Residential Apartments (9-storey)",
+      "configurations": [
+        {
+          "type": "2 BHK",
+          "size_sqft": 1200
+        },
+        {
+          "type": "2.5 BHK",
+          "size_sqft": "Available (size on request)"
+        },
+        {
+          "type": "3 BHK",
+          "size_sqft": 1500
+        }
+      ],
+      "project_details": {
+        "total_units": 116,
+        "floors": 9,
+        "parking": "Basement & stilt parking"
+      },
+      "pricing": {
+        "1200_sqft": "₹54 Lakhs onwards",
+        "1500_sqft": "₹67.5 Lakhs onwards"
+      },
+      "possession": {
+        "status": "COMPLETED PROJECT",
+        "approvals": ["BMRDA", "RERA"]
+      },
+      "amenities": [
+        "Swimming pool",
+        "Outdoor gym",
+        "Indoor gym",
+        "Jogging track",
+        "Multipurpose court",
+        "Children's play area",
+        "Skating rink",
+        "EV charging points",
+        "Clubhouse with party hall",
+        "Hammock zone",
+        "Yoga deck",
+        "24/7 security",
+        "CCTV surveillance",
+        "Generator backup for each flat",
+        "Grand entrance & exit",
+        "Landscaped gardens",
+        "Power backup",
+        "Rainwater harvesting"
+      ],
+      "unique_highlights": [
+        "Timeless architecture meets modern comfort",
+        "Intelligent layouts optimized for comfort and ventilation",
+        "Premium materials and finishes",
+        "Club-class lifestyle amenities",
+        "Strategic Sarjapur Road location",
+        "Generator backup for each individual flat",
+        "EV charging points - Future-ready infrastructure"
+      ],
+      "nearby_landmarks": {
+        "it_parks": [
+          {"name": "Wipro SEZ", "distance_km": 0.7},
+          {"name": "RGA Tech Park", "distance_km": 1.7},
+          {"name": "Microsoft Prestige Ferns", "distance_km": 13}
+        ],
+        "shopping": [
+          {"name": "D Mart", "distance_km": 4}
+        ],
+        "education": [
+          {"name": "Oakridge International School", "distance_km": 2.9}
+        ],
+        "healthcare": [
+          {"name": "Columbia Asia Hospital", "distance_km": 6.9}
+        ],
+        "metro": [
+          {"name": "Hope Farm Metro Station", "distance": "25 minutes"}
+        ]
+      },
+      "current_offers": "Completed project benefits"
+    },
+    {
+      "id": 10,
+      "project_name": "Abhee Silicon Shine Phase 1",
+      "status": "COMPLETED",
+      "location": {
+        "address": "Sarjapur Road, Bengaluru",
+        "landmarks": "Opposite Wipro SEZ"
+      },
+      "property_type": "Residential Apartments",
+      "configurations": [
+        {
+          "note": "Multiple BHK configurations - Contact for details"
+        }
+      ],
+      "pricing": {
+        "status": "Completed project - Resale market"
+      },
+      "possession": {
+        "status": "COMPLETED",
+        "approvals": ["BDA", "RERA"]
+      },
+      "amenities": [
+        "Swimming pool",
+        "Gym",
+        "Clubhouse",
+        "Children's play area",
+        "Landscaped gardens",
+        "24/7 security"
+      ],
+      "unique_highlights": [
+        "Opposite Wipro SEZ location",
+        "Established community",
+        "Phase 1 of successful Silicon Shine project"
+      ],
+      "nearby_landmarks": {
+        "it_parks": [
+          {"name": "Wipro SEZ", "distance_km": 0.7}
+        ]
+      },
+      "current_offers": "Resale opportunities available"
+    },
+    {
+      "id": 11,
+      "project_name": "Abhee Prakruthi",
+      "status": "COMPLETED",
+      "location": {
+        "address": "Sarjapur Road, Bengaluru"
+      },
+      "property_type": "Residential Apartments",
+      "configurations": [
+        {
+          "note": "Multiple configurations - Contact for details"
+        }
+      ],
+      "pricing": {
+        "status": "Completed project - Resale market"
+      },
+      "possession": {
+        "status": "COMPLETED",
+        "approvals": ["BDA", "RERA"]
+      },
+      "amenities": [
+        "Swimming pool",
+        "Gym",
+        "Clubhouse",
+        "Children's play area",
+        "Landscaped gardens",
+        "24/7 security"
+      ],
+      "unique_highlights": [
+        "Established Sarjapur Road location",
+        "Proven Abhee quality"
+      ],
+      "nearby_landmarks": {
+        "note": "Sarjapur Road IT corridor connectivity"
+      },
+      "current_offers": "Resale opportunities"
+    },
+    {
+      "id": 12,
+      "project_name": "Abhee Srishti Layout",
+      "status": "COMPLETED",
+      "location": {
+        "address": "Electronic City, Bengaluru"
+      },
+      "property_type": "Villa Plots",
+      "configurations": [
+        {
+          "note": "Plot configurations - Contact for details"
+        }
+      ],
+      "pricing": {
+        "status": "Completed project - Resale market"
+      },
+      "possession": {
+        "status": "COMPLETED",
+        "approvals": ["BMRDA", "RERA"]
+      },
+      "amenities": [
+        "Gated community",
+        "Landscaped avenues",
+        "24/7 security"
+      ],
+      "unique_highlights": [
+        "Electronic City location",
+        "Villa plotted development"
+      ],
+      "nearby_landmarks": {
+        "it_parks": [
+          {"name": "Electronic City", "distance": "Nearby"}
+        ]
+      },
+      "current_offers": "Resale opportunities"
+    },
+    {
+      "id": 13,
+      "project_name": "Other Legacy Completed Projects",
+      "status": "COMPLETED",
+      "projects_list": [
+        "Abhee Nandika",
+        "Abhee Sunrise",
+        "Abhee Lotus",
+        "Abhee Brindavan",
+        "Abhee Lakeview",
+        "Abhee Prince",
+        "Abhee Nandana",
+        "Abhee Nakshatra"
+      ],
+      "note": "These are older completed projects with established communities. Limited public information available. Contact Abhee Ventures for resale opportunities or details."
+    }
+  ],
+  "upcoming_projects": [
+    {
+      "project_name": "Codename: NEW DIMENSION",
+      "status": "UPCOMING LAUNCH",
+      "project_details": {
+        "land_area_acres": 45,
+        "description": "Mega project - Marks a bold new chapter in premium living",
+        "architecture": "Scottish-inspired premium living",
+        "features": "Expansive open spaces, world-class experiences"
+      },
+      "note": "Details will be announced at launch"
+    }
+  ],
+  "chatbot_implementation_notes": {
+    "information_availability": {
+      "complete_information": [
+        "Abhee Celestial City",
+        "Abhee Silicon Shine Phase 2",
+        "Abhee Serenity Springs",
+        "Abhee Riviera Royale",
+        "Abhee Natura",
+        "Abhee Tranquila",
+        "Abhee Pride",
+        "Abhee King's Court"
+      ],
+      "limited_information": [
+        "Abhee Aaria - Contact for details"
+      ],
+      "minimal_information": [
+        "Legacy completed projects - Contact for resale details"
+      ]
+    },
+    "verification_status": {
+      "sources": [
+        "Official Abhee Ventures website",
+        "99acres.com",
+        "MagicBricks.com",
+        "Housing.com"
+      ],
+      "rera_verified": true,
+      "pricing_current_as_of": "June 2026",
+      "note": "All pricing and possession information cross-verified from official sources"
+    },
+    "customer_inquiry_handling": {
+      "direct_to_sales_for": [
+        "Latest pricing updates",
+        "Current promotional offers",
+        "Site visit scheduling",
+        "Floor plan downloads",
+        "Possession timeline confirmations",
+        "Loan assistance",
+        "Abhee Aaria complete details"
+      ],
+      "contact_details": {
+        "phone": "For detailed pricing, floor plans, and site visits, call 08045888783",
+        "email": "For inquiries via email, contact tanishq@diggajrealty.com",
+        "website": "abheeventures.com"
+      }
+    },
+    "key_selling_points_by_category": {
+      "for_it_professionals": [
+        "Silicon Shine (opposite Wipro)",
+        "Celestial City (multiple IT parks 8-13 km)",
+        "King's Court (Sarjapur Road)"
+      ],
+      "for_families": [
+        "Serenity Springs (70% open space, Vastu-compliant)",
+        "Celestial City (resort amenities)",
+        "Pride (ready to move, 70% open)"
+      ],
+      "for_investors": [
+        "Tranquila (adjacent SWIFT City)",
+        "Natura (Whitefield growth corridor)",
+        "Riviera Royale (high rental yield HSR)"
+      ],
+      "for_immediate_possession": [
+        "Pride (completed)",
+        "King's Court (completed)",
+        "Riviera Royale (near completion)"
+      ],
+      "for_plot_buyers": [
+        "Natura (ready to register)",
+        "Tranquila (next to SWIFT City)"
+      ]
+    },
+    "bangalore_only_confirmation": true,
+    "cities_excluded": "All projects in other cities excluded as per requirement"
+  }
+}

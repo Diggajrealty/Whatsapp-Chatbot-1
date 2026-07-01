@@ -1,0 +1,156 @@
+{
+  "builder": "Nambiar Builders",
+  "description": "Known for modern architectural excellence and quality construction",
+  "projects": [
+    {
+      "id": "district25",
+      "name": "Nambiar District 25",
+      "type": "Premium Independent Villas",
+      "location": "Sarjapur Road, near HSR Layout",
+      "configurations": ["3 BHK", "4 BHK"],
+      "sizes": {
+        "3BHK": "2100 sq.ft",
+        "4BHK": "2800 sq.ft"
+      },
+      "price": "₹1.8 Cr onwards",
+      "possession": "Ready to Move",
+      "amenities": [
+        "Clubhouse with gym and indoor games",
+        "Swimming pool",
+        "Landscaped gardens",
+        "Children's play area",
+        "Jogging track",
+        "24/7 security with CCTV",
+        "Ample parking",
+        "Power backup"
+      ],
+      "highlights": "Gated villa community spread across 25 acres with abundant green spaces",
+      "nearby": "HSR Layout (3 km), Electronic City (8 km), Wipro Corporate Office (5 km)"
+    },
+    {
+      "id": "ellegenza",
+      "name": "Nambiar Ellegenza",
+      "type": "2 & 3 BHK Apartments",
+      "location": "Devanahalli, North Bangalore",
+      "configurations": ["2 BHK", "3 BHK"],
+      "sizes": {
+        "2BHK": "1200 sq.ft",
+        "3BHK": "1650 sq.ft"
+      },
+      "price": "₹65 Lakhs onwards",
+      "possession": "Dec 2025",
+      "amenities": [
+        "Modern clubhouse",
+        "Swimming pool",
+        "Gym and yoga room",
+        "Indoor games room",
+        "Children's play area",
+        "Landscaped gardens",
+        "24/7 security",
+        "Visitor parking"
+      ],
+      "highlights": "Affordable luxury near Kempegowda International Airport",
+      "nearby": "Airport (12 km), Aerospace Park (5 km), BIAL IT Park (8 km)"
+    },
+    {
+      "id": "bellezea",
+      "name": "Nambiar Bellezea",
+      "type": "Luxury 3 & 4 BHK Apartments",
+      "location": "Whitefield, East Bangalore",
+      "configurations": ["3 BHK", "4 BHK"],
+      "sizes": {
+        "3BHK": "1800 sq.ft",
+        "4BHK": "2400 sq.ft"
+      },
+      "price": "₹1.2 Cr onwards",
+      "possession": "Ready to Move",
+      "amenities": [
+        "Premium clubhouse with spa",
+        "Infinity swimming pool",
+        "State-of-the-art gym",
+        "Indoor badminton court",
+        "Library and reading room",
+        "Rooftop garden",
+        "24/7 concierge service",
+        "EV charging stations"
+      ],
+      "highlights": "Ultra-modern architecture with smart home features and sustainable design",
+      "nearby": "ITPL (4 km), Whitefield Main Road (2 km), Phoenix Marketcity (3 km)"
+    },
+    {
+      "id": "embassy",
+      "name": "Nambiar The Embassy Boulevard",
+      "type": "Luxury Apartments",
+      "location": "Bellary Road, North Bangalore",
+      "configurations": ["3 BHK", "4 BHK"],
+      "sizes": {
+        "3BHK": "1900 sq.ft",
+        "4BHK": "2600 sq.ft"
+      },
+      "price": "₹1.4 Cr onwards",
+      "possession": "Under Construction - Dec 2026",
+      "amenities": [
+        "World-class clubhouse",
+        "Olympic-size swimming pool",
+        "Tennis court",
+        "Basketball court",
+        "Multipurpose hall",
+        "Landscaped parks",
+        "Amphitheater",
+        "Retail shops within complex"
+      ],
+      "highlights": "Premium high-rise living with stunning city views and excellent connectivity",
+      "nearby": "Manyata Tech Park (5 km), Yelahanka (8 km), Bangalore Airport (25 km)"
+    },
+    {
+      "id": "millennia",
+      "name": "Nambiar Millennia",
+      "type": "Premium Residential Plots",
+      "location": "Devanahalli, North Bangalore",
+      "configurations": ["30x40", "40x60", "50x80"],
+      "sizes": {
+        "plots": "1200 to 2400 sq.ft"
+      },
+      "price": "₹45 Lakhs onwards",
+      "possession": "Ready to Construct",
+      "amenities": [
+        "Gated community",
+        "Underground drainage",
+        "Street lights",
+        "Water supply",
+        "Paved roads",
+        "Security cabin",
+        "Children's park",
+        "Landscaping"
+      ],
+      "highlights": "DTCP approved plots near airport - build your dream home with complete infrastructure",
+      "nearby": "Airport (10 km), Financial City (12 km), Aerospace Park (6 km)"
+    },
+    {
+      "id": "palmshire",
+      "name": "Nambiar Palmshire",
+      "type": "Independent Villas",
+      "location": "Devanahalli, North Bangalore",
+      "configurations": ["3 BHK", "4 BHK"],
+      "sizes": {
+        "3BHK": "2000 sq.ft",
+        "4BHK": "2700 sq.ft"
+      },
+      "price": "₹1.5 Cr onwards",
+      "possession": "Upcoming - Launch Q3 2026",
+      "status": "upcoming",
+      "amenities": [
+        "Private gardens for each villa",
+        "Clubhouse with pool",
+        "Tennis court",
+        "Walking trails",
+        "Children's play area",
+        "Solar power backup",
+        "Rainwater harvesting",
+        "Smart home automation"
+      ],
+      "highlights": "Eco-friendly villa community with sustainable living features and green technology",
+      "nearby": "Airport (15 km), Aerospace Park (7 km), International Schools (5 km)"
+    }
+  ]
+}

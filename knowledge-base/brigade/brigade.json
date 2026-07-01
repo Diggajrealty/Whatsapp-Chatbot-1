@@ -1,0 +1,184 @@
+{
+  "builder": "Brigade Group",
+  "description": "One of South India's leading property developers with 35+ years of excellence",
+  "projects": [
+    {
+      "id": "eldorado",
+      "name": "Brigade Eldorado",
+      "type": "2, 3 & 4 BHK Apartments",
+      "location": "Bagalur Road, North Bangalore",
+      "configurations": ["2 BHK", "3 BHK", "4 BHK"],
+      "sizes": {
+        "2BHK": "1100 sq.ft",
+        "3BHK": "1600 sq.ft",
+        "4BHK": "2200 sq.ft"
+      },
+      "price": "₹60 Lakhs onwards",
+      "possession": "Ready to Move",
+      "amenities": [
+        "50+ amenities including clubhouse",
+        "Swimming pool",
+        "Gym and aerobics room",
+        "Indoor games",
+        "Kids play area",
+        "Jogging track",
+        "Amphitheater",
+        "Landscaped gardens"
+      ],
+      "highlights": "Affordable premium living with excellent connectivity to IT hubs and airport",
+      "nearby": "Yelahanka (10 km), Manyata Tech Park (15 km), Devanahalli Airport (20 km)"
+    },
+    {
+      "id": "utopia",
+      "name": "Brigade Utopia",
+      "type": "3 & 4 BHK Premium Apartments",
+      "location": "Whitefield, East Bangalore",
+      "configurations": ["3 BHK", "4 BHK"],
+      "sizes": {
+        "3BHK": "1850 sq.ft",
+        "4BHK": "2500 sq.ft"
+      },
+      "price": "₹1.1 Cr onwards",
+      "possession": "Ready to Move",
+      "amenities": [
+        "Sprawling 75,000 sq.ft clubhouse",
+        "Olympic-size swimming pool",
+        "Squash and badminton courts",
+        "Spa and salon",
+        "Library",
+        "Banquet hall",
+        "Mini theater",
+        "Convenience store"
+      ],
+      "highlights": "Luxury integrated enclave with world-class facilities and modern architecture",
+      "nearby": "ITPL (3 km), Whitefield Main Road (1 km), Varthur Lake (4 km)"
+    },
+    {
+      "id": "cornerstone",
+      "name": "Brigade Cornerstone Utopia",
+      "type": "2 & 3 BHK Apartments",
+      "location": "Varthur, Whitefield",
+      "configurations": ["2 BHK", "3 BHK"],
+      "sizes": {
+        "2BHK": "1250 sq.ft",
+        "3BHK": "1700 sq.ft"
+      },
+      "price": "₹85 Lakhs onwards",
+      "possession": "Dec 2025",
+      "amenities": [
+        "Modern clubhouse",
+        "Swimming pool",
+        "Gym",
+        "Yoga deck",
+        "Indoor games",
+        "Children's play area",
+        "Skating rink",
+        "Party hall"
+      ],
+      "highlights": "Contemporary design with smart home features and sustainable living",
+      "nearby": "Whitefield (5 km), KR Puram (8 km), Marathahalli (10 km)"
+    },
+    {
+      "id": "orchards",
+      "name": "Brigade Orchards",
+      "type": "Integrated Township",
+      "location": "Devanahalli, North Bangalore",
+      "configurations": ["Apartments 1-4 BHK", "Villas 3-4 BHK", "Plots"],
+      "sizes": {
+        "apartments": "650-2500 sq.ft",
+        "villas": "2200-3500 sq.ft",
+        "plots": "1200-2400 sq.ft"
+      },
+      "price": "Starting ₹50 Lakhs",
+      "possession": "Ready to Move / Phased",
+      "amenities": [
+        "130+ amenities across 130 acres",
+        "International school within campus",
+        "Retail boulevard",
+        "Healthcare center",
+        "Multiple clubhouses",
+        "Sports complex",
+        "Skating rink",
+        "Adventure park"
+      ],
+      "highlights": "India's largest plotted development with complete infrastructure and self-sustained ecosystem",
+      "nearby": "Bangalore Airport (12 km), Financial City (10 km), Aerospace Park (8 km)"
+    },
+    {
+      "id": "valencia",
+      "name": "Brigade Valencia",
+      "type": "3 & 4 BHK Luxury Apartments",
+      "location": "JP Nagar, South Bangalore",
+      "configurations": ["3 BHK", "4 BHK"],
+      "sizes": {
+        "3BHK": "1900 sq.ft",
+        "4BHK": "2600 sq.ft"
+      },
+      "price": "₹1.3 Cr onwards",
+      "possession": "Under Construction - Mar 2027",
+      "amenities": [
+        "Premium clubhouse",
+        "Infinity pool",
+        "Rooftop lounge",
+        "Home theater",
+        "Gym and spa",
+        "Indoor sports",
+        "Co-working spaces",
+        "EV charging points"
+      ],
+      "highlights": "Luxury high-rise apartments in established South Bangalore with metro connectivity",
+      "nearby": "JP Nagar Metro (2 km), Bannerghatta Road (3 km), RV College (5 km)"
+    },
+    {
+      "id": "citadel",
+      "name": "Brigade Citadel",
+      "type": "Premium Villas",
+      "location": "Budigere Cross, East Bangalore",
+      "configurations": ["3 BHK", "4 BHK"],
+      "sizes": {
+        "3BHK": "2100 sq.ft",
+        "4BHK": "2900 sq.ft"
+      },
+      "price": "₹1.6 Cr onwards",
+      "possession": "Ready to Move",
+      "amenities": [
+        "Gated community",
+        "Clubhouse with pool",
+        "Gymnasium",
+        "Indoor games",
+        "Children's play area",
+        "Landscaped gardens",
+        "24/7 security",
+        "Power and water backup"
+      ],
+      "highlights": "Premium villa community with excellent connectivity to Whitefield IT corridor",
+      "nearby": "Whitefield (12 km), KR Puram (8 km), Airport (25 km)"
+    },
+    {
+      "id": "eldorado_new",
+      "name": "Brigade El Dorado",
+      "type": "Luxury Residences",
+      "location": "Bannerghatta Road, South Bangalore",
+      "configurations": ["3 BHK", "4 BHK"],
+      "sizes": {
+        "3BHK": "2000 sq.ft",
+        "4BHK": "2700 sq.ft"
+      },
+      "price": "₹1.4 Cr onwards",
+      "possession": "Upcoming - Launch Q4 2026",
+      "status": "upcoming",
+      "amenities": [
+        "Ultra-modern clubhouse",
+        "Sky lounge",
+        "Infinity pool",
+        "Tennis and basketball courts",
+        "Spa and wellness center",
+        "Multipurpose hall",
+        "Co-working spaces",
+        "Pet park"
+      ],
+      "highlights": "Upcoming luxury project in premium South Bangalore with green living features",
+      "nearby": "IIM Bangalore (3 km), Meenakshi Mall (5 km), Electronic City (15 km)"
+    }
+  ]
+}

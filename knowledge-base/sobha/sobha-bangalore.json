@@ -1,0 +1,542 @@
+{
+  "builder": "SOBHA Limited",
+  "description": "India's most trusted luxury real estate brand. 30 years experience, 589 projects completed, 152.69 million sq.ft developed. 265+ awards. Headquarters: Bengaluru",
+  "website": "www.sobha.com",
+  "contact": {
+    "phone": "For detailed pricing, floor plans, and site visits, call 08045888783",
+    "email": "For inquiries via email, contact tanishq@diggajrealty.com"
+  },
+  "projects": [
+    {
+      "id": "ayana",
+      "name": "SOBHA Ayana",
+      "type": "Modern Tropical Luxury Apartments",
+      "location": "Panathur Main Road, Off Outer Ring Road, Balagere, East Bengaluru (within SOBHA Dream Acres township)",
+      "configurations": ["3 BHK"],
+      "sizes": {
+        "3BHK": "1,553 - 1,789 sq.ft"
+      },
+      "units": "683 apartments",
+      "price": "₹2.3 Cr onwards",
+      "possession": "December 2031",
+      "status": "under_construction",
+      "project_area": "6.28 acres (part of 81-acre Dream Acres township)",
+      "rera": "PRM/KA/RERA/1251/446/PR/030824/006958",
+      "amenities": [
+        "Multiple Clubhouses",
+        "Activity Arena",
+        "Celebration Court",
+        "Yoga Lawn",
+        "Camping Grounds",
+        "Tranquillity Valley",
+        "Swimming Pool",
+        "The Lanai",
+        "Paradise Grove",
+        "Isla Verde",
+        "Bamboo Bower",
+        "Premium Entrance Lobby",
+        "100+ total amenities (part of Dream Acres)"
+      ],
+      "highlights": "Modern tropical apartment concept with nature-integrated design. Raw tropical beauty with over 100 world-class amenities. Contemporary architecture with organic tropical aesthetics.",
+      "nearby": "Off Outer Ring Road (major connectivity), Marathalli area, East Bangalore IT corridor, Tech parks within 5-10 km"
+    },
+    {
+      "id": "infinia",
+      "name": "SOBHA Infinia",
+      "type": "Ultra-Luxe Residential Apartments",
+      "location": "Sarjapur-Marathahalli Road, Jakkasandra Extension, Koramangala, Bengaluru 560034",
+      "configurations": ["3 BHK", "4 BHK"],
+      "sizes": {
+        "3BHK": "1,768 sq.ft onwards",
+        "4BHK": "Up to 3,264 sq.ft"
+      },
+      "units": "196 apartments",
+      "price": "₹4.3 Cr onwards",
+      "possession": "Wing 5: June 2030 | Wing 1 & 2: December 2030",
+      "status": "under_construction",
+      "project_area": "4.708 acres",
+      "rera": "Wing 1 & 2: PRM/KA/RERA/1251/446/PR/030824/006957 | Wing 5: PRM/KA/RERA/1251/446/PR/030824/006956",
+      "amenities": [
+        "The Cosmopolitan Club (Premium Clubhouse)",
+        "Swimming Pool",
+        "Firefly Atrium",
+        "Community Plaza",
+        "Reflexology Path",
+        "Celebration Court",
+        "State-of-the-art gym",
+        "Yoga and meditation spaces",
+        "Modern fitness facilities"
+      ],
+      "highlights": "Ultra-luxe residences in prestigious Koramangala. Iconic apartments epitomizing modern architecture with minimalist sophistication. Premium location in Bangalore's most sought-after neighborhood.",
+      "nearby": "Koramangala (prime South Bengaluru), close to major tech parks, excellent connectivity to IT corridors, premium shopping and dining"
+    },
+    {
+      "id": "oneworld",
+      "name": "SOBHA One World",
+      "type": "Next-Generation Integrated Mega Township",
+      "location": "Greater Whitefield, Old Madras Road (OMR) near Hoskote Toll Plaza, Bangalore",
+      "configurations": ["1 BHK", "2 BHK Luxe", "2 BHK Grande", "3 BHK Luxe", "3 BHK Grande", "4 BHK Luxe", "4 BHK Grande"],
+      "sizes": {
+        "1BHK": "734 sq.ft",
+        "2BHK": "1,063-2,415 sq.ft",
+        "3BHK": "1,063-2,415 sq.ft",
+        "4BHK": "Up to 2,415 sq.ft"
+      },
+      "price": "Contact for pricing details",
+      "possession": "Phased - Contact for details",
+      "status": "active",
+      "project_area": "48 acres",
+      "towers": "14 high-rise towers (45-46 levels)",
+      "open_space": "80% open area",
+      "clubhouse": "120,000 sq.ft (One Club - 3-tier premium clubhouse)",
+      "retail": "65,000 sq.ft (One Emporium)",
+      "rera": "PRM/KA/RERA/1250/304/PR/080526/008634-008639",
+      "amenities": [
+        "90m diameter Cricket Ground & Football Field",
+        "750m Jogging/Cycling Track",
+        "350m Running Track",
+        "Tennis Courts",
+        "Pickle Ball Courts",
+        "Multisport Court",
+        "Skating Rink",
+        "Fitness Lawn",
+        "One Club (3-tier premium clubhouse)",
+        "Leisure Pool & Kids' Pool",
+        "Wellness Gardens",
+        "Observation Deck",
+        "Yoga Lawn",
+        "Reflexology Walk",
+        "Amphitheatre",
+        "Exhibition Square",
+        "OneWorld Plaza",
+        "Festival Lawn",
+        "Activity Deck",
+        "Oasis Trail",
+        "Tuscan Gardens",
+        "Rainforest Field",
+        "Play Park & Play Lawn",
+        "Pet Park",
+        "One Emporium (F&B outlets and lifestyle stores)"
+      ],
+      "unique_features": {
+        "themed_zones": "Six Immersive Zones: Temperate Enclave, Mediterranean Serenity, Tropical Zen, World Stadium, Continental Grounds, One Club",
+        "design": "Unfolds a new indulgence every 100m. All towers face Central Yard for scenic views. Walkable design with internal pathways.",
+        "quality": "Backward integration quality control"
+      },
+      "highlights": "Bengaluru's largest integrated township (48 acres) with 80% open space. Six immersive themed zones. Operational 120,000 sq.ft clubhouse and 65,000 sq.ft retail emporium.",
+      "nearby_it": "Bearys Global Research Triangle: 3-4 km | Brigade Signature Towers: 3-4 km | ITPL: 10 km | GR Tech Park: 10 km | Bagmane Tech Park: 15 km | RMZ Infinity: 15 km | EPIP: 15 km | KIADB Aerospace Park: 20 km",
+      "nearby_transport": "Proposed Purple Line Metro (walking distance) | Whitefield/Kadugodi Metro nearby | Whitefield Railway: 8-15 min | Bangalore Chennai Expressway: 10 min | Airport: 40 min",
+      "nearby_schools": "VIBGYOR High | Chrysalis High | New Baldwin International | NPS | The Brigade School",
+      "nearby_healthcare": "Manipal Hospital ITPL | Aster Whitefield | Motherhood Clinic | MVJ Hospital | East Point Hospital | Vydehi Hospital",
+      "nearby_shopping": "Phoenix Marketcity | Orion Uptown Mall | Decathlon OMR | Park Square Mall | Inorbit Mall | Nexus Shantiniketan | VR Bengaluru",
+      "investment_highlights": "Real estate growth: 12-20% annually in Greater Whitefield | 115% property appreciation in last 5 years | High rental yield potential"
+    },
+    {
+      "id": "altair",
+      "name": "SOBHA Altair",
+      "type": "Luxury Residential Apartments",
+      "location": "Hadosiddapura, Off Sarjapur Main Road, Bengaluru 560035",
+      "configurations": ["3 BHK", "4 BHK"],
+      "sizes": {
+        "3BHK": "1,894 sq.ft onwards",
+        "4BHK": "Up to 2,570 sq.ft"
+      },
+      "units": "207 residences",
+      "price": "₹3.5 Cr onwards",
+      "possession": "May 2031",
+      "status": "under_construction",
+      "project_area": "3.308 acres",
+      "rera": "PRM/KA/RERA/1251/446/PR/070126/008388",
+      "amenities": [
+        "Premium Clubhouse with indoor facilities",
+        "Swimming/Leisure Pool",
+        "Playground",
+        "Outdoor Fitness Corner",
+        "Reflexology Garden",
+        "Nature's Pavilion",
+        "Landscaped gardens",
+        "Luxury lobby",
+        "Spacious balconies"
+      ],
+      "highlights": "Eternally Timeless, Ideally Located - Composed urban oasis with deliberate exclusivity. Located beyond city sprawl yet well-connected off main Sarjapur Road for quieter environment.",
+      "nearby": "Off Sarjapur Main Road (major arterial), Electronic City, Panathur Road, access to business and lifestyle destinations"
+    },
+    {
+      "id": "neopolis",
+      "name": "SOBHA Neopolis",
+      "type": "Residential Apartments",
+      "location": "Panathur Road, Bengaluru",
+      "configurations": ["TBD - Pre-launch"],
+      "sizes": {
+        "note": "Specifications shared during registration"
+      },
+      "price": "Pre-launch lowest-ever pricing (First Come First Serve)",
+      "possession": "TBD",
+      "status": "pre_launch",
+      "rera": "Phase 1: PRM/KA/RERA/1251/446/PR/200923/006269 | Phase 2: PRM/KA/RERA/1251/446/PR/200923/006270 | Phase 5: PRM/KA/RERA/1251/446/PR/200923/006271",
+      "amenities": [
+        "Details shared during registration/inquiry phase"
+      ],
+      "highlights": "Pre-launch benefits available. Complete freedom of choice on preferred unit (any floor, any view). Limited period offer.",
+      "nearby": "Panathur Road, East Bangalore IT corridor"
+    },
+    {
+      "id": "townpark_madison_hamptons",
+      "name": "SOBHA Town Park (Phase 3) - Madison Heights & Hamptons",
+      "type": "New York-themed Luxury Residential Township",
+      "location": "Near Electronic City, Hosur Road, Bengaluru 562107",
+      "configurations": ["1 BHK", "2 BHK", "3 BHK", "4 BHK"],
+      "sizes": {
+        "2BHK": "1,240 sq.ft onwards",
+        "4BHK": "Up to 2,846 sq.ft"
+      },
+      "units": "2,104 units total (Madison Heights: 1,120 | Hamptons: 984)",
+      "price": "₹1.8 Cr onwards",
+      "possession": "Madison Heights Phase 1: Dec 2030 | Hamptons Phase 1: Jun 2031 | Madison Heights Phase 2: Dec 2032 | Hamptons Phase 2: Jun 2033",
+      "status": "under_construction",
+      "project_area": "33 acres 17.5 guntas (Phase 3)",
+      "rera": "PRM/KA/RERA/1251/308/PR/230125/007418-007421",
+      "amenities": [
+        "Cricket Ground",
+        "Multi-sport Court",
+        "Sports Plaza",
+        "Club Hamptons",
+        "Club Madison (Multiple Clubhouses)",
+        "Lap & Leisure Pools",
+        "Central Park",
+        "Madison Park Trail",
+        "Forest Grove",
+        "Town Centre",
+        "Promenade",
+        "Alfresco Deck",
+        "Camping Grounds"
+      ],
+      "highlights": "Bengaluru's only NYC-themed residential township. New York-inspired design and lifestyle. Multi-phase mega development with distinct tower names (Madison Heights inspired by Manhattan, Hamptons inspired by New York suburbs).",
+      "nearby": "Electronic City (major IT hub), Hosur Road (excellent connectivity)"
+    },
+    {
+      "id": "dreamacres",
+      "name": "SOBHA Dream Acres",
+      "type": "Aspiration-Themed Apartments (Mega Township)",
+      "location": "Panathur Main Road, Off Outer Ring Road, Balagere, East Bengaluru 560087",
+      "configurations": ["2 BHK"],
+      "sizes": {
+        "2BHK": "1,007-1,020 sq.ft"
+      },
+      "units": "6,500 apartments",
+      "price": "₹83-86 Lakhs",
+      "possession": "December 2024 (Construction in progress - Near completion)",
+      "status": "near_completion",
+      "project_area": "81 acres (mega township)",
+      "rera": "26 RERA numbers (multi-phase project)",
+      "amenities": [
+        "24 hours Power Backup",
+        "Premium Clubhouse",
+        "Swimming Pool",
+        "Co-working Space",
+        "Tennis Court",
+        "Badminton Hall",
+        "Guest Rooms",
+        "Cycling Track",
+        "Jogging Track",
+        "Garden Areas with seating",
+        "Multiple recreational facilities"
+      ],
+      "highlights": "Large-scale community living (81 acres, 6,500 apartments). Abundant lush greenery and wide open spaces. Designed using advanced precast technology. Affordable luxury segment with easy access to work, shopping, and entertainment.",
+      "nearby": "Off Outer Ring Road (prime connectivity), Marathalli area, East Bangalore IT corridor, Tech parks within 5-10 km"
+    },
+    {
+      "id": "magnus",
+      "name": "SOBHA Magnus",
+      "type": "Eco-Luxe Residential Apartments",
+      "location": "Bannerghatta Main Road, Kalena Agrahara, Kothnur, Bengaluru 560076",
+      "configurations": ["3 BHK", "4 BHK"],
+      "sizes": {
+        "3BHK": "1,856 sq.ft",
+        "4BHK": "2,578 sq.ft"
+      },
+      "units": "294 residences",
+      "price": "₹3.4 Cr onwards",
+      "possession": "May 2030",
+      "status": "under_construction",
+      "project_area": "5.85 acres",
+      "rera": "PRM/KA/RERA/1251/310/PR/131025/008160",
+      "amenities": [
+        "2-storeyed Premium Clubhouse",
+        "Clubhouse Lobby",
+        "Multi-purpose Hall",
+        "Games Room",
+        "Amphitheatre",
+        "Swimming Pool",
+        "Kids' Pool",
+        "Multi-sport Court",
+        "Play Park",
+        "Eco Pavilion/Nature's Pavilion",
+        "Seniors' Corner",
+        "Pet Park",
+        "Spacious apartment lobbies",
+        "Modern interiors"
+      ],
+      "highlights": "Inspired by biophilic design with climate-responsive planning. Eco-luxe themed development with nature-integrated living spaces and experiential amenities.",
+      "nearby": "Bannerghatta Main Road (major corridor), Kothnur area, South Bengaluru location"
+    },
+    {
+      "id": "valleyview",
+      "name": "SOBHA Valley View",
+      "type": "Luxury Residential Apartments",
+      "location": "V Legacy Road, Banashankari 3rd Stage, Hosakerehalli, Bengaluru 560085",
+      "configurations": ["2 BHK", "3 BHK"],
+      "sizes": {
+        "2BHK": "1,304 sq.ft onwards",
+        "3BHK": "Up to 1,817 sq.ft"
+      },
+      "units": "312 apartments",
+      "price": "₹2 Cr onwards",
+      "possession": "READY TO MOVE IN (Completed)",
+      "status": "ready_to_move",
+      "project_area": "7.175 acres",
+      "rera": "PRM/KA/RERA/1251/310/PR/170916/000117",
+      "amenities": [
+        "Clubhouse with indoor facilities",
+        "Swimming Pool",
+        "Jogging & Cycling tracks",
+        "Outdoor Gym",
+        "Children's Play Area",
+        "Party Lawn",
+        "Gazebo",
+        "Indoor Sports Arena",
+        "Landscaped gardens"
+      ],
+      "highlights": "READY TO MOVE IN - Immediate possession. Luxury residences nestled amidst sprawling greens. One-of-a-kind lifestyle balancing serenity with modern conveniences and seamless connectivity.",
+      "nearby": "Banashankari (established residential neighborhood), South Bengaluru, good connectivity to city center and IT hubs"
+    },
+    {
+      "id": "royalcrest",
+      "name": "SOBHA Royal Crest",
+      "type": "Bangalore Palace-themed Residential Apartments",
+      "location": "Behind PES University, Mysore Road, Banashankari, Bengaluru 560050",
+      "configurations": ["3 BHK", "4 BHK Duplexes"],
+      "sizes": {
+        "3BHK": "1,853-3,448 sq.ft",
+        "4BHK_Duplex": "1,853-3,448 sq.ft"
+      },
+      "units": "329 apartments",
+      "price": "₹2 Cr onwards",
+      "possession": "December 2028",
+      "status": "under_construction",
+      "project_area": "6.33 acres",
+      "rera": "PRM/KA/RERA/1251/309/PR/300522/004936",
+      "amenities": [
+        "Club Castle (Premium Clubhouse)",
+        "The Grand Courtyard",
+        "Regalia Pool (Main Pool)",
+        "Kids' Pool",
+        "Amphitheatre",
+        "Party Lawn",
+        "Play Court & Play Ground",
+        "Jogging Path",
+        "Arbor Park",
+        "Pet Park",
+        "Organic Garden",
+        "Sunrise Walkway",
+        "Bridge"
+      ],
+      "highlights": "A tribute to the rich heritage of Bengaluru. Architectural marvel crafted in footsteps of Bangalore Palace with fortified towers and turreted parapets. Unique heritage theme in premium location behind PES University.",
+      "nearby": "PES University (immediate proximity), Mysore Road, Banashankari area, good connectivity to city center"
+    },
+    {
+      "id": "oakshire",
+      "name": "SOBHA Oakshire",
+      "type": "4 BHK Tudor-style Row Houses",
+      "location": "IVC Road, Off Bellary Road, Near International Airport, Devanahalli, Bengaluru 562110",
+      "configurations": ["4 BHK Row Houses"],
+      "sizes": {
+        "4BHK": "3,441-3,467 sq.ft"
+      },
+      "units": "80 row houses",
+      "price": "₹5.3 Cr onwards",
+      "possession": "Phase 1: Dec 2026 | Phase 2: Jun 2027 | Phase 3: Dec 2027",
+      "status": "under_construction",
+      "project_area": "8 acres 35 guntas",
+      "rera": "Phase 1: PRM/KA/RERA/1250/303/PR/270323/005821 | Phase 2: PRM/KA/RERA/1250/303/PR/270323/005822 | Phase 3: PRM/KA/RERA/1250/303/PR/270323/005823",
+      "amenities": [
+        "Oxygen Park with Jogging track",
+        "Reflexology Park",
+        "Kids' Play Area",
+        "Tranquil Lawns",
+        "Landscaped gardens"
+      ],
+      "highlights": "Architectural tribute to quintessential English lifestyle. Picturesque Tudor-style homes with gabled steep roofs, timber & brick work, ornate windows. Crafted for the discerning few. Exclusive row house community in Devanahalli's elite hub.",
+      "nearby": "Near Kempegowda International Airport, Off Bellary Road, Devanahalli (emerging residential hub)"
+    },
+    {
+      "id": "dreamgardens",
+      "name": "SOBHA Dream Gardens",
+      "type": "Zen-Themed Residential Apartments",
+      "location": "Off Thanisandra Main Road, Kannuru Main Road, Mitganahalli, Bellahalli, Bengaluru 562149",
+      "configurations": ["1 BHK", "2 BHK"],
+      "sizes": {
+        "2BHK": "1,004-1,058 sq.ft"
+      },
+      "units": "1,780 units",
+      "price": "₹95 Lakhs onwards",
+      "possession": "December 2027",
+      "status": "under_construction",
+      "project_area": "17 acres",
+      "rera": "5 RERA numbers covering multiple phases",
+      "amenities": [
+        "Koi Pond",
+        "Bamboo Walk",
+        "Zen Gardens",
+        "Reflexology Gardens",
+        "Meditation Decks/Lawn",
+        "Torii Gate Entrance/Exit",
+        "Rock Garden",
+        "Blossom Park",
+        "Multi-layer Swimming Pool",
+        "Leisure Pool",
+        "Premium Clubhouse",
+        "Amphitheatre",
+        "Seniors Avenue",
+        "Promenade"
+      ],
+      "highlights": "Designed around principles of Zen balanced life. Ikigai through Zen living concept. Nature-centric design with comprehensive Japanese-inspired amenities. Affordable luxury segment.",
+      "nearby": "Thanisandra Main Road, North Bangalore location, growing residential area"
+    },
+    {
+      "id": "brooklyn",
+      "name": "SOBHA Brooklyn Towers (Town Park)",
+      "type": "New York Brooklyn-themed Residential Apartments",
+      "location": "Near Electronic City, Hosur Road, Bengaluru",
+      "configurations": ["3 BHK", "4 BHK"],
+      "sizes": {
+        "note": "Sizes TBD"
+      },
+      "units": "1,305 apartments",
+      "price": "₹2 Cr onwards",
+      "possession": "Phase 1 W1: Dec 2027 | Phase 3 W5: Jun 2029 | Phase 4 W4: Jun 2029",
+      "status": "under_construction",
+      "project_area": "8.62 acres",
+      "rera": "Phase 1 W1: PRM/KA/RERA/1251/308/PR/270922/005267 | Phase 3 W5: PRM/KA/RERA/1251/308/PR/270922/005268 | Phase 4 W4: PRM/KA/RERA/1251/308/PR/270922/005269",
+      "amenities": [
+        "Futsal Court",
+        "Cricket Pitch",
+        "Half Basketball Court",
+        "Volleyball Court",
+        "Badminton Court",
+        "Skate-robics",
+        "Leisure Pool",
+        "The Prospect Club (Clubhouse)",
+        "Camping Lawn",
+        "Eco Pond",
+        "Senior's Hangout",
+        "Food Truck Café",
+        "Brooklyn Bridge (Kids' Play Area)",
+        "Rainbow Step Play",
+        "Bamboo Trek",
+        "Pet Park",
+        "Sunset Walk",
+        "Arbor Walk",
+        "Sunset Promenade",
+        "Reflexology Walk",
+        "Scenic Drive",
+        "The Arena",
+        "Tropic Junction",
+        "Work Canopy",
+        "Woodbridge Events Corner",
+        "Domino's Park",
+        "The Roundabout"
+      ],
+      "highlights": "Inspired by the ever-trending borough of New York, Brooklyn. Part of larger Townpark NYC-themed township. Large-scale development with comprehensive 26+ amenities. Metropolitan lifestyle concept.",
+      "nearby": "Electronic City (major IT hub), Hosur Road"
+    },
+    {
+      "id": "manhattan",
+      "name": "SOBHA Manhattan Towers (Town Park)",
+      "type": "New York Manhattan-themed Luxury Apartments",
+      "location": "Near Electronic City, Hosur Road, Bengaluru",
+      "configurations": ["3 BHK"],
+      "sizes": {
+        "note": "Sizes TBD"
+      },
+      "units": "560 apartments",
+      "price": "₹1.56 Cr onwards",
+      "possession": "December 2026",
+      "status": "under_construction",
+      "project_area": "7.61 acres",
+      "rera": "PRM/KA/RERA/1251/308/PR/210518/004150 | PRM/KA/RERA/1251/308/PR/210518/004151",
+      "amenities": [
+        "Kid's Play Area",
+        "Skating Rink",
+        "Bio-Pond",
+        "Fountain Plaza",
+        "Stepped Seating",
+        "Senior Citizen Park",
+        "Cricket Pitch",
+        "Swimming Pool",
+        "Kid's Pool",
+        "Board Walk",
+        "Multi Court",
+        "Badminton Court",
+        "Table Tennis",
+        "Billiards",
+        "Gym",
+        "Yoga and Aerobics",
+        "Steam and Sauna",
+        "Co-Working Space",
+        "Work From Nature spaces",
+        "Multipurpose Hall",
+        "Association Room",
+        "Clinic",
+        "Cards, Carroms and Chess",
+        "Foos Ball",
+        "Air Hockey"
+      ],
+      "highlights": "New York Themed Luxury Apartments. Architecture inspired by Manhattan's skyline with iconic NYC-style landmarks: Washington Arch, Bow Bridge, Literary Walk, Astoria Pool. Metropolitan Club House. Part of Townpark NYC-themed township.",
+      "nearby": "Electronic City (IT hub), Hosur Road, East Bangalore tech corridor"
+    },
+    {
+      "id": "insignia",
+      "name": "SOBHA Insignia",
+      "type": "Residential Apartments",
+      "location": "Bengaluru (exact location details limited)",
+      "configurations": ["Contact for details"],
+      "sizes": {
+        "note": "Contact SOBHA for specifications"
+      },
+      "price": "Contact 08045888783",
+      "possession": "Contact for details",
+      "status": "active",
+      "amenities": [
+        "Contact SOBHA for complete amenity list"
+      ],
+      "highlights": "Active project listed among top trending properties. Complete information available by contacting SOBHA at 08045888783.",
+      "nearby": "Location details available on inquiry"
+    },
+    {
+      "id": "galera",
+      "name": "SOBHA Galera",
+      "type": "Residential Apartments",
+      "location": "Near Kannamangala, Bengaluru",
+      "configurations": ["Contact for details"],
+      "sizes": {
+        "note": "Contact SOBHA for specifications"
+      },
+      "price": "Contact 08045888783",
+      "possession": "Contact for details",
+      "status": "active",
+      "rera": "PRM/KA/RERA/1251/446/PR/050123/005601",
+      "amenities": [
+        "Contact SOBHA for complete amenity list"
+      ],
+      "highlights": "Active project. Detailed specifications available upon inquiry. Appears to be in pre-launch or early launch phase.",
+      "nearby": "Near Kannamangala area"
+    }
+  ],
+  "notes": {
+    "data_accuracy": "All information verified from official SOBHA Limited website and RERA portal. Research completed with comprehensive web search across multiple sources.",
+    "pricing_note": "Prices are starting prices and subject to change. Contact SOBHA for current pricing and offers.",
+    "possession_note": "Possession dates are tentative and subject to RERA and construction timelines.",
+    "amenities_note": "Amenity lists are comprehensive but not exhaustive. Contact SOBHA for complete project-specific amenity details."
+  }
+}

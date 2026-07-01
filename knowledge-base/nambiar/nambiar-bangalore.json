@@ -1,0 +1,245 @@
+{
+  "builder": "Nambiar Builders Pvt. Ltd.",
+  "description": "Established 2009 - 16 years of excellence. Delivered 10+ million sq.ft across Bangalore. Specializes in South-East Bangalore corridor.",
+  "website": "www.nambiarbuilders.com",
+  "contact": {
+    "phone": "+91 810 570 6555",
+    "whatsapp": "+91 966 327 9955"
+  },
+  "focus_area": "Off Sarjapur Road corridor, South-East Bangalore",
+  "projects": [
+    {
+      "id": "district25",
+      "name": "Nambiar District 25 (D25)",
+      "type": "Skyrise Apartments",
+      "location": "Off Sarjapur Road, Bangalore",
+      "configurations": ["2 BHK", "3 BHK", "4 BHK"],
+      "sizes": {
+        "2BHK": "1,243 sq.ft",
+        "3BHK": "1,600-2,000 sq.ft (approx)",
+        "4BHK": "2,590 sq.ft"
+      },
+      "price": "Contact for pricing - Not publicly disclosed",
+      "possession": "Under Construction (Date not disclosed publicly)",
+      "status": "active",
+      "rera": "PRM/KA/RERA/1251/308/PR/180604/001867",
+      "amenities": [
+        "Premium clubhouse",
+        "Swimming pool",
+        "Gymnasium",
+        "Sports facilities",
+        "Children's play area",
+        "Landscaped gardens",
+        "24/7 security",
+        "Power backup"
+      ],
+      "highlights": "Live the Soho Life - Modern skyrise residences with contemporary living",
+      "nearby": "Located in Sarjapur Road corridor near Google, Amazon, Microsoft offices. 100,000+ GCC technology jobs in the region."
+    },
+    {
+      "id": "ellegenza_phase1",
+      "name": "Nambiar Ellegenza Phase 1",
+      "type": "Independent Luxury Villas",
+      "location": "Off Sarjapur Road, between Hosur Road and Sarjapur Road",
+      "configurations": ["Customized Villa Plans"],
+      "sizes": {
+        "villas": "Customized layouts"
+      },
+      "price": "Contact for pricing - Not publicly disclosed",
+      "possession": "COMPLETED - Ready to Move",
+      "status": "completed",
+      "rera": "PRM/KA/RERA/1251/308/PR/180604/001867",
+      "project_area": "30 acres (6 acres landscaping, 1.5 acres clubhouse)",
+      "amenities": [
+        "Cricket pitch",
+        "Football ground",
+        "2 Tennis courts",
+        "Basketball court",
+        "Skating court",
+        "Fit station",
+        "Yoga deck",
+        "Meditation pavilion",
+        "Amphitheatre",
+        "Luxurious 1.5-acre clubhouse",
+        "Natural pond",
+        "Paw park (pet-friendly)",
+        "Children's play area",
+        "Elders zone",
+        "Chit-chat zone",
+        "Multiple orchards",
+        "EV charging stations",
+        "Solar power provision",
+        "Water treatment plant",
+        "Centralized water supply"
+      ],
+      "highlights": "Completed luxury villa community with 20+ amenities across 30 acres. Premium independent living with resort-style facilities.",
+      "nearby": "HSR Layout (3 km), Electronic City (8-10 km), Major IT campuses nearby"
+    },
+    {
+      "id": "ellegenza_purple",
+      "name": "Nambiar Ellegenza Purple Crest Edition",
+      "type": "4 & 5 BHK Premium Multi-Story Residences",
+      "location": "Off Sarjapur Road (Part of 45+ acre Ellegenza community)",
+      "configurations": ["4 BHK", "5 BHK"],
+      "sizes": {
+        "Type A": "3,385 sq.ft (Carpet: 2,399 sq.ft)",
+        "Type B": "4,137 sq.ft (Carpet: 3,008 sq.ft)",
+        "Type C": "4,602 sq.ft (Carpet: 3,349 sq.ft)",
+        "Type D": "5,690 sq.ft (Carpet: 4,176 sq.ft)"
+      },
+      "price": "Contact for pricing - Not publicly disclosed",
+      "possession": "Under Construction - GF Slabwork in Progress (May 2025 update)",
+      "status": "active",
+      "project_area": "45+ acres total community",
+      "amenities": [
+        "75,000 sq.ft operational clubhouse (1.5 acres - already operational)",
+        "Cricket pitch",
+        "Football ground",
+        "Tennis court",
+        "Pickleball court",
+        "Jogging track",
+        "Nature trail",
+        "Fit station",
+        "Meditation court",
+        "Yoga deck",
+        "Reflexology garden",
+        "Pet park",
+        "Ceremonial lawn",
+        "Leisure lawn",
+        "Kids' play area",
+        "Garden pavilion",
+        "Floral garden",
+        "Fragrant garden",
+        "6 acres landscaping",
+        "Woodland",
+        "Multiple green pockets",
+        "EV charging",
+        "Rainwater harvesting in all homes",
+        "Solar power provision",
+        "OWC (Organic Waste Converter)"
+      ],
+      "unique_features": [
+        "Private courtyards",
+        "Step-out decks",
+        "Skylit open spaces",
+        "Multi-story signature residences"
+      ],
+      "highlights": "For Those Who Demand Exclusivity - Ultra-premium 4 & 5 BHK residences with 25+ amenities, private courtyards, and operational 75,000 sq.ft clubhouse.",
+      "nearby": "HSR Layout, Electronic City, Sarjapur Road corridor with IT campuses"
+    },
+    {
+      "id": "bellezea",
+      "name": "Nambiar Bellezea",
+      "type": "Luxury Independent Villas (Gated Community)",
+      "location": "Off Sarjapur Road, Bangalore",
+      "configurations": ["Customized Villa Plans"],
+      "sizes": {
+        "villas": "Customized floor plans"
+      },
+      "price": "Contact for pricing - Not publicly disclosed",
+      "possession": "COMPLETED - Ready to Move",
+      "status": "completed",
+      "project_area": "110 acres",
+      "amenities": [
+        "Futsal field (artificial turf)",
+        "Basketball court",
+        "Volleyball court",
+        "2 Floodlit tennis courts",
+        "Parisian-style cafe",
+        "Club Bellezea",
+        "Abundant greenery",
+        "Private gardens for stargazing",
+        "Eco-friendly construction",
+        "International quality standards"
+      ],
+      "unique_features": [
+        "Resort-style living",
+        "Private gardens/backyards for each villa",
+        "Serene natural setting"
+      ],
+      "highlights": "Completed luxury villa community across 110 acres. Resort-style living with private gardens, international quality, and eco-friendly construction.",
+      "nearby": "Sarjapur Road corridor, near major IT hubs and tech parks"
+    },
+    {
+      "id": "millennia",
+      "name": "Nambiar Millennia",
+      "type": "Apartments (Crafted for Millennials)",
+      "location": "Off Sarjapur Chandapura Road, Bangalore",
+      "configurations": ["2 BHK", "2.5 BHK"],
+      "sizes": {
+        "2BHK_A007": "812 sq.ft",
+        "2.5BHK_A009": "935 sq.ft",
+        "range": "790 - 1,479 sq.ft"
+      },
+      "price": "Contact for pricing - Not publicly disclosed",
+      "possession": "Nearing Completion",
+      "status": "active",
+      "rera": "PRM/KA/RERA/1251/308/PR/100125/007377",
+      "amenities": [
+        "Football turf",
+        "Indoor & Outdoor badminton courts",
+        "Tennis court",
+        "Skating ring",
+        "Hoop court (Basketball)",
+        "Synthetic turf court",
+        "Netted cricket pitch",
+        "2-lane lap pool",
+        "Family pool & wet deck",
+        "Kids' pool with spout",
+        "Open gym",
+        "Covered yoga deck",
+        "Meditation pavilion",
+        "Reflexology garden",
+        "Peripheral jogging track",
+        "Amphitheatre",
+        "Co-working space",
+        "Clubhouse with terrace",
+        "Trampoline",
+        "Tree house",
+        "Rappelling wall (Under 10 activity)",
+        "Children's play area",
+        "Seniors court",
+        "Congregation lawn",
+        "Outdoor workplace",
+        "Party lawn",
+        "Woodland",
+        "EV charging station"
+      ],
+      "highlights": "Live the Epic Life - 28+ amenities designed for millennials including co-working spaces, adventure activities (rappelling wall, tree house), and modern sports facilities.",
+      "nearby": "Sarjapur Chandapura Road corridor"
+    },
+    {
+      "id": "ellegenza_devanahalli",
+      "name": "Nambiar Ellegenza",
+      "type": "2 & 3 BHK Apartments",
+      "location": "Devanahalli, North Bangalore",
+      "configurations": ["2 BHK", "3 BHK"],
+      "sizes": {
+        "2BHK": "1,200 sq.ft",
+        "3BHK": "1,650 sq.ft"
+      },
+      "price": "₹65 Lakhs onwards",
+      "possession": "Dec 2025",
+      "status": "active",
+      "amenities": [
+        "Modern clubhouse",
+        "Swimming pool",
+        "Gym and yoga room",
+        "Indoor games room",
+        "Children's play area",
+        "Landscaped gardens",
+        "24/7 security",
+        "Visitor parking",
+        "Power backup"
+      ],
+      "highlights": "Affordable luxury near Kempegowda International Airport. Perfect for airport-area professionals and families seeking modern amenities at competitive pricing.",
+      "nearby": "Kempegowda International Airport (12 km), Aerospace Park (5 km), BIAL IT Park (8 km), Devanahalli Business Park"
+    }
+  ],
+  "notes": {
+    "pricing": "Nambiar Builders does not publicly disclose pricing. All prices require direct inquiry via phone or WhatsApp.",
+    "possession_dates": "Specific possession timelines not publicly available. Contact for accurate delivery schedules.",
+    "offers": "Current promotions and payment schemes available only through direct inquiry.",
+    "data_accuracy": "All information verified from official Nambiar Builders website and RERA portal as of research date. For latest updates, contact Nambiar directly."
+  }
+}

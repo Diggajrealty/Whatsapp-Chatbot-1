@@ -1,0 +1,292 @@
+{
+  "builder": "Godrej Properties",
+  "description": "Part of the Godrej Group conglomerate. Leading real estate developer known for sustainable and innovative projects across India.",
+  "website": "www.godrejproperties.com",
+  "contact": {
+    "note": "Contact details to be updated - Check official website"
+  },
+  "data_note": "Limited information due to website access restrictions. For complete details, amenities, and current pricing, contact Godrej Properties directly or visit their official website.",
+  "projects": [
+    {
+      "id": "woods_thanisandra",
+      "name": "Godrej Woods Thanisandra",
+      "type": "Luxury Residential Apartments",
+      "location": "Thanisandra, North Bangalore",
+      "configurations": ["2 BHK", "3 BHK"],
+      "sizes": {
+        "note": "Contact Godrej for specific sizes"
+      },
+      "price": "₹1.59 Cr onwards",
+      "possession": "Under Construction",
+      "status": "active",
+      "amenities": [
+        "Contact Godrej Properties for complete amenity list"
+      ],
+      "highlights": "Luxury residential living in Thanisandra area",
+      "nearby": "Thanisandra, North Bangalore with good connectivity"
+    },
+    {
+      "id": "lakeside_orchard",
+      "name": "Godrej Lakeside Orchard",
+      "type": "Residential Apartments",
+      "location": "Sarjapur Road, East Bangalore",
+      "configurations": ["Multiple BHK options"],
+      "sizes": {
+        "note": "Contact Godrej for specific sizes"
+      },
+      "price": "Contact Godrej Properties",
+      "possession": "Contact for details",
+      "status": "active",
+      "amenities": [
+        "Contact Godrej Properties for complete amenity list"
+      ],
+      "highlights": "Lakeside location on prime Sarjapur Road IT corridor",
+      "nearby": "Sarjapur Road - Major IT corridor with tech parks, Electronic City proximity"
+    },
+    {
+      "id": "woodscape",
+      "name": "Godrej Woodscape",
+      "type": "Residential Apartments",
+      "location": "Budigere Cross, East Bangalore",
+      "configurations": ["Contact for details"],
+      "sizes": {
+        "note": "Contact Godrej for specific sizes"
+      },
+      "price": "Contact Godrej Properties",
+      "possession": "Contact for details",
+      "status": "active",
+      "amenities": [
+        "Nature-themed amenities",
+        "Green spaces",
+        "Contact Godrej for complete list"
+      ],
+      "highlights": "An Urban Sanctuary for Contemporary Families - Nature/forest-themed development concept with strong green living focus",
+      "nearby": "Budigere Cross, East Bangalore - Emerging residential area"
+    },
+    {
+      "id": "tiara",
+      "name": "Godrej Tiara",
+      "type": "Residential Apartments",
+      "location": "Bangalore (Contact for specific area)",
+      "configurations": ["Contact for details"],
+      "sizes": {
+        "note": "Contact Godrej for specific sizes"
+      },
+      "price": "Contact Godrej Properties",
+      "possession": "Recent Launch (Late 2024)",
+      "status": "new_launch",
+      "amenities": [
+        "Modern amenities",
+        "Contemporary design features",
+        "Contact Godrej for complete list"
+      ],
+      "highlights": "A Symphony of Design and Architecture - Recent launch focused on modern living and contemporary design. Premium modern development.",
+      "nearby": "Contact Godrej Properties for location details"
+    },
+    {
+      "id": "vanantara",
+      "name": "Godrej Vanantara",
+      "type": "Residential Apartments",
+      "location": "Bannerghatta Road, South Bangalore",
+      "configurations": ["2 BHK", "3 BHK"],
+      "sizes": {
+        "note": "Contact Godrej for specific sizes"
+      },
+      "price": "Contact Godrej Properties",
+      "possession": "Upcoming - May 2026",
+      "status": "upcoming",
+      "amenities": [
+        "Forest-themed amenities",
+        "Nature integration",
+        "Premium luxury facilities",
+        "Contact Godrej for complete list"
+      ],
+      "highlights": "Forest Themed Luxury Living - Family living concept with premium positioning and strong nature integration. Luxury project with forest/nature theme.",
+      "nearby": "Bannerghatta Road, South Bangalore - Near Bannerghatta National Park, established residential corridor"
+    },
+    {
+      "id": "shettigere",
+      "name": "Godrej Shettigere",
+      "type": "Premium Residential Apartments",
+      "location": "Shettigere Road, Devanahalli, North Bangalore (Airport Road area)",
+      "configurations": ["Contact for details"],
+      "sizes": {
+        "note": "Contact Godrej for specific sizes"
+      },
+      "price": "Booking available - Contact for pricing",
+      "possession": "Recent/Upcoming Launch (Jan-Mar 2025)",
+      "status": "new_launch",
+      "amenities": [
+        "Modern living features",
+        "Premium amenities",
+        "Contact Godrej for complete list"
+      ],
+      "highlights": "The Future of Modern Living in Bangalore - Strong airport connectivity positioning. Premium development near Kempegowda International Airport.",
+      "nearby": "Near Kempegowda International Airport, Devanahalli area, Airport Road"
+    },
+    {
+      "id": "devanahalli_villas",
+      "name": "Godrej Devanahalli",
+      "type": "Luxury Villas",
+      "location": "Devanahalli, North Bangalore",
+      "configurations": ["Villa configurations"],
+      "sizes": {
+        "note": "Contact Godrej for villa sizes"
+      },
+      "price": "Contact Godrej Properties",
+      "possession": "Contact for details",
+      "status": "active",
+      "amenities": [
+        "Luxury villa amenities",
+        "Private spaces",
+        "Contact Godrej for complete list"
+      ],
+      "highlights": "Premium villa development in airport corridor. Villa product differentiating from apartment projects with exclusive living.",
+      "nearby": "Very close to Kempegowda International Airport, Devanahalli"
+    },
+    {
+      "id": "yelahanka",
+      "name": "Godrej Yelahanka",
+      "type": "Ultra-Luxury Apartments",
+      "location": "Airport Road, Yelahanka, North Bangalore",
+      "configurations": ["2 BHK", "3 BHK"],
+      "sizes": {
+        "note": "Contact Godrej for specific sizes"
+      },
+      "price": "Contact Godrej Properties",
+      "possession": "Contact for details",
+      "status": "active",
+      "amenities": [
+        "Ultra-luxury amenities",
+        "Premium facilities",
+        "Contact Godrej for complete list"
+      ],
+      "highlights": "New Benchmark in North Bangalore - Modern ultra-luxury apartments positioned in premium segment with excellent airport connectivity.",
+      "nearby": "Airport Road, close to Kempegowda International Airport, Bellary Road connectivity, Yelahanka"
+    },
+    {
+      "id": "plots_doddaballapur",
+      "name": "Godrej Plots Doddaballapur",
+      "type": "Residential Plots/Plotted Development",
+      "location": "Doddaballapur, North Bangalore",
+      "configurations": ["Various plot sizes"],
+      "sizes": {
+        "note": "Contact Godrej for plot dimensions"
+      },
+      "price": "Contact Godrej Properties",
+      "possession": "Contact for details",
+      "status": "active",
+      "amenities": [
+        "World-class amenities",
+        "Green living infrastructure",
+        "Gated community features",
+        "Contact Godrej for complete list"
+      ],
+      "highlights": "Plotted development with World-Class Amenities & Green Living focus. Build your own home with Godrej infrastructure and amenities.",
+      "nearby": "Doddaballapur area, North Bangalore"
+    },
+    {
+      "id": "hoskote",
+      "name": "Godrej Hoskote",
+      "type": "Premium Residential Apartments",
+      "location": "Hoskote, East Bangalore",
+      "configurations": ["Modern apartments"],
+      "sizes": {
+        "note": "Contact Godrej for specific sizes"
+      },
+      "price": "Contact Godrej Properties",
+      "possession": "Contact for details (Oct-Nov 2025 publications)",
+      "status": "active",
+      "amenities": [
+        "Modern living amenities",
+        "Premium facilities",
+        "Contact Godrej for complete list"
+      ],
+      "highlights": "Premium development in emerging peripheral area with connectivity to Whitefield and IT corridor.",
+      "nearby": "Hoskote area with connectivity to Whitefield IT corridor, East Bangalore"
+    },
+    {
+      "id": "aravya_estate",
+      "name": "Godrej Aravya Estate",
+      "type": "Residential",
+      "location": "Bangalore (Contact for specific area)",
+      "configurations": ["Contact for details"],
+      "sizes": {
+        "note": "Contact Godrej for specific sizes"
+      },
+      "price": "Contact Godrej Properties",
+      "possession": "November 2025 Launch",
+      "status": "upcoming",
+      "amenities": [
+        "Contact Godrej Properties for amenity details"
+      ],
+      "highlights": "Upcoming launch scheduled for November 2025",
+      "nearby": "Contact Godrej Properties for location details"
+    },
+    {
+      "id": "msr_city",
+      "name": "Godrej MSR City",
+      "type": "Residential Apartments",
+      "location": "Bangalore (Contact for specific area)",
+      "configurations": ["Contact for details"],
+      "sizes": {
+        "note": "Contact Godrej for specific sizes"
+      },
+      "price": "Contact Godrej Properties",
+      "possession": "Contact for details",
+      "status": "active",
+      "amenities": [
+        "Luxury amenities",
+        "Contact Godrej for complete list"
+      ],
+      "highlights": "Barca at Godrej MSR City - Gateway to Luxury Living. Barca appears to be a phase or tower within the project.",
+      "nearby": "Contact Godrej Properties for location details"
+    },
+    {
+      "id": "woodsman_estate",
+      "name": "Godrej Woodsman Estate",
+      "type": "Residential",
+      "location": "Bangalore (Contact for specific area)",
+      "configurations": ["Contact for details"],
+      "sizes": {
+        "note": "Contact Godrej for specific sizes"
+      },
+      "price": "Contact Godrej Properties",
+      "possession": "Contact for details",
+      "status": "active",
+      "amenities": [
+        "Contact Godrej Properties for amenity details"
+      ],
+      "highlights": "Godrej Properties project in Bangalore - Contact for complete information",
+      "nearby": "Contact Godrej Properties for location details"
+    }
+  ],
+  "geographic_distribution": {
+    "north_bangalore_airport_corridor": ["Godrej Shettigere", "Godrej Devanahalli", "Godrej Yelahanka", "Godrej Plots Doddaballapur"],
+    "east_bangalore": ["Godrej Woods Thanisandra", "Godrej Woodscape", "Godrej Hoskote", "Godrej Lakeside Orchard"],
+    "south_bangalore": ["Godrej Vanantara"],
+    "location_tbd": ["Godrej Tiara", "Godrej Aravya Estate", "Godrej MSR City", "Godrej Woodsman Estate"]
+  },
+  "property_types": {
+    "apartments": ["Woods Thanisandra", "Lakeside Orchard", "Woodscape", "Tiara", "Vanantara", "Shettigere", "Yelahanka", "Hoskote", "MSR City"],
+    "villas": ["Godrej Devanahalli"],
+    "plots": ["Godrej Plots Doddaballapur"],
+    "tbd": ["Godrej Aravya Estate", "Godrej Woodsman Estate"]
+  },
+  "notes": {
+    "data_limitations": "This knowledge base has limited data due to anti-scraping restrictions on Godrej Properties website and major real estate portals. Only 1 of 13 projects has confirmed pricing. For accurate and complete information, customers MUST contact Godrej Properties directly.",
+    "recommendation": "For all inquiries about Godrej projects, direct customers to contact Godrej Properties official channels for:",
+    "contact_for": [
+      "Current pricing and payment plans",
+      "Complete amenity lists (10-15 amenities per project)",
+      "Exact unit sizes and floor plans",
+      "Specific possession timelines",
+      "Nearby landmark distances (schools, hospitals, tech parks, malls)",
+      "Current promotional offers",
+      "Site visit bookings"
+    ],
+    "verified_projects": "All 13 project names confirmed as Godrej Properties Bangalore projects through research.",
+    "pricing_available": "Only Godrej Woods Thanisandra (₹1.59 Cr onwards) has publicly available pricing.",
+    "data_accuracy": "Information compiled from limited accessible sources. Research conducted June 2026. For most current information, contact Godrej Properties directly."
+  }
+}
