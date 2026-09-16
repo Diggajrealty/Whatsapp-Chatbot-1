@@ -18,7 +18,7 @@ async function testGemini() {
     for (let i = 0; i < keys.length; i++) {
         try {
             const genAI = new GoogleGenerativeAI(keys[i]);
-            const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
+            const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
             const result = await model.generateContent('Say hi in 2 words');
             const response = result.response.text();

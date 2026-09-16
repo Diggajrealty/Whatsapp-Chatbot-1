@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node index-multibot.js",
-    "single": "node index.js"
+    "single": "node index.js",
+    "tunnel-url": "node -e \"const{execSync}=require('child_process');const m=execSync('docker logs kaira-tunnel 2>&1').toString().match(/https:\\/\\/[a-z0-9-]+\\.trycloudflare\\.com/g);console.log(m?m[m.length-1]:'no URL in logs - is kaira-tunnel running?')\"",
+    "restart": "docker compose up -d kaira"
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",

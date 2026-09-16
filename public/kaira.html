@@ -1,0 +1,60 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kaira — Send a Lead</title>
+<style>
+  :root{color-scheme:dark}
+  body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;
+       font:15px/1.5 system-ui,sans-serif;background:#0b0f14;color:#e6edf3}
+  .card{width:100%;max-width:560px;background:#111823;border:1px solid #1e2937;
+        border-radius:16px;padding:24px}
+  h1{margin:0 0 4px;font-size:20px}
+  p.sub{margin:0 0 20px;color:#8b98a5}
+  label{display:block;margin:14px 0 6px;font-size:13px;color:#8b98a5}
+  input,textarea{width:100%;box-sizing:border-box;padding:11px 13px;border-radius:9px;
+       border:1px solid #243041;background:#0b1220;color:#e6edf3;font:inherit}
+  textarea{min-height:92px;resize:vertical}
+  button{margin-top:18px;width:100%;padding:12px;border:0;border-radius:9px;
+       background:#25d366;color:#04120a;font:600 15px system-ui;cursor:pointer}
+  button:disabled{opacity:.5;cursor:default}
+  pre{margin-top:16px;padding:12px;background:#0b1220;border:1px solid #243041;
+      border-radius:9px;white-space:pre-wrap;word-break:break-word;font-size:13px}
+  .ok{border-color:#1f6f43}.err{border-color:#7f2230}
+</style>
+<div class="card">
+  <h1>🤖 Kaira</h1>
+  <p class="sub">Tell Kaira who to talk to. She opens the WhatsApp chat and takes it from there.</p>
+
+  <label>Instruction</label>
+  <textarea id="text" placeholder="Kaira, talk to this person about Abhee New Dimension"></textarea>
+
+  <label>Phone number (optional if it's in the instruction)</label>
+  <input id="phone" placeholder="9876543210">
+
+  <label>API key (only if CRM_API_KEY is set)</label>
+  <input id="key" type="password" placeholder="leave blank if not configured">
+
+  <button id="go">Send first message</button>
+  <pre id="out" hidden></pre>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+$('go').onclick = async () => {
+  const out = $('out'); const btn = $('go');
+  btn.disabled = true; out.hidden = false; out.className = ''; out.textContent = 'Sending…';
+  try {
+    const headers = {'Content-Type':'application/json'};
+    if ($('key').value) headers['x-api-key'] = $('key').value;
+    const r = await fetch('/api/instruct', {
+      method:'POST', headers,
+      body: JSON.stringify({ text: $('text').value, phone: $('phone').value || undefined })
+    });
+    const j = await r.json();
+    out.className = r.ok ? 'ok' : 'err';
+    out.textContent = r.ok
+      ? `✅ Sent via "${j.botId}" bot to ${j.whatsappId}\n\n${j.sent}`
+      : `❌ ${j.error || 'failed'}`;
+  } catch (e) { out.className='err'; out.textContent = '❌ ' + e.message; }
+  btn.disabled = false;
+};
+$('text').addEventListener('keydown', e => { if (e.key==='Enter' && (e.metaKey||e.ctrlKey)) $('go').click(); });
+</script>

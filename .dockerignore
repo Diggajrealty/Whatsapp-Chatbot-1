@@ -1,0 +1,7 @@
+.git
+node_modules
+whatsapp_session_*
+sessions
+.env
+*.log
+*.md

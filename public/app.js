@@ -233,6 +233,20 @@ function updateEmptyState() {
 // QR Modal
 let currentQRBot = null;
 
+// The 'qr' event can arrive before the modal is open (or while another bot's
+// modal is), so keep the last QR per bot and paint it whenever it's needed.
+const qrCache = new Map();
+
+function paintQR(botId) {
+    if (currentQRBot !== botId) return;
+    const qr = qrCache.get(botId);
+    if (!qr) return;
+    document.getElementById('qr-placeholder').style.display = 'none';
+    const img = document.getElementById('qr-image');
+    img.src = qr;
+    img.style.display = 'block';
+}
+
 function showQRModal(botId) {
     currentQRBot = botId;
     const modal = document.getElementById('qr-modal');
@@ -245,8 +259,8 @@ function showQRModal(botId) {
 
     modal.classList.add('active');
 
-    // The QR will come from backend via Socket.io 'qr' event
-    // No simulation needed
+    // Paint immediately if we already have one; otherwise the 'qr' event will.
+    paintQR(botId);
 }
 
 function closeQRModal() {
@@ -356,14 +370,16 @@ socket.on('connect', () => {
 // Multi-bot backend events (with botId)
 socket.on('qr', ({ botId, qr }) => {
     console.log(`QR received for ${botId}`);
-    if (currentQRBot === botId) {
-        const qrPlaceholder = document.getElementById('qr-placeholder');
-        const qrImage = document.getElementById('qr-image');
+    qrCache.set(botId, qr);
+    paintQR(botId);
+});
 
-        qrPlaceholder.style.display = 'none';
-        qrImage.src = qr;
-        qrImage.style.display = 'block';
-    }
+// On (re)connect the server replays current bot state, including any live QR,
+// so a page reload doesn't lose it.
+socket.on('init', ({ bots }) => {
+    Object.entries(bots || {}).forEach(([botId, b]) => {
+        if (b && b.qr) { qrCache.set(botId, b.qr); paintQR(botId); }
+    });
 });
 
 socket.on('loading', ({ botId, percent, message }) => {

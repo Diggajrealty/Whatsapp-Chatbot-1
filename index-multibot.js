@@ -8,9 +8,37 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const { botConfigs, getSystemInstruction } = require('./botConfigs');
+const { normalizePhone, resolveBotId, parseInstruction, parseVisitTag, resolveFromDirectory } = require('./crmLead');
+const { projectDirectory, PLACEHOLDER_BUILDERS } = require('./projectDirectory');
 
 // ── Knowledge Base Integration ──────────────────────────────────────────────
 const knowledgeBase = require('./knowledge-base/index.js');
+
+// A long-running bot must survive a transient Puppeteer/WhatsApp error rather
+// than exit and take every session down with it. Log loudly, stay alive.
+process.on('unhandledRejection', (reason) => {
+    console.error('[FATAL-GUARD] unhandled rejection:', reason && reason.message ? reason.message : reason);
+});
+process.on('uncaughtException', (err) => {
+    console.error('[FATAL-GUARD] uncaught exception:', err && err.message ? err.message : err);
+});
+
+// Docker sends SIGTERM on every restart/redeploy. Without this, Node dies at
+// once and Chromium is killed mid-write, leaving a torn session profile —
+// which is what makes WhatsApp drop the device and demand a fresh QR. Close
+// the browsers properly and the stored session survives the restart.
+let shuttingDown = false;
+for (const sig of ['SIGTERM', 'SIGINT']) {
+    process.on(sig, async () => {
+        if (shuttingDown) return;
+        shuttingDown = true;
+        console.log(`[SHUTDOWN] ${sig} — closing ${activeBots.size} bot(s) cleanly`);
+        await Promise.all([...activeBots.values()].map(b =>
+            b.client.destroy().catch(e => console.error('[SHUTDOWN] destroy failed:', e.message))));
+        console.log('[SHUTDOWN] done');
+        process.exit(0);
+    });
+}
 
 // Map each bot to their specific knowledge base
 const BOT_KNOWLEDGE_BASE = {
@@ -23,8 +51,62 @@ const BOT_KNOWLEDGE_BASE = {
     // Note: 'all' bot will get combined data from all builders
 };
 
+// The knowledge base is static, so stringify it once per bot rather than on
+// every message - the 'all' bot's is ~106KB.
+const kbCache = new Map();
+
+// The KB belongs in the system instruction, not in each message: injected per
+// message it is re-sent AND accumulates in the chat history, so every turn gets
+// slower than the last. Here it is constant and charged once per call.
+// The model has no clock. Without this it cannot turn "Saturday 4pm" into the
+// absolute timestamp the CRM needs, and will guess a year at random.
+const IST = 'Asia/Kolkata';
+function todayLine() {
+    const now = new Date();
+    const date = now.toLocaleDateString('en-IN', { timeZone: IST, weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    const time = now.toLocaleTimeString('en-IN', { timeZone: IST, hour: '2-digit', minute: '2-digit', hour12: false });
+    return `TODAY'S DATE is ${date}. The current time is ${time} IST (+05:30). ` +
+        `Resolve every relative date the user gives you ("tomorrow", "Saturday", "next week") against this.`;
+}
+
+// Names only — the knowledge base has details for six builders, the CRM sells
+// far more. Without this the general bot denies these projects exist; with it
+// she can take the lead seriously. The "do not invent" rule below is the point:
+// a name is all she has for most of them.
+function projectCatalogue() {
+    const lines = Object.entries(projectDirectory)
+        .filter(([builder]) => !PLACEHOLDER_BUILDERS.has(builder))
+        .map(([builder, projects]) => `${builder}: ${projects.join(', ')}`);
+    return `=== PROJECTS THE COMPANY SELLS (names only) ===\n${lines.join('\n')}\n` +
+        `=== END PROJECT LIST ===\n` +
+        `These are real projects you can discuss. For any project NOT covered by your knowledge ` +
+        `base above, you know only the name and the builder — you do NOT know its price, ` +
+        `configurations, amenities, possession date or RERA number. Never invent them. Say you ` +
+        `will have an expert share the details, offer to arrange a site visit, and give ` +
+        `08045888783 for specifics. Inventing a detail about someone's home purchase is the ` +
+        `worst thing you can do.`;
+}
+
+function fullSystemInstruction(botId) {
+    const kb = getBotKnowledgeContext(botId);
+    let base = getSystemInstruction(botId) + '\n\n' + todayLine();
+    // Only the general bot: a builder's own bot must stay on its own projects.
+    if (botId === 'all') base += '\n\n' + projectCatalogue();
+    if (!kb) return base;
+    return base +
+        '\n\n=== YOUR KNOWLEDGE BASE (answer from this data directly) ===\n' + kb +
+        '\n=== END KNOWLEDGE BASE ===';
+}
+
 // Function to get builder-specific knowledge base context
 function getBotKnowledgeContext(botId) {
+    if (kbCache.has(botId)) return kbCache.get(botId);
+    const out = buildBotKnowledgeContext(botId);
+    kbCache.set(botId, out);
+    return out;
+}
+
+function buildBotKnowledgeContext(botId) {
     // Special case: 'all' bot gets data from ALL builders
     if (botId === 'all') {
         const allData = {
@@ -124,6 +206,211 @@ io.on('connection', (socket) => {
     });
 });
 
+// Autostart bots on boot, so the QR (or a reconnected session) is ready before
+// anyone opens the dashboard - and so bots come back by themselves after a restart.
+// e.g. AUTOSTART_BOTS=all,sobha
+if (process.env.AUTOSTART_BOTS) {
+    const ids = process.env.AUTOSTART_BOTS.split(',').map(x => x.trim()).filter(Boolean);
+    setTimeout(() => {
+        ids.forEach(id => {
+            if (!botConfigs[id]) return console.warn(`[AUTOSTART] unknown bot '${id}'`);
+            console.log(`[AUTOSTART] starting ${id}`);
+            startBot(id).catch(e => console.error(`[AUTOSTART] ${id} failed:`, e.message));
+        });
+    }, 1000);
+}
+
+// ── CRM Lead Intake (Luna → Kaira) ─────────────────────────────────────────
+// Luna (the CRM AI) POSTs a new enquiry here; Kaira opens the WhatsApp chat.
+app.use(express.json());
+
+const KAIRA = 'Kaira'; // WhatsApp assistant name shown to leads
+
+function authOk(req) {
+    return !process.env.CRM_API_KEY || req.get('x-api-key') === process.env.CRM_API_KEY;
+}
+
+// ── Callback: Kaira → Luna ──────────────────────────────────────────────────
+// Tell the CRM a site visit was booked so Luna can put it on the calendar.
+// Fire-and-forget: a CRM outage must never stop the lead's WhatsApp reply.
+async function notifyVisitScheduled({ botId, convo, userId, visit, lastUserMessage }) {
+    const phone = String(userId).split('@')[0];
+
+    // A slot we cannot turn into an instant is worse than none - Luna would book
+    // it at the wrong time. Log it loudly so the visit can be booked by hand.
+    if (!visit.at) {
+        return console.error(`[VISIT] ${phone} confirmed a visit but the model wrote an ` +
+            `unusable date: "${visit.raw}" — book this one manually`);
+    }
+
+    const url = process.env.CRM_WEBHOOK_URL;
+    if (!url) return console.warn(`[VISIT] ${phone} booked ${visit.at} but CRM_WEBHOOK_URL is unset — not sent`);
+
+    const cfg = botConfigs[botId] || {};
+    // Luna's contract: phone and at are required; project is free text matched
+    // against her project list, falling back to whatever is on the lead already.
+    const payload = {
+        phone,
+        at: visit.at,
+        project: convo.project || cfg.builder || undefined,
+        notes: lastUserMessage ? `Booked over WhatsApp with ${KAIRA}. Lead's words: "${lastUserMessage}"`
+                               : `Booked over WhatsApp with ${KAIRA}.`
+    };
+
+    try {
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                ...(process.env.CRM_API_KEY ? { 'x-api-key': process.env.CRM_API_KEY } : {})
+            },
+            body: JSON.stringify(payload),
+            signal: AbortSignal.timeout(10000)
+        });
+        const body = await res.text();
+        // 422 means Luna understood but could not place it (unknown lead, no
+        // project match). That needs a human, so say which.
+        if (!res.ok) throw new Error(`${res.status} ${body.slice(0, 300)}`);
+        console.log(`[VISIT] → Luna: ${phone} at ${visit.at} (${payload.project || 'no project'}) ${body.slice(0, 120)}`);
+    } catch (e) {
+        console.error(`[VISIT] callback failed for ${phone} at ${visit.at}:`, e.message);
+    }
+}
+
+// Shared by /api/lead and /api/instruct. Returns { status, body }.
+async function startLeadConversation({ phone, property, builder, name, notes, botId: forcedBot }) {
+    if (!phone) return { status: 400, body: { error: 'phone is required' } };
+
+    // Luna sometimes leaves `property` null and mentions the project in `notes`
+    // instead ("new property launch dsr villas"). Read both before giving up.
+    const leadBotId = forcedBot || resolveBotId(botConfigs, builder, [property, notes].filter(Boolean).join(' '));
+    let botId = leadBotId;
+    let bot = activeBots.get(botId);
+    // The builder's own bot is best, but the 'all' bot knows every builder, so
+    // fall back to it rather than dropping the lead.
+    if ((!bot || bot.status !== 'ready') && !forcedBot && botId !== 'all') {
+        const allBot = activeBots.get('all');
+        if (allBot && allBot.status === 'ready') {
+            console.log(`[LEAD] '${botId}' offline → falling back to 'all'`);
+            botId = 'all';
+            bot = allBot;
+        }
+    }
+    if (!bot || bot.status !== 'ready' || !bot.model) {
+        return { status: 503, body: { error: `bot '${botId}' is not running — start it from the dashboard`, botId } };
+    }
+
+    const digits = normalizePhone(phone);
+    let userId;
+    try {
+        const numId = await bot.client.getNumberId(digits);
+        if (!numId) return { status: 404, body: { error: 'number is not on WhatsApp', phone: digits } };
+        userId = numId._serialized;
+    } catch (e) {
+        return { status: 500, body: { error: `lookup failed: ${e.message}`, phone: digits } };
+    }
+
+    const cfg = bot.config;
+    // The lead came in for one builder. Even when the general 'all' bot serves
+    // it, introduce that builder — never "All Builders".
+    // Most of the CRM's ~250 projects belong to builders with no bot of their
+    // own, so look them up in the directory before falling back to the bot.
+    const found = resolveFromDirectory(projectDirectory, [property, builder, notes].filter(Boolean).join(' '), PLACEHOLDER_BUILDERS);
+    const leadBuilder = (builder && !PLACEHOLDER_BUILDERS.has(builder) ? builder : '')
+        || (found && found.builder)
+        || (leadBotId !== 'all' && botConfigs[leadBotId] && botConfigs[leadBotId].builder)
+        || (cfg.id !== 'all' ? cfg.builder : '');
+    // Only a real project or builder. Never cfg.builder for the general bot — a
+    // lead told "you enquired about All Builders" knows they enquired about no
+    // such thing, and we look like a bot that lost their details.
+    // Prefer the directory's spelling: Luna's "new dimension" becomes the
+    // "Abhee New Dimension" the lead actually recognises.
+    const projectLabel = (found && found.project) || property || leadBuilder || '';
+    if (!projectLabel) {
+        console.warn(`[LEAD] ${digits}: no property/builder in the payload — greeting without a project. ` +
+            `Luna should send "property" (e.g. "DSR Villas") so Kaira opens with the right one.`);
+    }
+    const greeting =
+        `Hi${name ? ' ' + String(name).split(' ')[0] : ''}! 👋 I'm ${KAIRA}${leadBuilder ? ' from ' + leadBuilder : ''}.\n\n` +
+        (projectLabel
+            ? `I see you enquired about *${projectLabel}* — I'd be happy to help!\n\n` +
+              `Would you like details on the configurations, amenities or location? Or shall I arrange a site visit for you?`
+            : `Thanks for your interest in our properties!\n\n` +
+              `Which project were you enquiring about? I can share configurations, amenities and location, ` +
+              `or arrange a site visit for you.`);
+
+    try {
+        await bot.client.sendMessage(userId, greeting);
+    } catch (e) {
+        return { status: 500, body: { error: `send failed: ${e.message}` } };
+    }
+
+    // Record it so the dashboard shows the chat
+    const convo = bot.chatHistory.get(userId) || { name: name || digits, phone: userId, messages: [] };
+    // Remembered so the site-visit callback can tell Luna which project it is for.
+    convo.builder = leadBuilder || cfg.builder;
+    convo.project = property || null;
+    convo.messages.push({ type: 'bot', body: greeting, timestamp: Date.now() });
+    bot.chatHistory.set(userId, convo);
+
+    // Seed the AI session with the lead context, so the next reply continues the
+    // conversation instead of restarting with the project-selection menu.
+    bot.sessions.set(userId, bot.model.startChat({
+        history: [
+            { role: 'user', parts: [{ text:
+                `[CRM LEAD HANDOVER — system context, not a message from the user]\n` +
+                `Your name in this chat is ${KAIRA}.\n` +
+                (leadBuilder ? `You represent ${leadBuilder} in this chat ONLY. Introduce yourself as ` +
+                    `"${KAIRA} from ${leadBuilder}" — never as a general or multi-builder assistant, and do ` +
+                    `not offer other builders' projects unless the user asks for them.\n` : '') +
+                `Lead name: ${name || 'unknown'}\nEnquired about: ${projectLabel || 'not recorded in the CRM'}\n` +
+                `CRM notes: ${notes || 'none'}\n` +
+                `You have ALREADY sent this person the opening message below.\n` +
+                (projectLabel
+                    ? `They have already chosen ${projectLabel}, so do NOT show the project selection menu ` +
+                      `again. Answer their next message directly about ${projectLabel} using the knowledge base.`
+                    : `The CRM did not record which project they enquired about, and you have just asked them. ` +
+                      `Work out from their reply which project they mean, then answer about it from the ` +
+                      `knowledge base.`) }] },
+            { role: 'model', parts: [{ text: greeting }] }
+        ]
+    }));
+
+    io.emit('bot_reply', { botId, userId, contactName: convo.name, body: greeting, timestamp: Date.now() });
+    console.log(`[LEAD] ${digits} → ${botId} (${projectLabel})`);
+    return { status: 200, body: { ok: true, botId, whatsappId: userId, sent: greeting } };
+}
+
+// Structured intake — Luna posts JSON fields
+app.post('/api/lead', async (req, res) => {
+    if (!authOk(req)) return res.status(401).json({ error: 'invalid api key' });
+    const r = await startLeadConversation(req.body || {});
+    if (r.status !== 200) console.error('[LEAD] rejected:', r.status, JSON.stringify(r.body), 'payload:', JSON.stringify(req.body));
+    res.status(r.status).json(r.body);
+});
+
+// Plain-English intake — "Kaira, talk to 9876543210 about Abhee New Dimension"
+app.post('/api/instruct', async (req, res) => {
+    if (!authOk(req)) return res.status(401).json({ error: 'invalid api key' });
+    const { text, phone } = req.body || {};
+    if (!text) return res.status(400).json({ error: 'text is required' });
+    const parsed = parseInstruction(botConfigs, text);
+    if (phone) parsed.phone = phone;
+    if (!parsed.phone) return res.status(400).json({ error: 'could not find a phone number in the instruction' });
+    if (!parsed.property) return res.status(400).json({ error: 'could not work out which project — mention it by name' });
+    const r = await startLeadConversation(parsed);
+    res.status(r.status).json({ ...r.body, parsed });
+});
+
+// Which bots are live right now (Luna can check before sending)
+app.get('/api/bots', (req, res) => {
+    res.json(Object.keys(botConfigs).map(id => ({
+        id,
+        builder: botConfigs[id].builder,
+        status: activeBots.get(id) ? activeBots.get(id).status : 'stopped'
+    })));
+});
+
 // ── Bot Lifecycle Management ────────────────────────────────────────────────
 async function startBot(botId) {
     const config = botConfigs[botId];
@@ -132,15 +419,19 @@ async function startBot(botId) {
         return;
     }
 
-    const SESSION_PATH = path.join(__dirname, `whatsapp_session_${botId}`);
+    const SESSION_PATH = path.join(process.env.SESSION_DIR || __dirname, `whatsapp_session_${botId}`);
 
-    // Cleanup stale lock files
+    // Cleanup stale lock files. LocalAuth's actual Chromium profile is
+    // `session-<clientId>`; a lock left behind by a killed process in there
+    // blocks startup with "profile appears to be in use", so clear both.
     const lockFiles = ['SingletonLock', 'SingletonCookie', 'SingletonSocket'];
-    const sessionDir = path.join(SESSION_PATH, 'session');
-    for (const file of lockFiles) {
+    for (const dir of [path.join(SESSION_PATH, 'session'), path.join(SESSION_PATH, `session-${botId}`)]) {
+      const sessionDir = dir;
+      for (const file of lockFiles) {
         try {
             fs.rmSync(path.join(sessionDir, file), { force: true });
         } catch (_) {}
+      }
     }
 
     const client = new Client({
@@ -166,6 +457,9 @@ async function startBot(botId) {
         chatHistory: new Map(),
         model: null,
         sessions: new Map(), // userId → Gemini chat session
+        // Set now, or the first message would "roll over" and wipe the session
+        // the CRM handover just seeded.
+        modelDay: new Date().toLocaleDateString('en-CA', { timeZone: IST }),
         config
     };
 
@@ -176,7 +470,10 @@ async function startBot(botId) {
     const genAI = new GoogleGenerativeAI(apiKeys[currentKeyIndex]);
     botState.model = genAI.getGenerativeModel({
         model: 'gemini-2.5-flash',
-        systemInstruction: getSystemInstruction(botId)
+        systemInstruction: fullSystemInstruction(botId),
+        // 2.5 Flash thinks before answering by default, which adds seconds per
+        // reply. These are short lookup answers - no thinking needed.
+        generationConfig: { thinkingConfig: { thinkingBudget: 0 } }
     });
 
     // Event: QR Code
@@ -213,14 +510,35 @@ async function startBot(botId) {
     });
 
     // Event: Disconnected
-    client.on('disconnected', (reason) => {
+    client.on('disconnected', async (reason) => {
         console.log(`[${botId.toUpperCase()}] Disconnected: ${reason}`);
         activeBots.delete(botId);
         io.emit('bot_status', { botId, status: 'offline' });
+        // Leaving the client alive leaks a Chromium per disconnect.
+        try { await client.destroy(); } catch (_) {}
+
+        // LOGOUT means the phone unlinked this device - the session really is
+        // gone and only a fresh QR can fix it. Everything else (lost network,
+        // WhatsApp Web navigating, CONFLICT) reconnects from the stored session,
+        // so come back by ourselves instead of waiting for someone to notice.
+        if (String(reason).toUpperCase().includes('LOGOUT')) {
+            console.warn(`[${botId.toUpperCase()}] Logged out on the phone — needs a QR rescan`);
+            return;
+        }
+        setTimeout(() => {
+            if (activeBots.has(botId)) return;
+            console.log(`[${botId.toUpperCase()}] Reconnecting after '${reason}'`);
+            startBot(botId).catch(e => console.error(`[${botId.toUpperCase()}] reconnect failed:`, e.message));
+        }, 5000);
     });
 
     // Event: Message
-    client.on('message', (msg) => handleMessage(botId, msg));
+    client.on('message', (msg) => {
+        // Never let one bad message become an unhandled rejection - Node kills
+        // the process on those, which drops every other bot too.
+        handleMessage(botId, msg).catch(e =>
+            console.error(`[${botId.toUpperCase()}] handleMessage failed:`, e.message));
+    });
 
     // Initialize
     await client.initialize();
@@ -327,8 +645,9 @@ async function handleMessage(botId, msg) {
 
     if (msg.from === 'status@broadcast' || msg.fromMe) return;
 
-    const chat = await msg.getChat();
-    if (chat.isGroup) return;
+    // msg.getChat() fails against current WhatsApp Web, so avoid it entirely:
+    // group JIDs always end in @g.us, and client.sendMessage works fine.
+    if (String(msg.from).endsWith('@g.us')) return;
 
     const userId = msg.from;
     let userMessage = msg.body || '';
@@ -339,12 +658,16 @@ async function handleMessage(botId, msg) {
     // Get or create conversation
     let convo = bot.chatHistory.get(userId);
     if (!convo) {
-        const contact = await msg.getContact();
-        convo = {
-            name: contact.pushname || contact.name || userId,
-            phone: userId,
-            messages: []
-        };
+        // getContact() throws against current WhatsApp Web just like getChat().
+        // A new number must never lose its first message to a name lookup.
+        let name = userId;
+        try {
+            const contact = await msg.getContact();
+            name = contact.pushname || contact.name || userId;
+        } catch (e) {
+            console.warn(`[${botId.toUpperCase()}] getContact failed, using number:`, e.message);
+        }
+        convo = { name, phone: userId, messages: [] };
         bot.chatHistory.set(userId, convo);
     }
 
@@ -403,46 +726,35 @@ async function handleMessage(botId, msg) {
         }
     }
 
-    await chat.sendStateTyping();
+    try { await bot.client.sendPresenceAvailable(); } catch (_) {}
 
     // Get or create Gemini session
+    // The date is baked into the model's system instruction, so after midnight a
+    // long-running bot would still think it is yesterday and book site visits a
+    // day early. Rebuild on rollover. Sessions go with it - they hold the old
+    // instruction - which costs a day-old conversation its context, fairly cheap
+    // next to a wrong booking date.
+    const istToday = new Date().toLocaleDateString('en-CA', { timeZone: IST });
+    if (bot.modelDay !== istToday) {
+        bot.model = new GoogleGenerativeAI(apiKeys[currentKeyIndex]).getGenerativeModel({
+            model: 'gemini-2.5-flash',
+            systemInstruction: fullSystemInstruction(botId),
+            generationConfig: { thinkingConfig: { thinkingBudget: 0 } }
+        });
+        bot.sessions.clear();
+        bot.modelDay = istToday;
+        console.log(`[${botId.toUpperCase()}] Model refreshed for ${istToday}`);
+    }
+
     let chatSession = bot.sessions.get(userId);
     if (!chatSession) {
         chatSession = bot.model.startChat({ history: [] });
         bot.sessions.set(userId, chatSession);
     }
 
-    // Inject knowledge base context for this bot
-    let enhancedMessage = userMessage;
-    const kbContext = getBotKnowledgeContext(botId);
-
-    // Only inject knowledge base if:
-    // 1. We have knowledge base for this bot
-    // 2. User is asking about projects (not just "hi" or greetings)
-    const needsKnowledgeBase = kbContext &&
-                                (userMessage.toLowerCase().includes('tell me') ||
-                                 userMessage.toLowerCase().includes('about') ||
-                                 userMessage.toLowerCase().includes('project') ||
-                                 userMessage.toLowerCase().includes('price') ||
-                                 userMessage.toLowerCase().includes('amenities') ||
-                                 userMessage.toLowerCase().includes('location') ||
-                                 userMessage.toLowerCase().includes('bhk') ||
-                                 /how many|what.*have|does.*have/.test(userMessage.toLowerCase()));
-
-    if (needsKnowledgeBase) {
-        enhancedMessage = `User Question: ${userMessage}
-
-IMPORTANT: You have a knowledge base below with ALL project information. Use this data to answer the user's question directly.
-
-=== YOUR KNOWLEDGE BASE ===
-${kbContext}
-=== END KNOWLEDGE BASE ===
-
-Now answer the user's question using the data above. Provide specific details from the knowledge base.`;
-        console.log(`[${botId.toUpperCase()}] ✅ Injected knowledge base context (${kbContext.length} chars)`);
-    } else {
-        console.log(`[${botId.toUpperCase()}] Skipped knowledge base injection (greeting/general message)`);
-    }
+    // Knowledge base now lives in the system instruction (see fullSystemInstruction),
+    // so the model always has it without it bloating the per-turn history.
+    const enhancedMessage = userMessage;
 
     // Send to AI: Try Gemini first, then fallback to OpenRouter, then Claude
     let responseText = '';
@@ -472,7 +784,8 @@ Now answer the user's question using the data above. Provide specific details fr
                     const currentHistory = await chatSession.getHistory();
                     bot.model = genAI.getGenerativeModel({
                         model: 'gemini-2.5-flash',
-                        systemInstruction: getSystemInstruction(botId)
+                        systemInstruction: fullSystemInstruction(botId),
+                        generationConfig: { thinkingConfig: { thinkingBudget: 0 } }
                     });
                     chatSession = bot.model.startChat({ history: currentHistory });
                     bot.sessions.set(userId, chatSession);
@@ -500,7 +813,7 @@ Now answer the user's question using the data above. Provide specific details fr
                 }
             }
 
-            responseText = await callOpenRouter(history, userMessage, getSystemInstruction(botId));
+            responseText = await callOpenRouter(history, userMessage, fullSystemInstruction(botId));
             console.log(`[${botId.toUpperCase()}] ✅ OpenRouter responded successfully`);
         } catch (openRouterError) {
             console.error(`[${botId.toUpperCase()}] OpenRouter failed:`, openRouterError.message);
@@ -519,7 +832,7 @@ Now answer the user's question using the data above. Provide specific details fr
                     }
                 }
 
-                responseText = await callClaude(history, userMessage, getSystemInstruction(botId));
+                responseText = await callClaude(history, userMessage, fullSystemInstruction(botId));
                 console.log(`[${botId.toUpperCase()}] ✅ Claude Haiku responded successfully`);
             } catch (claudeError) {
                 console.error(`[${botId.toUpperCase()}] Claude failed:`, claudeError.message);
@@ -533,6 +846,10 @@ Now answer the user's question using the data above. Provide specific details fr
     // Parse tags before sending
     const quickActionsMatch = responseText.match(/\[QUICK_ACTIONS:\s*(.*?)\]/i);
     const brochureMatch = responseText.match(/\[SEND_BROCHURE:\s*(.*?)\]/i);
+    const visit = parseVisitTag(responseText);
+
+    // Push the booking to the CRM without making the lead wait on it.
+    if (visit) notifyVisitScheduled({ botId, convo, userId, visit, lastUserMessage: userMessage });
 
     // Remove all tags from response text
     let cleanResponse = responseText
@@ -548,7 +865,7 @@ Now answer the user's question using the data above. Provide specific details fr
         .trim();
 
     // STEP 1: Send main reply FIRST
-    await msg.reply(cleanResponse);
+    await bot.client.sendMessage(userId, cleanResponse);
 
     // STEP 2: Then send quick actions (if any)
     let quickActionsText = '';
@@ -567,14 +884,14 @@ Now answer the user's question using the data above. Provide specific details fr
             }
         });
         buttonText += '\n_Reply with the number of your choice._';
-        await chat.sendMessage(buttonText);
+        await bot.client.sendMessage(userId, buttonText);
         quickActionsText = buttonText;  // Save for storage
     }
 
     // STEP 3: Then send brochure (if requested)
     if (brochureMatch) {
         const projectName = brochureMatch[1].trim().toLowerCase();
-        await sendBrochure(botId, chat, projectName);
+        await sendBrochure(botId, userId, projectName);
     }
 
     // Store bot reply (include quick actions text for context detection)
@@ -584,7 +901,7 @@ Now answer the user's question using the data above. Provide specific details fr
 }
 
 // ── Helper: Send Brochure ────────────────────────────────────────────────────
-async function sendBrochure(botId, chat, projectName) {
+async function sendBrochure(botId, userId, projectName) {
     const bot = activeBots.get(botId);
     if (!bot) return;
 
@@ -592,7 +909,7 @@ async function sendBrochure(botId, chat, projectName) {
 
     try {
         if (!fs.existsSync(brochureDir)) {
-            await chat.sendMessage("Brochure folder not found. An executive will send it to you shortly!");
+            await bot.client.sendMessage(userId, "Brochure folder not found. An executive will send it to you shortly!");
             return;
         }
 
@@ -618,14 +935,14 @@ async function sendBrochure(botId, chat, projectName) {
         if (matchedFile) {
             const brochurePath = path.join(brochureDir, matchedFile);
             const media = MessageMedia.fromFilePath(brochurePath);
-            await chat.sendMessage(media, { caption: 'Here is the requested brochure!' });
+            await bot.client.sendMessage(userId, media, { caption: 'Here is the requested brochure!' });
             console.log(`[${botId.toUpperCase()}] Brochure sent: ${matchedFile}`);
         } else {
-            await chat.sendMessage("Brochure not found. An executive will send it to you shortly!");
+            await bot.client.sendMessage(userId, "Brochure not found. An executive will send it to you shortly!");
         }
     } catch (e) {
         console.error(`[${botId.toUpperCase()}] Brochure error:`, e.message);
-        await chat.sendMessage("Couldn't send the brochure right now. An executive will assist you!");
+        await bot.client.sendMessage(userId, "Couldn't send the brochure right now. An executive will assist you!");
     }
 }
 

@@ -36,6 +36,10 @@ RUN apt-get update && apt-get install -y \
 # Tell puppeteer to use the system Chromium
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV CHROMIUM_PATH=/usr/bin/chromium
+# Puppeteer reads this automatically - without it the bundled download is skipped
+# and no browser is found at runtime.
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+ENV SESSION_DIR=/app/sessions
 
 WORKDIR /app
 
@@ -46,4 +50,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["node", "index.js"]
+CMD ["node", "index-multibot.js"]

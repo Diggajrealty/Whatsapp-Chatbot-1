@@ -1,0 +1,41 @@
+services:
+  kaira:
+    build: .
+    container_name: kaira-whatsapp
+    restart: unless-stopped          # keeps the bot awake for Luna's webhooks
+    # Chromium needs a moment to close its session profile cleanly on SIGTERM;
+    # the 10s default cuts it off and corrupts the login.
+    stop_grace_period: 45s
+    ports:
+      - "3100:3000"
+    env_file: .env
+    volumes:
+      - ./sessions:/app/sessions     # WhatsApp logins survive rebuilds
+      - ./media:/app/media:ro        # brochures
+      - ./public:/app/public:ro      # dashboard - edit without rebuilding
+      # App source mounted so code edits need only a restart, not a rebuild
+      - ./index-multibot.js:/app/index-multibot.js:ro
+      - ./botConfigs.js:/app/botConfigs.js:ro
+      - ./crmLead.js:/app/crmLead.js:ro
+      - ./projectDirectory.js:/app/projectDirectory.js:ro
+      - ./knowledge-base:/app/knowledge-base:ro
+    shm_size: "1gb"                  # Chromium needs this or it crashes
+
+  # Public URL so Luna can reach the bot. Temporary - delete this service
+  # and the `docker compose up` still works, just localhost-only.
+  # Default: free quick tunnel, random URL, printed in the logs on startup.
+  # Fixed hostname: create a named tunnel in the Cloudflare dashboard, then put
+  #   TUNNEL_ARGS=run --token eyJh...
+  # in .env and restart.
+  # While TUNNEL_ARGS is empty this is a quick tunnel: the URL is minted at
+  # container start and dies with it. It survives `docker compose up -d kaira`
+  # (use `npm run restart`) but NOT `docker compose up -d` / `down`, which
+  # recreate this container and hand out a new URL that Luna will not know.
+  # `npm run tunnel-url` prints the current one. Set TUNNEL_ARGS to be rid of all this.
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: kaira-tunnel
+    restart: unless-stopped
+    command: tunnel --no-autoupdate ${TUNNEL_ARGS:---url http://kaira:3000}
+    depends_on:
+      - kaira

@@ -1,11 +1,20 @@
 services:
   - type: web
-    name: aria-whatsapp-bot
+    name: kaira-whatsapp
     runtime: docker
     dockerfilePath: ./Dockerfile
+    # Chromium per bot is memory-hungry (~0.5-1GB each). Free/starter instances
+    # also sleep, which drops the WhatsApp connection and forces a re-login.
+    plan: standard
+    healthCheckPath: /
     envVars:
       - key: NODE_ENV
         value: production
+      # The code reads SESSION_DIR (see startBot). The old SESSION_PATH was
+      # ignored, so sessions landed on the ephemeral disk and every deploy
+      # wiped the WhatsApp logins.
+      - key: SESSION_DIR
+        value: /data
       - key: GEMINI_API_KEY_1
         sync: false
       - key: GEMINI_API_KEY_2
@@ -16,9 +25,23 @@ services:
         sync: false
       - key: GEMINI_API_KEY_5
         sync: false
-      - key: SESSION_PATH
-        value: /data/whatsapp_session
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      # Shared secret with Luna: authenticates her calls in, and Kaira's
+      # site-visit callback out.
+      - key: CRM_API_KEY
+        sync: false
+      - key: CRM_WEBHOOK_URL
+        sync: false
+      - key: ADMIN_PHONE_NUMBER
+        sync: false
+      # Bots to bring up on boot, so they reconnect by themselves after a deploy.
+      - key: AUTOSTART_BOTS
+        value: all,abhee
     disk:
       name: session-storage
       mountPath: /data
-      sizeGB: 1
+      # ~100MB per logged-in bot, and Chromium profiles grow with cache.
+      sizeGB: 5

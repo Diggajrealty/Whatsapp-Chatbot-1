@@ -5,3 +5,7 @@ node_modules/
 whatsapp_session/
 C:/temp/
 *.log
+sessions/
+docker-compose.override.yml
+whatsapp_session_*/
+.tokensave/
