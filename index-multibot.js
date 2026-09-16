@@ -441,11 +441,20 @@ async function startBot(botId) {
         }),
         puppeteer: {
             headless: true,
+            // A shared-CPU instance is slow enough that Chromium blows
+            // Puppeteer's default protocol timeout mid-handshake and the bot
+            // dies before it ever shows a scannable QR.
+            protocolTimeout: 300000,
             args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
                 '--disable-dev-shm-usage',
-                '--disable-gpu'
+                '--disable-gpu',
+                // Each bot is a whole browser; trim what we never use.
+                '--disable-extensions',
+                '--disable-background-networking',
+                '--disable-accelerated-2d-canvas',
+                '--mute-audio'
             ]
         }
     });
