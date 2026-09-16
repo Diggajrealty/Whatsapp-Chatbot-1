@@ -408,8 +408,8 @@ socket.on('loading', ({ botId, percent, message }) => {
         const qrPlaceholder = document.getElementById('qr-placeholder');
         qrPlaceholder.innerHTML = `
             <div class="spinner"></div>
-            <p style="color: #64748b; font-size: 14px;">Loading: ${percent}%</p>
-            <p style="color: #94a3b8; font-size: 12px;">${message}</p>
+            <p style="color: #64748b; font-size: 14px;">Connecting… ${percent}%</p>
+            <p style="color: #94a3b8; font-size: 12px;">${message} — if this bot is already linked, no QR will appear.</p>
         `;
     }
 });
@@ -417,6 +417,16 @@ socket.on('loading', ({ botId, percent, message }) => {
 socket.on('authenticated', ({ botId }) => {
     console.log(`${botId} authenticated!`);
     showToast(`${getBotName(botId)} authenticated!`);
+    // A bot with a saved session never emits a QR, so the modal would otherwise
+    // sit on "Loading: 99%" under a "Connect" title as if the code had failed.
+    if (currentQRBot === botId) {
+        document.getElementById('qr-image').style.display = 'none';
+        const p = document.getElementById('qr-placeholder');
+        p.style.display = 'flex';
+        p.innerHTML = '<div class="spinner"></div>' +
+            '<p style="color:#16a34a;font-size:14px;font-weight:600;">Already linked — no scan needed</p>' +
+            '<p style="color:#94a3b8;font-size:12px;">Reconnecting the saved session…</p>';
+    }
 });
 
 socket.on('ready', ({ botId }) => {
