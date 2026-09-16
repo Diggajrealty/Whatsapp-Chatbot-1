@@ -33,8 +33,14 @@ for (const sig of ['SIGTERM', 'SIGINT']) {
         if (shuttingDown) return;
         shuttingDown = true;
         console.log(`[SHUTDOWN] ${sig} — closing ${activeBots.size} bot(s) cleanly`);
+        // Unbounded here means a wedged Chromium holds the whole shutdown until
+        // Docker SIGKILLs us mid-write — exactly the torn profile we're avoiding.
         await Promise.all([...activeBots.values()].map(b =>
-            b.client.destroy().catch(e => console.error('[SHUTDOWN] destroy failed:', e.message))));
+            withTimeout(b.client.destroy(), 15000, 'destroy')
+                .catch(e => {
+                    console.error('[SHUTDOWN] destroy failed:', e.message);
+                    try { b.client.pupBrowser?.process()?.kill('SIGKILL'); } catch (_) {}
+                })));
         console.log('[SHUTDOWN] done');
         process.exit(0);
     });
@@ -265,12 +271,7 @@ setInterval(() => {
         if (bot.status !== 'ready' || recycling.has(botId)) continue;
         withTimeout(bot.client.getState(), 45000, 'health probe')
             .then(() => strikes.delete(botId))
-            .catch(e => {
-                const n = (strikes.get(botId) || 0) + 1;
-                strikes.set(botId, n);
-                console.warn(`[HEALTH] '${botId}' probe failed (${n}/${HEALTH_STRIKES}): ${e.message}`);
-                if (n >= HEALTH_STRIKES) { strikes.delete(botId); markDegraded(botId, e.message); }
-            });
+            .catch(e => markDegraded(botId, `probe: ${e.message}`));
     }
 }, 60000);
 
@@ -657,14 +658,17 @@ async function stopBot(botId) {
     const bot = activeBots.get(botId);
     if (!bot) return;
 
+    activeBots.delete(botId);
+    io.emit('bot_status', { botId, status: 'offline' });
     try {
-        await bot.client.destroy();
-        activeBots.delete(botId);
-        io.emit('bot_status', { botId, status: 'offline' });
-        console.log(`[${botId.toUpperCase()}] Stopped`);
+        await withTimeout(bot.client.destroy(), 15000, 'destroy');
     } catch (e) {
-        console.error(`[${botId.toUpperCase()}] Error stopping:`, e.message);
+        console.error(`[${botId.toUpperCase()}] destroy failed (${e.message}) — killing Chromium`);
+    } finally {
+        // A graceful destroy can leave the browser behind; make sure it dies.
+        try { bot.client.pupBrowser?.process()?.kill('SIGKILL'); } catch (_) {}
     }
+    console.log(`[${botId.toUpperCase()}] Stopped`);
 }
 
 // ── Fallback API Functions ──────────────────────────────────────────────────
