@@ -225,6 +225,8 @@ if (process.env.AUTOSTART_BOTS) {
 // while still reporting 'ready', and every lead then fails until someone
 // restarts by hand. Probe it, tell the truth in /api/bots, and recycle.
 const recycling = new Set();
+const HEALTH_STRIKES = 3;
+const strikes = new Map();
 
 async function recycleBot(botId, why) {
     if (recycling.has(botId)) return;
@@ -242,6 +244,11 @@ async function recycleBot(botId, why) {
 
 // Called when a live request proves the page is wedged.
 function markDegraded(botId, why) {
+    const n = (strikes.get(botId) || 0) + 1;
+    strikes.set(botId, n);
+    console.warn(`[HEALTH] '${botId}' stalled (${n}/${HEALTH_STRIKES}): ${why}`);
+    if (n < HEALTH_STRIKES) return;   // one cold lookup is not a wedge
+    strikes.delete(botId);
     const bot = activeBots.get(botId);
     if (bot && bot.status === 'ready') {
         bot.status = 'degraded';
@@ -253,9 +260,6 @@ function markDegraded(botId, why) {
 // getState() is genuinely slow on a shared CPU, and one slow probe is not a
 // wedge. Recycling on a single miss restarts healthy bots in a loop, which is
 // worse than the problem — so give it room and require repeats.
-const HEALTH_STRIKES = 3;
-const strikes = new Map();
-
 setInterval(() => {
     for (const [botId, bot] of activeBots) {
         if (bot.status !== 'ready' || recycling.has(botId)) continue;
@@ -374,7 +378,7 @@ async function startLeadConversation({ phone, property, builder, name, notes, bo
     const digits = normalizePhone(phone);
     let userId;
     try {
-        const numId = await withTimeout(bot.client.getNumberId(digits), 8000, 'number lookup');
+        const numId = await withTimeout(bot.client.getNumberId(digits), 20000, 'number lookup');
         if (!numId) return { status: 404, body: { error: 'number is not on WhatsApp', phone: digits } };
         userId = numId._serialized;
     } catch (e) {
@@ -416,7 +420,7 @@ async function startLeadConversation({ phone, property, builder, name, notes, bo
               `or arrange a site visit for you.`);
 
     try {
-        await withTimeout(bot.client.sendMessage(userId, greeting), 15000, 'send');
+        await withTimeout(bot.client.sendMessage(userId, greeting), 20000, 'send');
     } catch (e) {
         if (/timed out/i.test(e.message)) {
             markDegraded(botId, `send: ${e.message}`);
