@@ -909,7 +909,7 @@ async function sendBrochure(botId, userId, projectName) {
 
     try {
         if (!fs.existsSync(brochureDir)) {
-            await bot.client.sendMessage(userId, "Brochure folder not found. An executive will send it to you shortly!");
+            await bot.client.sendMessage(userId, "Let me get that brochure across to you — one of our executives will send it shortly!");
             return;
         }
 
@@ -938,7 +938,7 @@ async function sendBrochure(botId, userId, projectName) {
             await bot.client.sendMessage(userId, media, { caption: 'Here is the requested brochure!' });
             console.log(`[${botId.toUpperCase()}] Brochure sent: ${matchedFile}`);
         } else {
-            await bot.client.sendMessage(userId, "Brochure not found. An executive will send it to you shortly!");
+            await bot.client.sendMessage(userId, "Let me get that brochure across to you — one of our executives will send it shortly!");
         }
     } catch (e) {
         console.error(`[${botId.toUpperCase()}] Brochure error:`, e.message);

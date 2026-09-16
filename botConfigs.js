@@ -4,7 +4,7 @@
 const botConfigs = {
     sobha: {
         id: 'sobha',
-        name: 'Divya',
+        name: 'Kaira',
         builder: 'SOBHA Limited',
         description: 'Luxury Residential Properties',
         icon: '🏢',
@@ -32,7 +32,7 @@ CRITICAL CONVERSATION FLOW:
 **FIRST MESSAGE / GREETING:**
 When a user first contacts you or asks "what properties do you have", DO NOT provide detailed information yet. Instead, show them the selection menu:
 
-"Hello! I'm ${name}, your ${builder} assistant. 🏢
+"Hi! 👋 I'm ${name}, your ${builder} assistant.
 
 We have these premium projects:
 
@@ -58,12 +58,12 @@ When the user replies with a number (1-9) or project name, THEN:
 - For amenities, configurations, locations, possession dates: Answer directly from knowledge base WITHOUT contact number
 
 **OTHER BUILDERS:**
-If a user asks about ANY other builder (Brigade, Nambiar, Godrej, DSR, Abhee, etc.), politely inform them: "I'm ${name}, and I specialize exclusively in ${builder} properties. For information about other builders, please contact our general helpline. Let me show you our amazing ${builder} projects!" Then show the selection menu.`
+If a user asks about ANY other builder (Brigade, Nambiar, Godrej, DSR, Abhee, etc.), politely inform them: "I'm ${name}, and I specialize exclusively in ${builder} properties. For other builders, our team can help you on 08045888783. Let me show you our amazing ${builder} projects!" Then show the selection menu.`
     },
 
     brigade: {
         id: 'brigade',
-        name: 'Ashi',
+        name: 'Kaira',
         builder: 'Brigade Group',
         description: 'Premium Property Solutions',
         icon: '🏗️',
@@ -89,7 +89,7 @@ CRITICAL CONVERSATION FLOW:
 **FIRST MESSAGE / GREETING:**
 When a user first contacts you or says "hi" or "hello", DO NOT provide detailed information yet. Instead, show them the selection menu with property types clearly mentioned:
 
-"Hello! I'm ${name}, your ${builder} assistant. 🏗️
+"Hi! 👋 I'm ${name}, your ${builder} assistant.
 
 We have these premium projects:
 
@@ -127,12 +127,12 @@ When the user replies with a number (1-7) or project name:
 If the user asks any question about a property (pricing, location, amenities, etc.), answer with specific details and THEN append [QUICK_ACTIONS: VISIT|BROCHURE|EMI|EXPERT].
 
 **OTHER BUILDERS:**
-If a user asks about ANY other builder (Sobha, Nambiar, Godrej, DSR, Abhee, etc.), politely inform them: "I'm ${name}, and I specialize exclusively in ${builder} properties. For information about other builders, please contact our general helpline. Let me show you our amazing ${builder} projects!" Then show the selection menu.`
+If a user asks about ANY other builder (Sobha, Nambiar, Godrej, DSR, Abhee, etc.), politely inform them: "I'm ${name}, and I specialize exclusively in ${builder} properties. For other builders, our team can help you on 08045888783. Let me show you our amazing ${builder} projects!" Then show the selection menu.`
     },
 
     nambiar: {
         id: 'nambiar',
-        name: 'Samaira',
+        name: 'Kaira',
         builder: 'Nambiar Builders',
         description: 'Modern Living Spaces',
         icon: '🌆',
@@ -157,7 +157,7 @@ CRITICAL CONVERSATION FLOW:
 **FIRST MESSAGE / GREETING:**
 When a user first contacts you or says "hi" or "hello", DO NOT provide detailed information yet. Instead, show them the selection menu with property types clearly mentioned:
 
-"Hello! I'm ${name}, your ${builder} assistant. 🌆
+"Hi! 👋 I'm ${name}, your ${builder} assistant.
 
 We have these premium projects:
 
@@ -200,7 +200,7 @@ If a user asks about ANY other builder, politely redirect them: "I'm ${name}, an
 
     godrej: {
         id: 'godrej',
-        name: 'Riya',
+        name: 'Kaira',
         builder: 'Godrej Properties',
         description: 'Sustainable Smart Homes',
         icon: '🏘️',
@@ -222,7 +222,7 @@ CRITICAL: If a user asks about ANY other builder, politely redirect them: "I'm $
 
     abhee: {
         id: 'abhee',
-        name: 'Meera',
+        name: 'Kaira',
         builder: 'Abhee Ventures',
         description: 'Affordable Housing Expert',
         icon: '🏡',
@@ -244,7 +244,7 @@ CRITICAL: If a user asks about ANY other builder, politely redirect them: "I'm $
 
     dsr: {
         id: 'dsr',
-        name: 'Neha',
+        name: 'Kaira',
         builder: 'DSR Infratech',
         description: 'Urban Development Projects',
         icon: '🏙️',
@@ -266,7 +266,7 @@ CRITICAL: If a user asks about ANY other builder, politely redirect them: "I'm $
 
     all: {
         id: 'all',
-        name: 'Kavya',
+        name: 'Kaira',
         builder: 'All Builders',
         description: 'General Property Assistant',
         icon: '⭐',

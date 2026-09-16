@@ -84,16 +84,17 @@ function toggleBot(botId, isOn) {
     updateEmptyState();
 }
 
-// Get Bot Name with assistant name
+// Operator-facing label for a bot. Every bot introduces itself to customers as
+// Kaira, so the builder is what tells them apart here.
 function getBotName(botId) {
     const names = {
-        sobha: 'Divya',
-        brigade: 'Ashi',
-        nambiar: 'Samaira',
-        godrej: 'Riya',
-        abhee: 'Meera',
-        dsr: 'Neha',
-        all: 'Kavya'
+        sobha: 'SOBHA',
+        brigade: 'Brigade',
+        nambiar: 'Nambiar',
+        godrej: 'Godrej',
+        abhee: 'Abhee',
+        dsr: 'DSR',
+        all: 'All Builders'
     };
     return names[botId] || botId;
 }
