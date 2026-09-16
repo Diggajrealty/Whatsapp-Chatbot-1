@@ -250,11 +250,23 @@ function markDegraded(botId, why) {
     recycleBot(botId, why);
 }
 
+// getState() is genuinely slow on a shared CPU, and one slow probe is not a
+// wedge. Recycling on a single miss restarts healthy bots in a loop, which is
+// worse than the problem — so give it room and require repeats.
+const HEALTH_STRIKES = 3;
+const strikes = new Map();
+
 setInterval(() => {
     for (const [botId, bot] of activeBots) {
         if (bot.status !== 'ready' || recycling.has(botId)) continue;
-        withTimeout(bot.client.getState(), 10000, 'health probe')
-            .catch(e => markDegraded(botId, e.message));
+        withTimeout(bot.client.getState(), 45000, 'health probe')
+            .then(() => strikes.delete(botId))
+            .catch(e => {
+                const n = (strikes.get(botId) || 0) + 1;
+                strikes.set(botId, n);
+                console.warn(`[HEALTH] '${botId}' probe failed (${n}/${HEALTH_STRIKES}): ${e.message}`);
+                if (n >= HEALTH_STRIKES) { strikes.delete(botId); markDegraded(botId, e.message); }
+            });
     }
 }, 60000);
 
