@@ -236,6 +236,17 @@ io.use((socket, next) => {
     next(new Error('unauthorized'));
 });
 
+// Luna gives up on a slow reply, and an unbounded await on a stalled Chromium
+// turns a fast, actionable error into a timeout on her side. Bound every
+// WhatsApp call so the CRM always gets an answer it can act on.
+function withTimeout(promise, ms, label) {
+    let timer;
+    return Promise.race([
+        promise,
+        new Promise((_, reject) => { timer = setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms); })
+    ]).finally(() => clearTimeout(timer));
+}
+
 function authOk(req) {
     return !process.env.CRM_API_KEY || req.get('x-api-key') === process.env.CRM_API_KEY;
 }
@@ -313,7 +324,7 @@ async function startLeadConversation({ phone, property, builder, name, notes, bo
     const digits = normalizePhone(phone);
     let userId;
     try {
-        const numId = await bot.client.getNumberId(digits);
+        const numId = await withTimeout(bot.client.getNumberId(digits), 12000, 'number lookup');
         if (!numId) return { status: 404, body: { error: 'number is not on WhatsApp', phone: digits } };
         userId = numId._serialized;
     } catch (e) {
@@ -350,7 +361,7 @@ async function startLeadConversation({ phone, property, builder, name, notes, bo
               `or arrange a site visit for you.`);
 
     try {
-        await bot.client.sendMessage(userId, greeting);
+        await withTimeout(bot.client.sendMessage(userId, greeting), 15000, 'send');
     } catch (e) {
         return { status: 500, body: { error: `send failed: ${e.message}` } };
     }
@@ -454,7 +465,7 @@ async function startBot(botId) {
             // A shared-CPU instance is slow enough that Chromium blows
             // Puppeteer's default protocol timeout mid-handshake and the bot
             // dies before it ever shows a scannable QR.
-            protocolTimeout: 300000,
+            protocolTimeout: 60000,
             args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
