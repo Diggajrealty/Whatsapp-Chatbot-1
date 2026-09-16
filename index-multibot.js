@@ -220,6 +220,44 @@ if (process.env.AUTOSTART_BOTS) {
     }, 1000);
 }
 
+// ── Bot Health ──────────────────────────────────────────────────────────────
+// A linked session is not the same as a working one: the WhatsApp page can wedge
+// while still reporting 'ready', and every lead then fails until someone
+// restarts by hand. Probe it, tell the truth in /api/bots, and recycle.
+const recycling = new Set();
+
+async function recycleBot(botId, why) {
+    if (recycling.has(botId)) return;
+    recycling.add(botId);
+    console.warn(`[HEALTH] recycling '${botId}': ${why}`);
+    try {
+        await stopBot(botId);
+        await startBot(botId);       // session is on disk, so this is a reconnect, not a QR
+    } catch (e) {
+        console.error(`[HEALTH] recycle of '${botId}' failed:`, e.message);
+    } finally {
+        recycling.delete(botId);
+    }
+}
+
+// Called when a live request proves the page is wedged.
+function markDegraded(botId, why) {
+    const bot = activeBots.get(botId);
+    if (bot && bot.status === 'ready') {
+        bot.status = 'degraded';
+        io.emit('bot_status', { botId, status: 'degraded' });
+    }
+    recycleBot(botId, why);
+}
+
+setInterval(() => {
+    for (const [botId, bot] of activeBots) {
+        if (bot.status !== 'ready' || recycling.has(botId)) continue;
+        withTimeout(bot.client.getState(), 10000, 'health probe')
+            .catch(e => markDegraded(botId, e.message));
+    }
+}, 60000);
+
 // ── CRM Lead Intake (Luna → Kaira) ─────────────────────────────────────────
 // Luna (the CRM AI) POSTs a new enquiry here; Kaira opens the WhatsApp chat.
 app.use(express.json());
@@ -324,10 +362,15 @@ async function startLeadConversation({ phone, property, builder, name, notes, bo
     const digits = normalizePhone(phone);
     let userId;
     try {
-        const numId = await withTimeout(bot.client.getNumberId(digits), 12000, 'number lookup');
+        const numId = await withTimeout(bot.client.getNumberId(digits), 8000, 'number lookup');
         if (!numId) return { status: 404, body: { error: 'number is not on WhatsApp', phone: digits } };
         userId = numId._serialized;
     } catch (e) {
+        // A timeout here means the page is wedged, not that the number is bad.
+        if (/timed out/i.test(e.message)) {
+            markDegraded(botId, `number lookup: ${e.message}`);
+            return { status: 503, body: { error: 'bot is reconnecting — retry shortly', botId, phone: digits } };
+        }
         return { status: 500, body: { error: `lookup failed: ${e.message}`, phone: digits } };
     }
 
@@ -363,6 +406,10 @@ async function startLeadConversation({ phone, property, builder, name, notes, bo
     try {
         await withTimeout(bot.client.sendMessage(userId, greeting), 15000, 'send');
     } catch (e) {
+        if (/timed out/i.test(e.message)) {
+            markDegraded(botId, `send: ${e.message}`);
+            return { status: 503, body: { error: 'bot is reconnecting — retry shortly', botId } };
+        }
         return { status: 500, body: { error: `send failed: ${e.message}` } };
     }
 
@@ -430,6 +477,22 @@ app.get('/api/bots', (req, res) => {
         builder: botConfigs[id].builder,
         status: activeBots.get(id) ? activeBots.get(id).status : 'stopped'
     })));
+});
+
+// Canonical builder and project spelling, so the CRM can normalise against the
+// same names we route on instead of transcribing them from chat transcripts.
+app.get('/api/projects', (req, res) => {
+    const bots = {};
+    for (const [id, c] of Object.entries(botConfigs)) {
+        if (id !== 'all') bots[c.builder] = id;
+    }
+    res.json({
+        builders: Object.entries(projectDirectory)
+            .filter(([b]) => !PLACEHOLDER_BUILDERS.has(b))
+            .map(([builder, projects]) => ({ builder, botId: bots[builder] || null, projects })),
+        note: 'Match property against projects[]; routing is case-insensitive substring, ' +
+              'so the exact spelling is preferred but not required.'
+    });
 });
 
 // ── Bot Lifecycle Management ────────────────────────────────────────────────
