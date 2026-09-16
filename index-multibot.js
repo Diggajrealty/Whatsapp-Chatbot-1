@@ -226,6 +226,16 @@ app.use(express.json());
 
 const KAIRA = 'Kaira'; // WhatsApp assistant name shown to leads
 
+// The dashboard socket can start/stop bots, read live QR codes and send
+// WhatsApp messages as our numbers, so it needs the same key the HTTP API uses.
+// Fail-open without a key configured, matching authOk, so local dev still works.
+io.use((socket, next) => {
+    if (!process.env.CRM_API_KEY) return next();
+    if (socket.handshake.auth && socket.handshake.auth.token === process.env.CRM_API_KEY) return next();
+    console.warn('[SOCKET] rejected an unauthenticated dashboard connection');
+    next(new Error('unauthorized'));
+});
+
 function authOk(req) {
     return !process.env.CRM_API_KEY || req.get('x-api-key') === process.env.CRM_API_KEY;
 }

@@ -2,7 +2,26 @@
    REAL ESTATE BOT MANAGER — Multi-Bot Dashboard
    ═══════════════════════════════════════════════════════════════ */
 
-const socket = io();
+// The server rejects sockets without the dashboard key. Ask once, remember it,
+// and re-ask if it was wrong — otherwise the page silently never connects.
+function dashboardToken() {
+    let t = null;
+    try { t = localStorage.getItem('kaira_token'); } catch (_) {}
+    if (!t) {
+        t = window.prompt('Dashboard key:') || '';
+        try { localStorage.setItem('kaira_token', t); } catch (_) {}
+    }
+    return t;
+}
+
+const socket = io({ auth: { token: dashboardToken() } });
+
+socket.on('connect_error', (err) => {
+    if (err && err.message === 'unauthorized') {
+        try { localStorage.removeItem('kaira_token'); } catch (_) {}
+        alert('Wrong dashboard key — reload and try again.');
+    }
+});
 
 // State
 let activeBots = new Map(); // botId -> { name, status, messages, qrCode }
