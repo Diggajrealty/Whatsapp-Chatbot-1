@@ -498,6 +498,48 @@ app.get('/api/bots', (req, res) => {
     })));
 });
 
+// Stored WhatsApp profiles. The volume is small and a Chromium profile is not,
+// so a bot nobody uses still costs the space the live one needs to write.
+function sessionPath(botId) {
+    return path.join(process.env.SESSION_DIR || __dirname, `whatsapp_session_${botId}`);
+}
+
+app.get('/api/sessions', (req, res) => {
+    if (!authOk(req)) return res.status(401).json({ error: 'invalid api key' });
+    const root = process.env.SESSION_DIR || __dirname;
+    const dirs = fs.readdirSync(root).filter(d => d.startsWith('whatsapp_session_'));
+    res.json(dirs.map(d => ({
+        botId: d.replace('whatsapp_session_', ''),
+        mb: +(du(path.join(root, d)) / 1e6).toFixed(1),
+        running: activeBots.has(d.replace('whatsapp_session_', ''))
+    })));
+});
+
+function du(dir) {
+    let total = 0;
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+        const f = path.join(dir, e.name);
+        try { total += e.isDirectory() ? du(f) : fs.statSync(f).size; } catch (_) {}
+    }
+    return total;
+}
+
+// Deleting a session means that number has to scan a QR again, so never touch
+// one that is currently linked and running - stop it first, deliberately.
+app.delete('/api/sessions/:botId', (req, res) => {
+    if (!authOk(req)) return res.status(401).json({ error: 'invalid api key' });
+    const { botId } = req.params;
+    if (!botConfigs[botId]) return res.status(404).json({ error: `unknown bot '${botId}'` });
+    if (activeBots.has(botId)) {
+        return res.status(409).json({ error: `'${botId}' is running — stop it from the dashboard first`, botId });
+    }
+    const dir = sessionPath(botId);
+    if (!fs.existsSync(dir)) return res.json({ ok: true, botId, note: 'no stored session' });
+    fs.rmSync(dir, { recursive: true, force: true });
+    console.warn(`[SESSION] deleted stored session for '${botId}' — needs a fresh QR`);
+    res.json({ ok: true, botId, deleted: dir });
+});
+
 // Canonical builder and project spelling, so the CRM can normalise against the
 // same names we route on instead of transcribing them from chat transcripts.
 app.get('/api/projects', (req, res) => {
@@ -522,7 +564,7 @@ async function startBot(botId) {
         return;
     }
 
-    const SESSION_PATH = path.join(process.env.SESSION_DIR || __dirname, `whatsapp_session_${botId}`);
+    const SESSION_PATH = sessionPath(botId);
 
     // Cleanup stale lock files. LocalAuth's actual Chromium profile is
     // `session-<clientId>`; a lock left behind by a killed process in there
