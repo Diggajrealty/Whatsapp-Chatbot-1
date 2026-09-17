@@ -359,17 +359,19 @@ async function startLeadConversation({ phone, property, builder, name, notes, bo
 
     // Luna sometimes leaves `property` null and mentions the project in `notes`
     // instead ("new property launch dsr villas"). Read both before giving up.
-    const leadBotId = forcedBot || resolveBotId(botConfigs, builder, [property, notes].filter(Boolean).join(' '));
-    let botId = leadBotId;
+    // Still resolved, but only to label the greeting with the right builder -
+    // the lead is served by one number so Luna never has to know, or check,
+    // which builder bot happens to be linked. LEAD_BOT overrides which one.
+    const leadBotId = resolveBotId(botConfigs, builder, [property, notes].filter(Boolean).join(' '));
+    let botId = forcedBot || process.env.LEAD_BOT || 'all';
     let bot = activeBots.get(botId);
-    // The builder's own bot is best, but the 'all' bot knows every builder, so
-    // fall back to it rather than dropping the lead.
-    if ((!bot || bot.status !== 'ready') && !forcedBot && botId !== 'all') {
-        const allBot = activeBots.get('all');
-        if (allBot && allBot.status === 'ready') {
-            console.log(`[LEAD] '${botId}' offline → falling back to 'all'`);
-            botId = 'all';
-            bot = allBot;
+    // If the one number is down, any other linked bot is better than a dropped
+    // lead - it introduces itself by the lead's own builder either way.
+    if (!bot || bot.status !== 'ready') {
+        const spare = [...activeBots].find(([, b]) => b.status === 'ready' && b.model);
+        if (spare) {
+            console.warn(`[LEAD] '${botId}' not ready → serving from '${spare[0]}'`);
+            [botId, bot] = spare;
         }
     }
     if (!bot || bot.status !== 'ready' || !bot.model) {
