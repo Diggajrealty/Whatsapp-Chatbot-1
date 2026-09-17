@@ -263,15 +263,49 @@ function markDegraded(botId, why) {
     recycleBot(botId, why);
 }
 
-// getState() is genuinely slow on a shared CPU, and one slow probe is not a
-// wedge. Recycling on a single miss restarts healthy bots in a loop, which is
-// worse than the problem — so give it room and require repeats.
+// Is Chromium still answering, and is WhatsApp's own code still on the page?
+//
+// NOT getState(), which is what this used to probe with. That call hangs forever
+// against current WhatsApp Web: it timed out on all three strikes of every single
+// cycle — it never once succeeded — while the bot was authenticating, reaching
+// 'ready' and demonstrably replying to real messages. So the probe was measuring a
+// broken accessor, concluding the page was wedged, and recycling a working bot
+// every three minutes, which is the outage it was written to prevent. (The same
+// thing already happened to getChat(); see the note in handleMessage.)
+//
+// The probe asks one thing only: does Chromium still answer? It deliberately does
+// NOT assert on window.Store or any other WhatsApp internal. Depending on their
+// internals is what broke getState() and getChat() in the first place, and a probe
+// that can be wrong about WhatsApp's private API is a probe that recycles a working
+// bot. A dead or hung page — the failure a recycle actually fixes — fails this.
+async function pageAlive(client) {
+    const page = client.pupPage;
+    if (!page || page.isClosed()) return false;
+    await withTimeout(page.evaluate(() => true), 15000, 'page probe');
+    return true;
+}
+
 setInterval(() => {
     for (const [botId, bot] of activeBots) {
         if (bot.status !== 'ready' || recycling.has(botId)) continue;
-        withTimeout(bot.client.getState(), 45000, 'health probe')
-            .then(() => strikes.delete(botId))
-            .catch(e => markDegraded(botId, `probe: ${e.message}`));
+
+        // Captured, because a recycle replaces bot.client while this is in flight. A
+        // probe that outlived its own client was counting strikes against the fresh
+        // one — which is why the log showed '1/3' twice and then '2/3', and why a
+        // just-restarted bot could be condemned by its predecessor's failures.
+        const client = bot.client;
+        const stale = () => activeBots.get(botId)?.client !== client;
+
+        pageAlive(client)
+            .then((alive) => {
+                if (stale()) return;
+                if (alive) strikes.delete(botId);
+                else markDegraded(botId, 'page stopped responding');
+            })
+            .catch((e) => {
+                if (stale()) return;
+                markDegraded(botId, `probe: ${e.message}`);
+            });
     }
 }, 60000);
 
@@ -651,6 +685,14 @@ async function startBot(botId) {
     // Event: Loading
     client.on('loading_screen', (percent, message) => {
         io.emit('loading', { botId, percent, message });
+        console.log(`[${botId.toUpperCase()}] loading ${percent}% ${message}`);
+    });
+
+    // A stale session fails here rather than ever showing a QR. Wipe it and
+    // come back with a fresh one instead of leaving the bot dark.
+    client.on('auth_failure', async (msg) => {
+        console.error(`[${botId.toUpperCase()}] auth failure: ${msg} — wiping session for a fresh QR`);
+        await resetSession(botId);
     });
 
     // Event: Authenticated
@@ -699,8 +741,50 @@ async function startBot(botId) {
             console.error(`[${botId.toUpperCase()}] handleMessage failed:`, e.message));
     });
 
-    // Initialize
-    await client.initialize();
+    // Initialize. A session whose device was unlinked on the phone never emits
+    // 'qr' and never resolves initialize() — WhatsApp Web just hangs on the
+    // loading screen. Bound it: no QR and no auth within QR_TIMEOUT_MS means the
+    // stored session is dead, so drop it and restart into a real QR.
+    const watchdog = setTimeout(() => {
+        if (activeBots.get(botId) !== botState) return;
+        // Not 'authenticated': LocalAuth emits that as soon as session files
+        // exist, before WhatsApp validates them — a dead session parks there.
+        if (botState.status === 'qr' || botState.status === 'ready') return;
+        console.error(`[${botId.toUpperCase()}] no QR after ${QR_TIMEOUT_MS / 1000}s (status '${botState.status}') — session is dead`);
+        resetSession(botId);
+    }, QR_TIMEOUT_MS);
+
+    try {
+        await client.initialize();
+    } catch (e) {
+        clearTimeout(watchdog);
+        console.error(`[${botId.toUpperCase()}] initialize failed:`, e.message);
+        throw e;
+    }
+    client.once('qr', () => clearTimeout(watchdog));
+    client.once('ready', () => clearTimeout(watchdog));
+}
+
+// How long a bot may sit between "starting" and a scannable QR before we treat
+// the stored session as dead. Cold Chromium on a shared CPU is ~20-40s.
+const QR_TIMEOUT_MS = Number(process.env.QR_TIMEOUT_MS || 90000);
+
+// Stop the bot, throw away the stored credentials, start it again. The restart
+// has nothing on disk to restore, so it can only end in a QR.
+const resetting = new Set();
+async function resetSession(botId) {
+    if (resetting.has(botId)) return;
+    resetting.add(botId);
+    try {
+        await stopBot(botId);
+        fs.rmSync(sessionPath(botId), { recursive: true, force: true });
+        console.warn(`[${botId.toUpperCase()}] stored session deleted — restarting for a fresh QR`);
+        await startBot(botId);
+    } catch (e) {
+        console.error(`[${botId.toUpperCase()}] session reset failed:`, e.message);
+    } finally {
+        resetting.delete(botId);
+    }
 }
 
 async function stopBot(botId) {
@@ -784,8 +868,12 @@ async function callClaude(history, newMessage, systemInstruction) {
             "content-type": "application/json"
         },
         body: JSON.stringify({
-            model: "claude-3-5-sonnet-20241022",
-            max_tokens: 2048,
+            // claude-3-5-sonnet-20241022 was retired; the call 404'd, so the last
+            // fallback in the chain could never have answered even with a key set.
+            // Haiku 4.5 because this function's whole purpose is the cheap last
+            // resort — see the caller's comment — and a WhatsApp reply is short.
+            model: "claude-haiku-4-5",
+            max_tokens: 1024,
             system: systemInstruction,
             messages: messages
         })
@@ -931,7 +1019,12 @@ async function handleMessage(botId, msg) {
                 geminiWorked = true;
                 break;
             } catch (error) {
-                console.error(`[${botId.toUpperCase()}] Gemini error with key ${currentKeyIndex + 1}/${apiKeys.length}:`, error.message.substring(0, 100));
+                // Not truncated. The 100-character cut used to stop exactly before the
+                // HTTP status code, so every Gemini failure in the log read
+                // "Error fetching from https://generativelanguage.googleapis.com/v1beta/mod"
+                // and there was no way to tell a bad key from a rate limit from an
+                // outage without reproducing it by hand.
+                console.error(`[${botId.toUpperCase()}] Gemini error with key ${currentKeyIndex + 1}/${apiKeys.length}:`, error.message);
 
                 if (attempts === apiKeys.length - 1) {
                     console.log(`[${botId.toUpperCase()}] All ${apiKeys.length} Gemini keys failed. Trying OpenRouter...`);
