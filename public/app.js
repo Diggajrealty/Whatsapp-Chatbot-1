@@ -228,12 +228,11 @@ function switchTab(botId) {
 }
 
 // Close Bot
+// The tab's x closes the view only. It used to flip the toggle and stop the
+// bot, which silently killed freshly-scanned sessions; the toggle is the one
+// and only way to stop a bot.
 function closeBot(botId) {
-    const checkbox = document.querySelector(`.bot-item[data-bot="${botId}"] input[type="checkbox"]`);
-    if (checkbox) {
-        checkbox.checked = false;
-        toggleBot(botId, false);
-    }
+    removeBotTab(botId);
 }
 
 // Update Empty State
