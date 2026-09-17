@@ -215,15 +215,43 @@ io.on('connection', (socket) => {
 // Autostart bots on boot, so the QR (or a reconnected session) is ready before
 // anyone opens the dashboard - and so bots come back by themselves after a restart.
 // e.g. AUTOSTART_BOTS=all,sobha
+/**
+ * Autostart, with retries.
+ *
+ * One attempt was not a fair test. Chromium on a shared instance rejects
+ * initialize() with "Execution context was destroyed" often enough that a single
+ * failure at boot is ordinary — and this used to log that failure and give up, so
+ * the container sat there with no WhatsApp bot at all until a person noticed and
+ * pressed start in the dashboard. Meanwhile every lead the CRM sent got told the
+ * bot was not running.
+ *
+ * Backoff rather than a tight loop, because each attempt launches a whole browser:
+ * retrying immediately would starve the instance of the memory the next attempt
+ * needs, which is the failure it is trying to recover from.
+ */
+const AUTOSTART_BACKOFF_MS = [15000, 45000, 120000, 300000];
+
+async function autostart(id, attempt = 0) {
+    if (!botConfigs[id]) return console.warn(`[AUTOSTART] unknown bot '${id}'`);
+
+    console.log(`[AUTOSTART] starting ${id}${attempt ? ` (attempt ${attempt + 1})` : ''}`);
+    try {
+        await startBot(id);
+        console.log(`[AUTOSTART] ${id} is up`);
+    } catch (e) {
+        const wait = AUTOSTART_BACKOFF_MS[attempt];
+        if (wait === undefined) {
+            console.error(`[AUTOSTART] ${id} failed ${attempt + 1} times, giving up:`, e.message);
+            return;
+        }
+        console.error(`[AUTOSTART] ${id} failed (${e.message}) — retrying in ${wait / 1000}s`);
+        setTimeout(() => autostart(id, attempt + 1), wait);
+    }
+}
+
 if (process.env.AUTOSTART_BOTS) {
     const ids = process.env.AUTOSTART_BOTS.split(',').map(x => x.trim()).filter(Boolean);
-    setTimeout(() => {
-        ids.forEach(id => {
-            if (!botConfigs[id]) return console.warn(`[AUTOSTART] unknown bot '${id}'`);
-            console.log(`[AUTOSTART] starting ${id}`);
-            startBot(id).catch(e => console.error(`[AUTOSTART] ${id} failed:`, e.message));
-        });
-    }, 1000);
+    setTimeout(() => ids.forEach((id) => autostart(id)), 1000);
 }
 
 // ── Bot Health ──────────────────────────────────────────────────────────────
@@ -759,6 +787,30 @@ async function startBot(botId) {
     } catch (e) {
         clearTimeout(watchdog);
         console.error(`[${botId.toUpperCase()}] initialize failed:`, e.message);
+
+        /**
+         * Say so, instead of sitting on 'starting' forever.
+         *
+         * The bot state is registered before initialize() runs, so a throw here used
+         * to leave status 'starting' with nothing left to move it. /api/bots then
+         * reported 'starting' indefinitely — and the CRM reads that endpoint to decide
+         * whether she is coming up, so a permanently dead bot looked like one that was
+         * thirty seconds from ready. 'stopped' is the truth and is a status the CRM
+         * already knows how to act on.
+         */
+        if (activeBots.get(botId) === botState) {
+            botState.status = 'stopped';
+            io.emit('bot_status', { botId, status: 'stopped' });
+            activeBots.delete(botId);
+        }
+        // Chromium is usually already gone when initialize rejects; make sure, or the
+        // container leaks a browser per failed attempt and the retries starve.
+        try {
+            await withTimeout(client.destroy(), 15000, 'destroy');
+        } catch {
+            // Nothing useful left to do — the process is going to be restarted anyway.
+        }
+
         throw e;
     }
     client.once('qr', () => clearTimeout(watchdog));
