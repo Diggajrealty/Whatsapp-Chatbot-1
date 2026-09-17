@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kaira Lead API</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+  :root {
+    --bg: #f2f5f4;
+    --surface: #ffffff;
+    --surface-2: #e9efed;
+    --ink: #141d1b;
+    --muted: #5a6a66;
+    --line: #d7e0dd;
+    --accent: #0d6354;
+    --accent-soft: #d8ebe6;
+    --good: #1c7a52;
+    --warn: #8a5d00;
+    --bad: #a03228;
+    --code-bg: #f0f4f3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0e1413;
+      --surface: #151d1c;
+      --surface-2: #1c2625;
+      --ink: #e4ebe9;
+      --muted: #96a6a2;
+      --line: #27332f;
+      --accent: #57cdb1;
+      --accent-soft: #16302b;
+      --good: #4fbe8c;
+      --warn: #d9a441;
+      --bad: #e2786b;
+      --code-bg: #111a19;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0e1413;
+    --surface: #151d1c;
+    --surface-2: #1c2625;
+    --ink: #e4ebe9;
+    --muted: #96a6a2;
+    --line: #27332f;
+    --accent: #57cdb1;
+    --accent-soft: #16302b;
+    --good: #4fbe8c;
+    --warn: #d9a441;
+    --bad: #e2786b;
+    --code-bg: #111a19;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 820px;
+    margin: 0 auto;
+    padding-inline: 20px;
+    padding-block: 0 72px;
+  }
+
+  header.top {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 5;
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  header.top .wrap {
+    padding-block: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    align-items: baseline;
+  }
+  .brand {
+    font-family: Archivo, ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  nav { display: flex; flex-wrap: wrap; gap: 14px; margin-left: auto; }
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  nav a:hover { color: var(--accent); }
+
+  .hero { padding-block: 44px 8px; }
+  h1 {
+    font-family: Archivo, ui-sans-serif, system-ui, sans-serif;
+    font-size: clamp(30px, 6vw, 44px);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    font-weight: 700;
+    text-wrap: balance;
+    margin: 0 0 14px;
+  }
+  .lede { font-size: 18px; color: var(--muted); max-width: 62ch; margin: 0; }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-block: 28px 8px;
+  }
+  .fact { background: var(--surface); padding: 14px 16px; }
+  .fact dt {
+    font-size: 11px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .fact dd {
+    margin: 0;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    word-break: break-all;
+  }
+
+  h2 {
+    font-family: Archivo, ui-sans-serif, system-ui, sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin: 56px 0 10px;
+    padding-top: 10px;
+    border-top: 2px solid var(--accent-soft);
+  }
+  h3 {
+    font-family: Archivo, ui-sans-serif, system-ui, sans-serif;
+    font-size: 21px;
+    letter-spacing: -0.015em;
+    margin: 30px 0 8px;
+    text-wrap: balance;
+  }
+  p { max-width: 68ch; }
+  a { color: var(--accent); }
+  strong { font-weight: 600; }
+
+  .callout {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 18px;
+    margin-block: 20px;
+  }
+  .callout p { margin: 0; max-width: 62ch; }
+  .callout p + p { margin-top: 8px; }
+
+  .endpoint {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 15px;
+    margin-block: 22px 6px;
+  }
+  .verb {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: var(--accent);
+    color: var(--surface);
+  }
+  .verb.del { background: var(--bad); }
+  .verb.get { background: var(--muted); }
+
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.5px;
+    line-height: 1.55;
+    margin-block: 14px;
+  }
+  code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.9em;
+    background: var(--surface-2);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+  pre code { background: none; padding: 0; font-size: inherit; }
+
+  .scroll { overflow-x: auto; margin-block: 16px; }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 520px;
+    font-size: 14.5px;
+  }
+  th, td {
+    text-align: left;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  th {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+    border-bottom: 1px solid var(--ink);
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td code { white-space: nowrap; }
+
+  .code-col { font-family: "IBM Plex Mono", ui-monospace, monospace; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .s-ok { color: var(--good); }
+  .s-warn { color: var(--warn); }
+  .s-bad { color: var(--bad); }
+
+  .req { font-size: 12px; font-weight: 600; color: var(--bad); text-transform: uppercase; letter-spacing: 0.05em; }
+  .opt { font-size: 12px; color: var(--muted); }
+
+  .backoff { display: flex; flex-wrap: wrap; gap: 8px; margin-block: 16px; padding: 0; list-style: none; }
+  .backoff li {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 4px 13px;
+  }
+  .backoff li:last-child { border-color: var(--bad); color: var(--bad); }
+
+  ol.steps { padding-left: 0; list-style: none; counter-reset: step; max-width: 68ch; }
+  ol.steps li {
+    counter-increment: step;
+    position: relative;
+    padding-left: 38px;
+    margin-bottom: 12px;
+  }
+  ol.steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 1px;
+    width: 24px;
+    height: 24px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--surface);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  footer {
+    margin-top: 60px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 13.5px;
+  }
+  @media (max-width: 480px) {
+    nav { margin-left: 0; }
+  }
+</style>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { color-scheme: light dark; }
+  body { margin: 0; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <span class="brand">Kaira&nbsp;↔&nbsp;Luna</span>
+    <nav>
+      <a href="#send">Send a lead</a>
+      <a href="#codes">Responses</a>
+      <a href="#webhook">Site visits</a>
+      <a href="#checklist">Checklist</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <h1>Handing a lead to Kaira</h1>
+    <p class="lede">Kaira is the WhatsApp assistant that greets your leads, answers questions about the project from the knowledge base, and books site visits. Luna posts the lead; Kaira opens the chat within seconds.</p>
+  </div>
+
+  <dl class="facts">
+    <div class="fact">
+      <dt>Base URL</dt>
+      <dd>https://kaira-whatsapp-production.up.railway.app</dd>
+    </div>
+    <div class="fact">
+      <dt>Auth header</dt>
+      <dd>x-api-key: &lt;CRM_API_KEY&gt;</dd>
+    </div>
+    <div class="fact">
+      <dt>Content type</dt>
+      <dd>application/json</dd>
+    </div>
+  </dl>
+  <p class="opt">The same key authenticates the site-visit callback Kaira sends back to Luna. A missing or wrong key returns <code>401 {"error":"invalid api key"}</code>.</p>
+
+  <h2>What changed</h2>
+  <h3>One number takes every lead</h3>
+  <p>Kaira used to run a separate WhatsApp bot per builder — Sobha, Brigade, Godrej, Nambiar, Abhee — and the lead went to whichever one matched. You no longer have to know, or check, which builder bot is linked.</p>
+  <div class="callout">
+    <p><strong>Every lead goes to the single main number.</strong> Kaira still introduces herself as the lead's own builder, taken from the <code>property</code> and <code>builder</code> you send — not from which number serves the chat.</p>
+    <p>So: <strong>stop sending <code>botId</code></strong>. Routing is our problem now.</p>
+  </div>
+
+  <h2 id="send">Sending a lead</h2>
+  <div class="endpoint"><span class="verb">POST</span> <span>/api/lead</span></div>
+  <p>This is the endpoint to use. It opens the WhatsApp chat and sends the first message immediately.</p>
+
+<pre><code>POST /api/lead
+x-api-key: &lt;CRM_API_KEY&gt;
+Content-Type: application/json
+
+{
+  "phone":    "9886000000",
+  "property": "Abhee New Dimension",
+  "builder":  "Abhee Developers",
+  "name":     "Tanishq Sharma",
+  "notes":    "Enquired via Housing.com, budget 1.4Cr, wants 3BHK"
+}</code></pre>
+
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr><th>Field</th><th>Required</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>phone</code></td>
+          <td><span class="req">Yes</span></td>
+          <td>Any format. <code>9886000000</code>, <code>+91 98860 00000</code>, <code>09886000000</code> and <code>0091-98860-00000</code> all work. Bare 10-digit numbers are assumed Indian (+91).</td>
+        </tr>
+        <tr>
+          <td><code>property</code></td>
+          <td><span class="opt">Strongly recommended</span></td>
+          <td>The project enquired about, e.g. <code>"Sobha Neopolis"</code>. Free text — matched case-insensitively against ~250 projects, and the spelling is corrected ("new dimension" → "Abhee New Dimension").</td>
+        </tr>
+        <tr>
+          <td><code>builder</code></td>
+          <td><span class="opt">Optional</span></td>
+          <td>e.g. <code>"Godrej Properties"</code>. Used when <code>property</code> is missing or unmatched.</td>
+        </tr>
+        <tr>
+          <td><code>name</code></td>
+          <td><span class="opt">Optional</span></td>
+          <td>Only the first name is used, in the greeting.</td>
+        </tr>
+        <tr>
+          <td><code>notes</code></td>
+          <td><span class="opt">Optional</span></td>
+          <td>Free text. Given to the AI as context <em>and</em> searched for a project name when <code>property</code> is null.</td>
+        </tr>
+        <tr>
+          <td><code>botId</code></td>
+          <td><span class="opt">Don't send</span></td>
+          <td>Legacy override to force one specific bot. Leave it out.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>About <code>property: null</code></h3>
+  <p>A lot of payloads arrive with <code>"property": null</code> and the project sitting in <code>notes</code> — "new property launch dsr villas". Kaira reads <code>notes</code> as a fallback, so those still work. But the greeting is much better when <code>property</code> is filled in, because Kaira can name the project and skip the "which project?" question.</p>
+  <p>If neither field names a project, the lead is still greeted and simply asked which project they mean. Nothing is dropped.</p>
+
+  <h2 id="codes">What comes back</h2>
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr><th>Status</th><th>Body</th><th>What to do</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="code-col s-ok">200</td>
+          <td><code>{"ok":true,"botId":"all","whatsappId":"919886000000@c.us","sent":"Hi Tanishq! …"}</code></td>
+          <td>Done. <code>sent</code> is the exact message the lead received — worth storing on the lead record.</td>
+        </tr>
+        <tr>
+          <td class="code-col s-bad">400</td>
+          <td><code>{"error":"phone is required"}</code></td>
+          <td>Fix the payload. Don't retry as-is.</td>
+        </tr>
+        <tr>
+          <td class="code-col s-bad">401</td>
+          <td><code>{"error":"invalid api key"}</code></td>
+          <td>Wrong or missing <code>x-api-key</code>.</td>
+        </tr>
+        <tr>
+          <td class="code-col s-bad">404</td>
+          <td><code>{"error":"number is not on WhatsApp","phone":"919886000000"}</code></td>
+          <td>Genuinely not a WhatsApp user. Don't retry — flag for a phone call.</td>
+        </tr>
+        <tr>
+          <td class="code-col s-warn">503</td>
+          <td><code>{"error":"bot is reconnecting — retry shortly","botId":"all"}</code></td>
+          <td>Transient. Retry with backoff, below.</td>
+        </tr>
+        <tr>
+          <td class="code-col s-bad">500</td>
+          <td><code>{"error":"lookup failed: …"}</code></td>
+          <td>Unexpected. Log the body, retry once, then tell us.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Retries — please implement this</h3>
+  <p>A <code>503</code> means the WhatsApp session is mid-reconnect. It recovers by itself, usually within a minute. Queue the lead and retry on this schedule, then mark it failed for a human:</p>
+  <ul class="backoff">
+    <li>60s</li><li>2m</li><li>5m</li><li>10m</li><li>20m</li><li>human</li>
+  </ul>
+  <p>Every request is safe to retry. A lead sent twice just means the person gets greeted twice, which is far better than a dropped enquiry. Kaira answers within about 20 seconds, timing out cleanly rather than hanging, so a 30-second client timeout is enough.</p>
+
+  <h2>Plain-English intake</h2>
+  <div class="endpoint"><span class="verb">POST</span> <span>/api/instruct</span></div>
+  <p>For when an agent types a sentence instead of a structured lead. Prefer <code>/api/lead</code> for anything automated.</p>
+<pre><code>{ "text": "Kaira, talk to 9886000000 about Abhee New Dimension" }</code></pre>
+  <p>The phone is taken from the longest digit run in the sentence, and a <code>phone</code> field passed alongside <code>text</code> overrides it. The project must be named, or you get <code>400 {"error":"could not work out which project — mention it by name"}</code>. Same codes as <code>/api/lead</code>, plus a <code>parsed</code> object showing what was understood — show that back to the agent so they can spot a misread.</p>
+
+  <h2 id="webhook">Site visits come back to you</h2>
+  <p>When a lead confirms a site visit in WhatsApp, Kaira POSTs to the URL configured as <code>CRM_WEBHOOK_URL</code> — currently <code>https://luna-crm-api.vercel.app/kaira/site-visit</code> — with the same <code>x-api-key</code> header.</p>
+<pre><code>{
+  "phone":   "919886000000",
+  "at":      "2026-09-20T11:00:00+05:30",
+  "project": "Abhee New Dimension",
+  "notes":   "Booked over WhatsApp with Kaira. Lead's words: \"sunday 11am works\""
+}</code></pre>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Field</th><th>What it is</th></tr></thead>
+      <tbody>
+        <tr><td><code>phone</code></td><td>Digits only, with country code. Match it against your lead records the way you'd match any normalized number.</td></tr>
+        <tr><td><code>at</code></td><td><strong>Always an absolute ISO-8601 instant with an offset</strong> (<code>+05:30</code>) — never a bare local time, so there is no timezone guessing on your side. If the AI produces an unusable date, we log it and don't call you; those get booked by hand.</td></tr>
+        <tr><td><code>project</code></td><td>Best-effort canonical project name, or the builder, or omitted.</td></tr>
+        <tr><td><code>notes</code></td><td>Includes the lead's own words that confirmed the slot.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <p><strong>Respond <code>2xx</code> if you booked it.</strong> Use <code>422</code> when you understood the request but couldn't place it — unknown lead, no matching project — so those are logged distinctly and someone chases them.</p>
+    <p>The call is fire-and-forget with a 10-second timeout. If your API is down, the lead's WhatsApp conversation carries on normally, but the booking exists only in our log. A <code>5xx</code> from you means a visit that needs manual entry.</p>
+  </div>
+
+  <h2>Two lookups worth using</h2>
+  <div class="endpoint"><span class="verb get">GET</span> <span>/api/projects</span></div>
+  <p>Every builder and project as Kaira knows them. Use it to normalize <code>property</code> before sending — it removes almost all "which project did they mean?" ambiguity. Cache it; it changes rarely.</p>
+<pre><code>{
+  "builders": [
+    { "builder": "Sobha Limited", "botId": "sobha", "projects": ["Sobha Neopolis", "…"] }
+  ]
+}</code></pre>
+
+  <div class="endpoint"><span class="verb get">GET</span> <span>/api/bots</span></div>
+  <p>Is the service live? <code>status</code> is one of <code>stopped</code>, <code>starting</code>, <code>qr</code> (needs a QR scan — a human has to act), <code>authenticated</code>, <code>ready</code>, or <code>degraded</code> (wedged, recycling itself).</p>
+<pre><code>[{ "id": "all", "builder": "All Builders", "status": "ready" }]</code></pre>
+  <p>You don't need to poll this before sending a lead — just send it and handle the <code>503</code>. It's there for dashboards and alerting.</p>
+
+  <h2 id="checklist">Checklist for the Luna side</h2>
+  <ol class="steps">
+    <li><code>POST /api/lead</code> with <code>x-api-key</code>. Never send <code>botId</code>.</li>
+    <li>Fill <code>property</code> from the CRM whenever it exists; put everything else in <code>notes</code>.</li>
+    <li>Store the returned <code>sent</code> text and <code>whatsappId</code> on the lead.</li>
+    <li>Treat <code>503</code> as retryable with backoff; <code>400</code> and <code>404</code> as terminal.</li>
+    <li>Accept the site-visit webhook. Return <code>2xx</code> on success, <code>422</code> when you can't place it.</li>
+    <li>Normalize project names against <code>GET /api/projects</code>.</li>
+  </ol>
+
+  <footer>
+    Kaira ↔ Luna integration contract · maintained as <code>LUNA_API.md</code> in the Whatsapp-Chatbot-1 repo · last updated 17 September 2026.
+  </footer>
+</div>
+</body>
+</html>
