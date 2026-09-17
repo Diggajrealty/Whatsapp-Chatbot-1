@@ -537,6 +537,11 @@ async function startBot(botId) {
       }
     }
 
+    // Which of these survives a redeploy is the difference between a silent
+    // reconnect and someone having to rescan a QR, so say it out loud.
+    console.log(`[${botId.toUpperCase()}] session ` +
+        `${fs.existsSync(path.join(SESSION_PATH, `session-${botId}`)) ? 'restored from' : 'NEW at'} ${SESSION_PATH}`);
+
     const client = new Client({
         authStrategy: new LocalAuth({
             dataPath: SESSION_PATH,
