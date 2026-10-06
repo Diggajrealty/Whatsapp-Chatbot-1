@@ -13,6 +13,7 @@ const { projectDirectory, PLACEHOLDER_BUILDERS } = require('./projectDirectory')
 
 // ── Knowledge Base Integration ──────────────────────────────────────────────
 const knowledgeBase = require('./knowledge-base/index.js');
+const { startBrochureSync, brochureVersion, brochureContext } = require('./crmBrochures');
 
 // A long-running bot must survive a transient Puppeteer/WhatsApp error rather
 // than exit and take every session down with it. Log loudly, stay alive.
@@ -98,6 +99,9 @@ function fullSystemInstruction(botId) {
     let base = getSystemInstruction(botId) + '\n\n' + todayLine();
     // Only the general bot: a builder's own bot must stay on its own projects.
     if (botId === 'all') base += '\n\n' + projectCatalogue();
+    // Brochures uploaded in the CRM (crmBrochures.js); empty until the first refresh lands.
+    const brochures = brochureContext(botId);
+    if (brochures) base += '\n\n' + brochures;
     if (!kb) return base;
     return base +
         '\n\n=== YOUR KNOWLEDGE BASE (answer from this data directly) ===\n' + kb +
@@ -248,6 +252,8 @@ async function autostart(id, attempt = 0) {
         setTimeout(() => autostart(id, attempt + 1), wait);
     }
 }
+
+startBrochureSync();
 
 if (process.env.AUTOSTART_BOTS) {
     const ids = process.env.AUTOSTART_BOTS.split(',').map(x => x.trim()).filter(Boolean);
@@ -1045,12 +1051,28 @@ async function handleMessage(botId, msg) {
         });
         bot.sessions.clear();
         bot.modelDay = istToday;
+        bot.brochureVersion = brochureVersion();
         console.log(`[${botId.toUpperCase()}] Model refreshed for ${istToday}`);
+    } else if (bot.brochureVersion !== brochureVersion()) {
+        // New brochure facts from the CRM. Rebuild the model but keep conversations:
+        // each session moves to the new model, history intact, the next time it speaks.
+        bot.model = new GoogleGenerativeAI(apiKeys[currentKeyIndex]).getGenerativeModel({
+            model: 'gemini-2.5-flash',
+            systemInstruction: fullSystemInstruction(botId),
+            generationConfig: { thinkingConfig: { thinkingBudget: 0 } }
+        });
+        bot.brochureVersion = brochureVersion();
+        console.log(`[${botId.toUpperCase()}] Model refreshed for new brochures`);
     }
 
     let chatSession = bot.sessions.get(userId);
     if (!chatSession) {
         chatSession = bot.model.startChat({ history: [] });
+        chatSession.brochureVersion = bot.brochureVersion;
+        bot.sessions.set(userId, chatSession);
+    } else if (chatSession.brochureVersion !== bot.brochureVersion) {
+        chatSession = bot.model.startChat({ history: await chatSession.getHistory() });
+        chatSession.brochureVersion = bot.brochureVersion;
         bot.sessions.set(userId, chatSession);
     }
 
